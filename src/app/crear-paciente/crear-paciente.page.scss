@@ -1,0 +1,19 @@
+.form-wrap { 
+    max-width: 720px; 
+    margin: 0 auto; 
+}
+
+.form-list { 
+    border-radius: 12px; 
+}
+
+.error { 
+    color: var(--ion-color-danger); 
+    margin: 4px 12px 8px; 
+    display: block; 
+}
+
+.actions { 
+    margin-top: 16px; 
+    padding: 0 15px;
+}

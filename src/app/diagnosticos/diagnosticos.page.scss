@@ -1,0 +1,54 @@
+.diag-list {
+  max-width: 680px;
+  margin: 24px auto;
+  border-radius: 12px;
+  background: var(--ion-item-background, #1a1a1a);
+  padding: 0;
+}
+
+.diag-list ion-item {
+  --background: transparent;
+  --border-color: transparent;
+  --inner-border-width: 0;
+  --min-height: 56px;
+  padding: 5px 0;
+}
+
+.diag-list ion-item:not(:last-child) {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+@media (hover: hover) {
+  .diag-list ion-item:hover { --background: rgba(255, 255, 255, 0.04); }
+}
+
+.diag-list ion-icon {
+  font-size: 22px;
+  margin-right: 6px;
+  opacity: 0.9;
+}
+
+.diag-list h3 {
+  margin: 0;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.diag-list p {
+  margin: 2px 0 0;
+  color: var(--ion-color-medium);
+  font-size: 0.9rem;
+}
+
+.header {
+    margin: 35px 0;
+}
+
+.header strong {
+    font-size: 1.5rem;
+}
+
+.header small {
+    margin-top: 20px;
+    font-size: 1.2rem;
+}
