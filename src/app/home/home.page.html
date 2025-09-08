@@ -1,20 +1,44 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>¡Bienvenido a Hamburguesas David!</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+<ion-content class="ion-padding">
+  <!-- Portada del local -->
+  <div style="text-align:center; margin-bottom: 24px;">
+    <img src="assets/icon/favicon.png" alt="Logo Hamburguesería" style="width:120px; border-radius:50%; box-shadow:0 2px 8px #0002;">
+    <h2 style="margin-top:16px;">Las mejores hamburguesas de la ciudad</h2>
+    <p>¡Disfruta nuestras promociones y sabores únicos!</p>
   </div>
+
+  <!-- Promociones -->
+  <h3>Promociones del día</h3>
+  <ion-list>
+    <ion-card>
+      <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=400&q=80" alt="Promo 1" />
+      <ion-card-header>
+        <ion-card-title>Combo Clásico</ion-card-title>
+        <ion-card-subtitle>Hamburguesa + Papas + Bebida</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <p>¡Solo $5.990!</p>
+        <ion-button expand="block" color="primary">Pedir ahora</ion-button>
+      </ion-card-content>
+    </ion-card>
+    <ion-card>
+      <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=400&q=80" alt="Promo 2" />
+      <ion-card-header>
+        <ion-card-title>Doble Queso</ion-card-title>
+        <ion-card-subtitle>2 Hamburguesas + Papas</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <p>¡Solo $7.990!</p>
+        <ion-button expand="block" color="primary">Pedir ahora</ion-button>
+      </ion-card-content>
+    </ion-card>
+  </ion-list>
 </ion-content>
