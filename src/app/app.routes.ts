@@ -20,5 +20,13 @@ export const routes: Routes = [
   {
     path: 'paciente/:rut/editar',
     loadComponent: () => import('./editar-paciente/editar-paciente.page').then( m => m.EditarPacientePage)
+  },  {
+    path: 'agendamiento-medico',
+    loadComponent: () => import('./agendamiento-medico/agendamiento-medico.page').then( m => m.AgendamientoMedicoPage)
+  },
+  {
+    path: 'agendamiento-no-medico',
+    loadComponent: () => import('./agendamiento-no-medico/agendamiento-no-medico.page').then( m => m.AgendamientoNoMedicoPage)
   }
+
 ];
