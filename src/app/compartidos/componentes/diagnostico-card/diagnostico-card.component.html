@@ -1,0 +1,13 @@
+<ion-card *ngIf="diagnostico" class="diagnostico-card">
+  <ion-card-header>
+    <ion-card-title class="titulo">{{ diagnostico.nombre }}</ion-card-title>
+  </ion-card-header>
+
+  <ion-card-content>
+    <ion-item lines="none">
+      <ion-icon slot="start" name="calendar-outline"></ion-icon>
+      <ion-label>Fecha</ion-label>
+      <div slot="end">{{ diagnostico.fecha | date:'longDate' }}</div>
+    </ion-item>
+  </ion-card-content>
+</ion-card>

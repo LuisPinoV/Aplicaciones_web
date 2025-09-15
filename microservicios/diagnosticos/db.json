@@ -1,0 +1,46 @@
+{
+  "diagnosticos": [
+    {
+      "id": 1,
+      "idPaciente": 4,
+      "nombre": "Resfriado común",
+      "codigo": "J00",
+      "fecha": "2025-08-21"
+    },
+    {
+      "id": 2,
+      "idPaciente": 4,
+      "nombre": "Hipertensión esencial (primaria)",
+      "codigo": "I10",
+      "fecha": "2025-07-03"
+    },
+    {
+      "id": 3,
+      "idPaciente": 4,
+      "nombre": "Diabetes mellitus tipo 2",
+      "codigo": "E11",
+      "fecha": "2025-03-18"
+    },
+    {
+      "id": 3,
+      "idPaciente": 1,
+      "nombre": "Resfriado común",
+      "codigo": "J00",
+      "fecha": "2025-08-21"
+    },
+    {
+      "id": 4,
+      "idPaciente": 1,
+      "nombre": "Hipertensión esencial (primaria)",
+      "codigo": "I10",
+      "fecha": "2025-07-03"
+    },
+    {
+      "id": 5,
+      "idPaciente": 1,
+      "nombre": "Diabetes mellitus tipo 2",
+      "codigo": "E11",
+      "fecha": "2025-03-18"
+    }
+  ]
+}

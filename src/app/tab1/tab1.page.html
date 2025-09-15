@@ -1,64 +1,8 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Búsqueda de paciente
+      Tab1
     </ion-title>
-    <ion-button slot="end" (click)="goToCrearPaciente()">
-      Agregar paciente
-    </ion-button>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <div class="contenido">
-    <div class="ion-text-center">
-      <h1>Buscar ficha médica</h1>
-      <p>Ingrese el RUT del paciente para acceder a su ficha médica</p>
-    </div>
-
-    <div class="cuadro ion-text-center">
-      <h2>RUT del paciente</h2>
-
-      <ion-input
-        placeholder="Ingrese RUT aquí"
-        [(ngModel)]="query"
-        (keyup.enter)="onSearch()"
-        inputmode="text">
-      </ion-input>
-
-      <p>Formato: XX.XXX.XXX-X</p>
-
-      <ion-button (click)="onSearch()">
-        <ion-icon name="search-outline" slot="start"></ion-icon>
-        Buscar paciente
-      </ion-button>
-    </div>
-
-    <div class="list-container">
-      <ion-list>
-        <ion-item *ngFor="let p of filteredPatients" button detail (click)="goToPatient(p)">
-          <ng-container *ngIf="p.avatarUrl; else initials">
-            <ion-avatar slot="start">
-              <img [src]="p.avatarUrl" [alt]="p.name" />
-            </ion-avatar>
-          </ng-container>
-
-          <ng-template #initials>
-            <div slot="start" class="avatar-fallback">
-              {{ getInitials(p.name) }}
-            </div>
-          </ng-template>
-
-          <ion-label>
-            <h3>{{ p.name }}</h3>
-            <p>{{ p.rut }}</p>
-          </ion-label>
-        </ion-item>
-
-        <ion-item *ngIf="filteredPatients.length === 0">
-          <ion-label>No se encontraron pacientes.</ion-label>
-        </ion-item>
-      </ion-list>
-    </div>
-  </div>
-</ion-content>

@@ -1,0 +1,13 @@
+<ion-card *ngIf="consultas" class="consultas-card">
+  <ion-card-header>
+    <ion-card-title class="titulo">{{ consultas.institucionMedica }}</ion-card-title>
+  </ion-card-header>
+
+  <ion-card-content>
+    <ion-item lines="none">
+      <ion-icon slot="start" name="calendar-outline"></ion-icon>
+      <ion-label>Fecha</ion-label>
+      <div slot="end">{{ consultas.fecha | date:'longDate' }}</div>
+    </ion-item>
+  </ion-card-content>
+</ion-card>

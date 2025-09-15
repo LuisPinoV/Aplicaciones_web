@@ -1,0 +1,25 @@
+{
+  "hospitalizaciones": [
+    {
+      "id": 1,
+      "idPaciente": 1,
+      "fecha": "2025-05-10",
+      "duracion": "7 días",
+      "institucionMedica": "Hospital Padre Hurtado"
+    },
+    {
+      "id": 2,
+      "idPaciente": 1,
+      "fecha": "2024-11-02",
+      "duracion": "3 días",
+      "institucionMedica": "Clínica Alemana"
+    },
+    {
+      "id": 3,
+      "idPaciente": 1,
+      "fecha": "2025-01-14",
+      "duracion": "5 días",
+      "institucionMedica": "Hospital Sótero del Río"
+    }
+  ]
+}

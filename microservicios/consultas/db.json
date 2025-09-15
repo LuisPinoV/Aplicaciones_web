@@ -1,0 +1,22 @@
+{
+  "consultas": [
+    {
+      "id": 1,
+      "idPaciente": 1,
+      "fecha": "2025-05-10",
+      "institucionMedica": "Hospital Padre Hurtado"
+    },
+    {
+      "id": 2,
+      "idPaciente": 1,
+      "fecha": "2024-11-02",
+      "institucionMedica": "Clínica Alemana"
+    },
+    {
+      "id": 3,
+      "idPaciente": 1,
+      "fecha": "2025-01-14",
+      "institucionMedica": "Hospital Sótero del Río"
+    }
+  ]
+}

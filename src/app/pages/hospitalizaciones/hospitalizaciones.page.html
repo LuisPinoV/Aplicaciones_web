@@ -1,0 +1,28 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/ficha-medica"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Hospitalizaciones</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="contenido" *ngIf="paciente">
+    <div class="paciente-header">
+      <h2>{{ paciente.nombre }}</h2>
+      <p class="rut">{{ paciente.rut }}</p>
+    </div>
+
+    <div *ngIf="hospitalizaciones.length > 0; else noData">
+      <app-hospitalizacion-card
+        *ngFor="let h of hospitalizaciones"
+        [hospitalizacion]="h">
+      </app-hospitalizacion-card>
+    </div>
+
+    <ng-template #noData>
+      <p class="sin-datos">Este paciente no tiene hospitalizaciones registradas.</p>
+    </ng-template>
+  </div>
+</ion-content>

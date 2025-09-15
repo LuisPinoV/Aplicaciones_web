@@ -1,0 +1,57 @@
+.contenedor {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.form-card {
+  width: 100%;
+  max-width: 380px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.formulario {
+  display: flex;
+  flex-direction: column;
+}
+
+.campo {
+  margin-top: 0.2rem;
+  margin-left: 4px;
+}
+
+ion-label {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--ion-text-color);
+}
+
+ion-item {
+  --padding-start: 4px;
+  --inner-padding-start: 0;
+  margin-bottom: 1rem;
+  border-radius: 6px;
+  --background: var(--ion-item-background, transparent);
+}
+
+ion-input {
+  --padding-start: 8px;
+  --padding-end: 8px;
+  color: var(--ion-text-color);
+}
+
+ion-button {
+  margin-top: 0.2rem;
+  --border-radius: 6px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.error {
+  color: var(--ion-color-danger);
+  text-align: center;
+  margin-top: 0.6rem;
+  font-size: 0.9rem;
+}

@@ -1,0 +1,46 @@
+<ion-card class="perfil-card" *ngIf="paciente">
+  <ion-card-header class="perfil-header">
+    <div class="avatar-fallback">
+      {{ getInitials(paciente.nombre) }}
+    </div>
+
+    <div class="perfil-titulos">
+      <ion-card-title>{{ paciente.nombre || 'Paciente' }}</ion-card-title>
+      <div class="rut ion-text-center">{{ paciente.rut }}</div>
+    </div>
+  </ion-card-header>
+
+  <ion-card-content>
+    <ion-list lines="none">
+      <ion-item>
+        <ion-icon slot="start" name="calendar-outline"></ion-icon>
+        <ion-label>Edad</ion-label>
+        <div slot="end">{{ displayAge }}</div>
+      </ion-item>
+
+      <ion-item>
+        <ion-icon slot="start" name="person-outline"></ion-icon>
+        <ion-label>Sexo</ion-label>
+        <div slot="end">{{ displaySex }}</div>
+      </ion-item>
+
+      <ion-item>
+        <ion-icon slot="start" name="medkit-outline"></ion-icon>
+        <ion-label>Grupo sanguíneo</ion-label>
+        <div slot="end">{{ paciente.grupo_sanguineo}}</div>
+      </ion-item>
+
+      <ion-item>
+        <ion-icon slot="start" name="call-outline"></ion-icon>
+        <ion-label>Teléfono</ion-label>
+        <div slot="end">{{ paciente.telefono}}</div>
+      </ion-item>
+
+      <ion-item>
+        <ion-icon slot="start" name="mail-outline"></ion-icon>
+        <ion-label>Mail</ion-label>
+        <div slot="end">{{ paciente.mail}}</div>
+      </ion-item>
+    </ion-list>
+  </ion-card-content>
+</ion-card>

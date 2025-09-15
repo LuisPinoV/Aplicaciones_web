@@ -1,0 +1,19 @@
+<ion-content class="ion-padding">
+  <div class="contenedor">
+    <ion-card class="form-card">
+      <ion-card-content>
+        <div class="formulario">
+          <div class="campo">
+            <ion-label>RUT</ion-label>
+          </div>
+          <ion-item>
+            <ion-input [(ngModel)]="rut" placeholder="Ingresa RUT"></ion-input>
+          </ion-item>
+
+          <ion-button expand="block" (click)="buscarPaciente()">Buscar</ion-button>
+          <p class="error" *ngIf="error">{{ error }}</p>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

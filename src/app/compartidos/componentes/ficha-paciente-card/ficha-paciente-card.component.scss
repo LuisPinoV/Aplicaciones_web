@@ -1,0 +1,52 @@
+.perfil-card {
+  margin: 10px auto 0 auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.perfil-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding-top: 1.8rem;
+}
+
+.avatar-fallback {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--ion-color-medium);
+  color: var(--ion-color-light);
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 1.1rem;
+  padding-top: 4px;
+}
+
+.perfil-titulos {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.perfil-titulos .rut {
+  margin-top: 2px;
+  color: var(--ion-color-medium);
+  font-size: 0.9rem;
+}
+
+ion-item {
+  margin-bottom: 0.3rem;
+}
+
+ion-icon {
+  font-size: 20px;
+  margin-right: 6px;
+  color: var(--ion-color-medium);
+}
+
+ion-card-content {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}

@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { IonHeader, IonToolbar, IonTitle, IonContent, IonButton } from '@ionic/angular/standalone';
-import { ExploreContainerComponent } from '../explore-container/explore-container.component';
 import { IonAccordion, IonAccordionGroup, IonItem} from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
 
@@ -8,7 +7,7 @@ import { Router } from '@angular/router';
   selector: 'app-tab2',
   templateUrl: 'tab2.page.html',
   styleUrls: ['tab2.page.scss'],
-  imports: [IonHeader, IonToolbar, IonTitle, IonContent, ExploreContainerComponent, 
+  imports: [IonHeader, IonToolbar, IonTitle, IonContent, 
     IonItem, IonAccordion, IonAccordionGroup,IonButton],
 })
 export class Tab2Page {

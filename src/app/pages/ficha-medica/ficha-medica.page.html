@@ -1,0 +1,15 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/buscar"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Detalle paciente</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="contenido" *ngIf="paciente">
+    <app-ficha-paciente-card [paciente]="paciente"></app-ficha-paciente-card>
+    <app-ficha-paciente-acciones></app-ficha-paciente-acciones>
+  </div>
+</ion-content>

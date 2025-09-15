@@ -1,0 +1,19 @@
+<ion-card *ngIf="hospitalizacion" class="hospitalizacion-card">
+  <ion-card-header>
+    <ion-card-title class="titulo">{{ hospitalizacion.institucionMedica }}</ion-card-title>
+  </ion-card-header>
+
+  <ion-card-content>
+    <ion-item lines="none">
+      <ion-icon slot="start" name="calendar-outline"></ion-icon>
+      <ion-label>Fecha</ion-label>
+      <div slot="end">{{ hospitalizacion.fecha | date:'longDate' }}</div>
+    </ion-item>
+
+    <ion-item lines="none">
+      <ion-icon slot="start" name="time-outline"></ion-icon>
+      <ion-label>Duración</ion-label>
+      <div slot="end">{{ hospitalizacion.duracion }}</div>
+    </ion-item>
+  </ion-card-content>
+</ion-card>

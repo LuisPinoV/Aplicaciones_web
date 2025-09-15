@@ -1,0 +1,44 @@
+{
+  "pacientes": [
+    { 
+      "id": 1, 
+      "rut": "22845534-2", 
+      "nombre": "Felipe Vázquez",
+      "edad": 30,
+      "sexo": "Masculino",
+      "grupo_sanguineo": "A+",
+      "telefono": "+56 9 1111 1111",
+      "mail": "felipe.vazquez@gmail.com"
+    },
+    { 
+      "id": 2, 
+      "rut": "21344654-1", 
+      "nombre": "David Hernández",
+      "edad": 27,
+      "sexo": "Masculino",
+      "grupo_sanguineo": "B-",
+      "telefono": "+56 9 2222 2222",
+      "mail": "david.hernandez@gmail.com"
+    },
+    { 
+      "id": 3, 
+      "rut": "20723454-6", 
+      "nombre": "Luis Pino",
+      "edad": 35,
+      "sexo": "Masculino",
+      "grupo_sanguineo": "O+",
+      "telefono": "+56 9 3333 3333",
+      "mail": "luis.pino@gmail.com"
+    },
+    { 
+      "id": 4, 
+      "rut": "19876543-2", 
+      "nombre": "Ignacia Herrera",
+      "edad": 24,
+      "sexo": "Femenino",
+      "grupo_sanguineo": "O+",
+      "telefono": "+56 9 1234 5678",
+      "mail": "ignacia.herrera@gmail.com"
+    }
+  ]
+}
