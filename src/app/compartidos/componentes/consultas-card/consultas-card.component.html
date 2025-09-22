@@ -1,13 +1,55 @@
-<ion-card *ngIf="consultas" class="consultas-card">
-  <ion-card-header>
-    <ion-card-title class="titulo">{{ consultas.institucionMedica }}</ion-card-title>
-  </ion-card-header>
+<div *ngIf="consultas" class="diagnostico-card">
+  <!-- Indicador de tipo/prioridad de consulta -->
+  <div class="severity-indicator" [class]="getConsultaSeverityClass()"></div>
+  
+  <div class="card-header">
+    <div class="diagnostico-icon">
+      <ion-icon [name]="getConsultaIcon()"></ion-icon>
+    </div>
+    <div class="diagnostico-info">
+      <h3 class="titulo">{{ consultas.institucionMedica }}</h3>
+      <p class="codigo" *ngIf="consultas.especialidad">{{ consultas.especialidad }}</p>
+    </div>
+    <div class="card-actions">
+      <ion-button fill="clear" size="small" class="more-btn">
+        <ion-icon name="ellipsis-horizontal" slot="icon-only"></ion-icon>
+      </ion-button>
+    </div>
+  </div>
 
-  <ion-card-content>
-    <ion-item lines="none">
-      <ion-icon slot="start" name="calendar-outline"></ion-icon>
-      <ion-label>Fecha</ion-label>
-      <div slot="end">{{ consultas.fecha | date:'longDate' }}</div>
-    </ion-item>
-  </ion-card-content>
-</ion-card>
+  <div class="card-content">
+    <div class="info-row">
+      <div class="info-item">
+        <ion-icon name="calendar-outline"></ion-icon>
+        <span class="label">Fecha consulta</span>
+        <span class="value">{{ consultas.fecha | date:'MMM d, y' }}</span>
+      </div>
+    </div>
+    
+    <div class="info-row" *ngIf="consultas.medico">
+      <div class="info-item">
+        <ion-icon name="person-outline"></ion-icon>
+        <span class="label">Médico</span>
+        <span class="value">{{ consultas.medico }}</span>
+      </div>
+    </div>
+    
+    <div class="info-row" *ngIf="consultas.motivo">
+      <div class="info-item">
+        <ion-icon name="document-text-outline"></ion-icon>
+        <span class="label">Motivo</span>
+        <span class="value">{{ consultas.motivo }}</span>
+      </div>
+    </div>
+    
+    <div class="diagnostico-footer" *ngIf="shouldShowFooter()">
+      <div class="tiempo-transcurrido" *ngIf="getTiempoTranscurrido()">
+        <ion-icon name="time-outline"></ion-icon>
+        <span>{{ getTiempoTranscurrido() }}</span>
+      </div>
+      <div class="estado-badge" [class]="getConsultaEstadoClass()" *ngIf="consultas.estado">
+        {{ getEstadoTexto() }}
+      </div>
+    </div>
+  </div>
+</div>

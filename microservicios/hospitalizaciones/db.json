@@ -5,21 +5,81 @@
       "idPaciente": 1,
       "fecha": "2025-05-10",
       "duracion": "7 días",
-      "institucionMedica": "Hospital Padre Hurtado"
+      "institucionMedica": "Hospital Padre Hurtado",
+      "tipoHospitalizacion": "Urgencia",
+      "estado": "Finalizada",
+      "gravedad": "moderado",
+      "motivo": "Infarto agudo al miocardio",
+      "especialidad": "Cardiología",
+      "medico": "Dr. Ricardo González",
+      "habitacion": "312-A",
+      "fechaAlta": "2025-05-17",
+      "observaciones": "Paciente evolucionó favorablemente"
     },
     {
       "id": 2,
       "idPaciente": 1,
       "fecha": "2024-11-02",
       "duracion": "3 días",
-      "institucionMedica": "Clínica Alemana"
+      "institucionMedica": "Clínica Alemana",
+      "tipoHospitalizacion": "Programada",
+      "estado": "Finalizada",
+      "gravedad": "leve",
+      "motivo": "Cirugía de vesícula",
+      "especialidad": "Cirugía General",
+      "medico": "Dra. María Fernández",
+      "habitacion": "205-B",
+      "fechaAlta": "2024-11-05",
+      "observaciones": "Procedimiento sin complicaciones"
     },
     {
       "id": 3,
       "idPaciente": 1,
       "fecha": "2025-01-14",
       "duracion": "5 días",
-      "institucionMedica": "Hospital Sótero del Río"
+      "institucionMedica": "Hospital Sótero del Río",
+      "tipoHospitalizacion": "Urgencia",
+      "estado": "Finalizada",
+      "gravedad": "grave",
+      "motivo": "Neumonía bilateral",
+      "especialidad": "Medicina Interna",
+      "medico": "Dr. José Martínez",
+      "habitacion": "401-C",
+      "fechaAlta": "2025-01-19",
+      "observaciones": "Requirió oxigenoterapia, evolución satisfactoria"
+    },
+    {
+      "id": 4,
+      "idPaciente": 1,
+      "fecha": "2025-09-15",
+      "duracion": "En curso",
+      "institucionMedica": "Hospital Salvador",
+      "tipoHospitalizacion": "Urgencia",
+      "estado": "Activa",
+      "gravedad": "moderado",
+      "motivo": "Control post-operatorio",
+      "especialidad": "Traumatología",
+      "medico": "Dr. Carlos Ramírez",
+      "habitacion": "108-A",
+      "fechaAlta": null,
+      "observaciones": "Paciente en recuperación"
     }
+  ],
+  "estadosHospitalizacion": [
+    "Activa",
+    "Finalizada",
+    "Suspendida",
+    "En evaluación"
+  ],
+  "gravedadHospitalizacion": [
+    "leve",
+    "moderado",
+    "grave"
+  ],
+  "tiposHospitalizacion": [
+    "Urgencia",
+    "Programada",
+    "Ambulatoria",
+    "Observación"
   ]
 }

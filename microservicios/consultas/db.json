@@ -4,19 +4,51 @@
       "id": 1,
       "idPaciente": 1,
       "fecha": "2025-05-10",
-      "institucionMedica": "Hospital Padre Hurtado"
+      "institucionMedica": "Hospital Padre Hurtado",
+      "especialidad": "Cardiología",
+      "medico": "Dr. Juan Pérez",
+      "motivo": "Control rutinario post-operatorio",
+      "estado": "completada",
+      "prioridad": "media",
+      "diagnostico": "Recuperación satisfactoria",
+      "tratamiento": "Continuar medicación actual"
     },
     {
       "id": 2,
       "idPaciente": 1,
       "fecha": "2024-11-02",
-      "institucionMedica": "Clínica Alemana"
+      "institucionMedica": "Clínica Alemana",
+      "especialidad": "Medicina General",
+      "medico": "Dra. María González",
+      "motivo": "Chequeo médico anual",
+      "estado": "completada",
+      "prioridad": "baja",
+      "diagnostico": "Estado de salud general bueno",
+      "tratamiento": "Mantener hábitos saludables"
     },
     {
       "id": 3,
       "idPaciente": 1,
       "fecha": "2025-01-14",
-      "institucionMedica": "Hospital Sótero del Río"
+      "institucionMedica": "Hospital Sótero del Río",
+      "especialidad": "Urgencia",
+      "medico": "Dr. Carlos Silva",
+      "motivo": "Dolor abdominal agudo",
+      "estado": "completada",
+      "prioridad": "alta",
+      "diagnostico": "Gastritis aguda",
+      "tratamiento": "Medicación antiácida y dieta blanda"
+    },
+    {
+      "id": 4,
+      "idPaciente": 1,
+      "fecha": "2025-12-15",
+      "institucionMedica": "Clínica Las Condes",
+      "especialidad": "Dermatología",
+      "medico": "Dra. Ana Martínez",
+      "motivo": "Control de lunar sospechoso",
+      "estado": "programada",
+      "prioridad": "media"
     }
   ]
 }

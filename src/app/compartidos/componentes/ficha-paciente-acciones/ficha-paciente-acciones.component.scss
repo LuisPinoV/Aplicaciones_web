@@ -1,12 +1,201 @@
 .acciones {
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-  margin-top: 0.2rem;
+  padding: 0px 0 16px 0;
+  
+  .acciones-grid {
+    --ion-grid-padding: 0;
+    --ion-grid-column-padding: 0;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  ion-col {
+    padding-bottom: 12px;
+    
+    &.left {
+      padding-left: 0;
+      padding-right: 6px;
+    }
+    
+    &.right {
+      padding-left: 6px;
+      padding-right: 0;
+    }
+  }
+
+  .accion-btn {
+    --border-radius: 12px;
+    --border-width: 1.5px;
+    --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    --transition: all 0.2s ease;
+    
+    font-weight: 500;
+    height: auto;
+    min-height: 100px;
+    margin: 0;
+
+    &:hover {
+      --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transform: translateY(-2px);
+    }
+
+    &:active {
+      --box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+      transform: translateY(0);
+    }
+
+    .btn-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 8px 4px;
+      text-align: center;
+    }
+
+    ion-icon {
+      font-size: 28px;
+      margin-bottom: 10px;
+      opacity: 0.85;
+      transition: all 0.2s ease;
+    }
+
+    &:hover ion-icon {
+      opacity: 1;
+      transform: scale(1.05);
+    }
+
+    .btn-text {
+      font-size: 0.9rem;
+      font-weight: 600;
+      line-height: 1.2;
+      margin-bottom: 3px;
+    }
+
+    .btn-subtitle {
+      font-size: 0.75rem;
+      font-weight: 400;
+      line-height: 1.1;
+      opacity: 0.7;
+    }
+  }
 }
 
-ion-button {
-  --border-radius: 8px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
+// Colores más casuales y naturales para cada botón
+.acciones ion-col:nth-child(1) .accion-btn { // Diagnósticos - Azul slate suave
+  --background: rgba(100, 116, 139, 0.06);
+  --border-color: rgba(100, 116, 139, 0.2);
+  --box-shadow: 0 2px 8px rgba(100, 116, 139, 0.08);
+  
+  ion-icon {
+    color: rgb(100, 116, 139);
+  }
+  
+  &:hover {
+    --background: rgba(100, 116, 139, 0.1);
+    --border-color: rgba(100, 116, 139, 0.3);
+    --box-shadow: 0 4px 12px rgba(100, 116, 139, 0.12);
+  }
+}
+
+.acciones ion-col:nth-child(2) .accion-btn { // Hospitalizaciones - Rosa suave
+  --background: rgba(219, 112, 147, 0.06);
+  --border-color: rgba(219, 112, 147, 0.2);
+  --box-shadow: 0 2px 8px rgba(219, 112, 147, 0.08);
+  
+  ion-icon {
+    color: rgb(219, 112, 147);
+  }
+  
+  &:hover {
+    --background: rgba(219, 112, 147, 0.1);
+    --border-color: rgba(219, 112, 147, 0.3);
+    --box-shadow: 0 4px 12px rgba(219, 112, 147, 0.12);
+  }
+}
+
+.acciones ion-col:nth-child(3) .accion-btn { // Consultas - Azul cielo natural
+  --background: rgba(56, 139, 193, 0.06);
+  --border-color: rgba(56, 139, 193, 0.2);
+  --box-shadow: 0 2px 8px rgba(56, 139, 193, 0.08);
+  
+  ion-icon {
+    color: rgb(56, 139, 193);
+  }
+  
+  &:hover {
+    --background: rgba(56, 139, 193, 0.1);
+    --border-color: rgba(56, 139, 193, 0.3);
+    --box-shadow: 0 4px 12px rgba(56, 139, 193, 0.12);
+  }
+}
+
+.acciones ion-col:nth-child(4) .accion-btn { // Procedimientos - Verde bosque
+  --background: rgba(52, 168, 83, 0.06);
+  --border-color: rgba(52, 168, 83, 0.2);
+  --box-shadow: 0 2px 8px rgba(52, 168, 83, 0.08);
+  
+  ion-icon {
+    color: rgb(52, 168, 83);
+  }
+  
+  &:hover {
+    --background: rgba(52, 168, 83, 0.1);
+    --border-color: rgba(52, 168, 83, 0.3);
+    --box-shadow: 0 4px 12px rgba(52, 168, 83, 0.12);
+  }
+}
+
+.acciones ion-col:nth-child(5) .accion-btn { // Medicamentos - Naranja cálido
+  --background: rgba(251, 146, 60, 0.06);
+  --border-color: rgba(251, 146, 60, 0.2);
+  --box-shadow: 0 2px 8px rgba(251, 146, 60, 0.08);
+  
+  ion-icon {
+    color: rgb(251, 146, 60);
+  }
+  
+  &:hover {
+    --background: rgba(251, 146, 60, 0.1);
+    --border-color: rgba(251, 146, 60, 0.3);
+    --box-shadow: 0 4px 12px rgba(251, 146, 60, 0.12);
+  }
+}
+
+.acciones ion-col:nth-child(6) .accion-btn { // Alergias - Rojo coral
+  --background: rgba(239, 68, 68, 0.06);
+  --border-color: rgba(239, 68, 68, 0.2);
+  --box-shadow: 0 2px 8px rgba(239, 68, 68, 0.08);
+  
+  ion-icon {
+    color: rgb(239, 68, 68);
+  }
+  
+  &:hover {
+    --background: rgba(239, 68, 68, 0.1);
+    --border-color: rgba(239, 68, 68, 0.3);
+    --box-shadow: 0 4px 12px rgba(239, 68, 68, 0.12);
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .acciones {
+    .accion-btn {
+      min-height: 90px;
+      
+      ion-icon {
+        font-size: 24px;
+        margin-bottom: 6px;
+      }
+
+      .btn-text {
+        font-size: 0.85rem;
+      }
+
+      .btn-subtitle {
+        font-size: 0.7rem;
+      }
+    }
+  }
 }

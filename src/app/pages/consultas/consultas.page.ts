@@ -38,4 +38,14 @@ export class ConsultasPage implements OnInit {
     });
   }
 
+  getInitials(nombre: string): string {
+    if (!nombre) return '';
+    return nombre
+      .split(' ')
+      .map(n => n[0])
+      .join('')
+      .toUpperCase()
+      .substring(0, 2);
+  }
+
 }

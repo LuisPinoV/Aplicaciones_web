@@ -1,46 +1,69 @@
 <ion-card class="perfil-card" *ngIf="paciente">
   <ion-card-header class="perfil-header">
-    <div class="avatar-fallback">
-      {{ getInitials(paciente.nombre) }}
+    <div class="avatar-container">
+      <div class="avatar-fallback">
+        {{ getInitials(paciente.nombre) }}
+      </div>
+      <div class="avatar-border"></div>
     </div>
 
-    <div class="perfil-titulos">
-      <ion-card-title>{{ paciente.nombre || 'Paciente' }}</ion-card-title>
-      <div class="rut ion-text-center">{{ paciente.rut }}</div>
+    <div class="perfil-info">
+      <ion-card-title class="nombre-paciente">{{ paciente.nombre || 'Paciente' }}</ion-card-title>
+      <div class="rut-paciente">{{ paciente.rut }}</div>
     </div>
   </ion-card-header>
 
-  <ion-card-content>
-    <ion-list lines="none">
-      <ion-item>
-        <ion-icon slot="start" name="calendar-outline"></ion-icon>
-        <ion-label>Edad</ion-label>
-        <div slot="end">{{ displayAge }}</div>
-      </ion-item>
+  <ion-card-content class="perfil-content">
+    <div class="info-grid">
+      <div class="info-item">
+        <div class="info-icon">
+          <ion-icon name="calendar-outline"></ion-icon>
+        </div>
+        <div class="info-content">
+          <span class="info-label">Edad</span>
+          <span class="info-value">{{ displayAge }}</span>
+        </div>
+      </div>
 
-      <ion-item>
-        <ion-icon slot="start" name="person-outline"></ion-icon>
-        <ion-label>Sexo</ion-label>
-        <div slot="end">{{ displaySex }}</div>
-      </ion-item>
+      <div class="info-item">
+        <div class="info-icon">
+          <ion-icon name="person-outline"></ion-icon>
+        </div>
+        <div class="info-content">
+          <span class="info-label">Sexo</span>
+          <span class="info-value">{{ displaySex }}</span>
+        </div>
+      </div>
 
-      <ion-item>
-        <ion-icon slot="start" name="medkit-outline"></ion-icon>
-        <ion-label>Grupo sanguíneo</ion-label>
-        <div slot="end">{{ paciente.grupo_sanguineo}}</div>
-      </ion-item>
+      <div class="info-item">
+        <div class="info-icon">
+          <ion-icon name="water-outline"></ion-icon>
+        </div>
+        <div class="info-content">
+          <span class="info-label">Grupo sanguíneo</span>
+          <span class="info-value">{{ paciente.grupo_sanguineo}}</span>
+        </div>
+      </div>
 
-      <ion-item>
-        <ion-icon slot="start" name="call-outline"></ion-icon>
-        <ion-label>Teléfono</ion-label>
-        <div slot="end">{{ paciente.telefono}}</div>
-      </ion-item>
+      <div class="info-item">
+        <div class="info-icon">
+          <ion-icon name="call-outline"></ion-icon>
+        </div>
+        <div class="info-content">
+          <span class="info-label">Teléfono</span>
+          <span class="info-value">{{ paciente.telefono}}</span>
+        </div>
+      </div>
 
-      <ion-item>
-        <ion-icon slot="start" name="mail-outline"></ion-icon>
-        <ion-label>Mail</ion-label>
-        <div slot="end">{{ paciente.mail}}</div>
-      </ion-item>
-    </ion-list>
+      <div class="info-item">
+        <div class="info-icon">
+          <ion-icon name="mail-outline"></ion-icon>
+        </div>
+        <div class="info-content">
+          <span class="info-label">Mail</span>
+          <span class="info-value">{{ paciente.mail}}</span>
+        </div>
+      </div>
+    </div>
   </ion-card-content>
 </ion-card>

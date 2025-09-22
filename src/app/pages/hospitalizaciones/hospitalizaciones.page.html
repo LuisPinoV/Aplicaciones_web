@@ -10,11 +10,16 @@
 <ion-content class="ion-padding">
   <div class="contenido" *ngIf="paciente">
     <div class="paciente-header">
-      <h2>{{ paciente.nombre }}</h2>
-      <p class="rut">{{ paciente.rut }}</p>
+      <div class="avatar-small">
+        {{ getInitials(paciente.nombre) }}
+      </div>
+      <div class="paciente-info">
+        <h2>{{ paciente.nombre }}</h2>
+        <p class="rut">{{ paciente.rut }}</p>
+      </div>
     </div>
 
-    <div *ngIf="hospitalizaciones.length > 0; else noData">
+    <div class="hospitalizacion-section" *ngIf="hospitalizaciones.length > 0; else noData">
       <app-hospitalizacion-card
         *ngFor="let h of hospitalizaciones"
         [hospitalizacion]="h">
@@ -22,7 +27,17 @@
     </div>
 
     <ng-template #noData>
-      <p class="sin-datos">Este paciente no tiene hospitalizaciones registradas.</p>
+      <div class="estado-vacio">
+        <div class="icono-vacio">
+          <ion-icon name="clipboard-outline"></ion-icon>
+        </div>
+        <h3>Sin hospitalizaciones registradas</h3>
+        <p>Este paciente no tiene hospitalizaciones médicas en su historial.</p>
+        <ion-button fill="outline" color="primary">
+          <ion-icon name="add-outline" slot="start"></ion-icon>
+          Agregar hospitalización
+        </ion-button>
+      </div>
     </ng-template>
   </div>
 </ion-content>

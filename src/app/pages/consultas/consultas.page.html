@@ -10,11 +10,16 @@
 <ion-content class="ion-padding">
   <div class="contenido" *ngIf="paciente">
     <div class="paciente-header">
-      <h2>{{ paciente.nombre }}</h2>
-      <p class="rut">{{ paciente.rut }}</p>
+      <div class="avatar-small">
+        {{ getInitials(paciente.nombre) }}
+      </div>
+      <div class="paciente-info">
+        <h2>{{ paciente.nombre }}</h2>
+        <p class="rut">{{ paciente.rut }}</p>
+      </div>
     </div>
 
-    <div *ngIf="consultas.length > 0; else noData">
+    <div class="consultas-section" *ngIf="consultas.length > 0; else noData">
       <app-consultas-card
         *ngFor="let c of consultas"
         [consultas]="c">

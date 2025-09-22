@@ -1,52 +1,249 @@
 .perfil-card {
-  margin: 10px auto 0 auto;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  --background: transparent;
+  box-shadow: none;
+  margin: 16px 0 2px 0!important;
+  border-radius: 16px;
+  overflow: visible;
+
+  .perfil-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 20px 16px 20px;
+    background: rgba(103, 126, 234, 0.06);
+    border-radius: 16px 16px 0 0;
+    border: 1.5px solid rgba(103, 126, 234, 0.15);
+    border-bottom: none;
+    position: relative;
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: rgba(79, 172, 254, 0.8);
+      border-radius: 16px 16px 0 0;
+    }
+
+    .avatar-container {
+      margin-bottom: 16px;
+
+      .avatar-fallback {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, rgba(103, 126, 234, 0.9) 0%, rgba(79, 172, 254, 0.9) 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        font-weight: 700;
+        color: white;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 4px 20px rgba(103, 126, 234, 0.02);
+      }
+
+      // Eliminamos completamente el avatar-border
+      .avatar-border {
+        display: none;
+      }
+    }
+
+    .perfil-info {
+      text-align: center;
+      width: 100%;
+
+      .nombre-paciente {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 4px;
+        line-height: 1.3;
+      }
+
+      .rut-paciente {
+        font-size: 0.9rem;
+        opacity: 0.8;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+      }
+    }
+  }
+
+  .perfil-content {
+    background: rgba(103, 126, 234, 0.03);
+    border: 1.5px solid rgba(103, 126, 234, 0.15);
+    border-top: none;
+    border-radius: 0 0 16px 16px;
+    padding: 20px;
+
+    .info-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .info-item {
+      display: flex;
+      align-items: center;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.6);
+      border-radius: 12px;
+      border: 1px solid rgba(103, 126, 234, 0.1);
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.8);
+        border-color: rgba(103, 126, 234, 0.2);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        transform: translateY(-1px);
+      }
+
+      .info-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        background: rgba(103, 126, 234, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 16px;
+        flex-shrink: 0;
+
+        ion-icon {
+          font-size: 20px;
+          color: rgb(103, 126, 234);
+        }
+      }
+
+      .info-content {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        min-width: 0;
+
+        .info-label {
+          font-size: 0.8rem;
+          font-weight: 500;
+          opacity: 0.7;
+          margin-bottom: 2px;
+          line-height: 1.2;
+        }
+
+        .info-value {
+          font-size: 0.95rem;
+          font-weight: 600;
+          line-height: 1.3;
+          word-break: break-word;
+        }
+      }
+
+      // Colores específicos para cada icono
+      &:nth-child(1) .info-icon { // Edad
+        background: rgba(103, 126, 234, 0.1);
+        ion-icon { color: rgb(103, 126, 234); }
+      }
+
+      &:nth-child(2) .info-icon { // Sexo
+        background: rgba(240, 147, 251, 0.1);
+        ion-icon { color: rgb(240, 147, 251); }
+      }
+
+      &:nth-child(3) .info-icon { // Grupo sanguíneo
+        background: rgba(255, 107, 107, 0.1);
+        ion-icon { color: rgb(255, 107, 107); }
+      }
+
+      &:nth-child(4) .info-icon { // Teléfono
+        background: rgba(67, 233, 123, 0.1);
+        ion-icon { color: rgb(67, 233, 123); }
+      }
+
+      &:nth-child(5) .info-icon { // Mail
+        background: rgba(255, 165, 7, 0.1);
+        ion-icon { color: rgb(255, 165, 7); }
+      }
+    }
+  }
 }
 
-.perfil-header {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  padding-top: 1.8rem;
+// Modo oscuro - Mejoramos la sombra del avatar
+@media (prefers-color-scheme: dark) {
+  .perfil-card {
+    .perfil-header {
+      background: rgba(103, 126, 234, 0.08);
+      border-color: rgba(103, 126, 234, 0.2);
+      
+      .avatar-container .avatar-fallback {
+        // Reducimos la sombra en modo oscuro para que no se vea extraña
+        box-shadow: 0 2px 12px rgba(103, 126, 234, 0.02);
+      }
+    }
+
+    .perfil-content {
+      background: rgba(103, 126, 234, 0.05);
+      border-color: rgba(103, 126, 234, 0.2);
+
+      .info-item {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(103, 126, 234, 0.15);
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.08);
+          border-color: rgba(103, 126, 234, 0.25);
+        }
+      }
+    }
+  }
 }
 
-.avatar-fallback {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background: var(--ion-color-medium);
-  color: var(--ion-color-light);
-  display: grid;
-  place-items: center;
-  font-weight: 700;
-  font-size: 1.1rem;
-  padding-top: 4px;
-}
+// Responsive
+@media (max-width: 768px) {
+  .perfil-card {
+    margin: 12px 0 20px 0;
 
-.perfil-titulos {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
+    .perfil-header {
+      padding: 20px 16px 14px 16px;
 
-.perfil-titulos .rut {
-  margin-top: 2px;
-  color: var(--ion-color-medium);
-  font-size: 0.9rem;
-}
+      .avatar-container .avatar-fallback {
+        width: 70px;
+        height: 70px;
+        font-size: 1.8rem;
+      }
 
-ion-item {
-  margin-bottom: 0.3rem;
-}
+      .perfil-info .nombre-paciente {
+        font-size: 1.3rem;
+      }
+    }
 
-ion-icon {
-  font-size: 20px;
-  margin-right: 6px;
-  color: var(--ion-color-medium);
-}
+    .perfil-content {
+      padding: 16px;
 
-ion-card-content {
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
+      .info-item {
+        padding: 14px;
+
+        .info-icon {
+          width: 36px;
+          height: 36px;
+          margin-right: 14px;
+
+          ion-icon {
+            font-size: 18px;
+          }
+        }
+
+        .info-content {
+          .info-label {
+            font-size: 0.75rem;
+          }
+
+          .info-value {
+            font-size: 0.9rem;
+          }
+        }
+      }
+    }
+  }
 }

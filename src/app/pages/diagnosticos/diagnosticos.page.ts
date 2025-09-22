@@ -37,4 +37,35 @@ export class DiagnosticosPage implements OnInit {
       error: (err) => console.error('Error cargando diagnósticos:', err)
     });
   }
+
+  // Funciones para las estadísticas
+  getDiagnosticosRecientes(): number {
+    const tresMesesAtras = new Date();
+    tresMesesAtras.setMonth(tresMesesAtras.getMonth() - 3);
+    return this.diagnosticos.filter(d => new Date(d.fecha) >= tresMesesAtras).length;
+  }
+
+  getDiagnosticosActivos(): number {
+    // Como no tienes campo 'activo' en la interfaz, puedes usar otra lógica
+    // Por ejemplo, diagnósticos del último año
+    const unAnoAtras = new Date();
+    unAnoAtras.setFullYear(unAnoAtras.getFullYear() - 1);
+    return this.diagnosticos.filter(d => new Date(d.fecha) >= unAnoAtras).length;
+  }
+
+  // Función para generar iniciales del paciente
+  getInitials(nombre: string): string {
+    if (!nombre) return '';
+    return nombre
+      .split(' ')
+      .map(n => n[0])
+      .join('')
+      .toUpperCase()
+      .substring(0, 2);
+  }
+
+  // Función para optimizar el renderizado de la lista
+  trackByDiagnostico(index: number, item: Diagnostico): number {
+    return item.id;
+  }
 }

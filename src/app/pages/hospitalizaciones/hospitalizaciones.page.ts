@@ -37,4 +37,14 @@ export class HospitalizacionesPage implements OnInit {
       error: (err) => console.error('Error cargando hospitalizaciones:', err)
     });
   }
+
+  getInitials(nombre: string): string {
+    if (!nombre) return '';
+    return nombre
+      .split(' ')
+      .map(n => n[0])
+      .join('')
+      .toUpperCase()
+      .substring(0, 2);
+  }
 }

@@ -9,20 +9,58 @@
 
 <ion-content class="ion-padding">
   <div class="contenido" *ngIf="paciente">
+    <!-- Header del paciente mejorado -->
     <div class="paciente-header">
-      <h2>{{ paciente.nombre }}</h2>
-      <p class="rut">{{ paciente.rut }}</p>
+      <div class="avatar-small">
+        {{ getInitials(paciente.nombre) }}
+      </div>
+      <div class="paciente-info">
+        <h2>{{ paciente.nombre }}</h2>
+        <p class="rut">{{ paciente.rut }}</p>
+      </div>
     </div>
 
-    <div *ngIf="diagnosticos.length > 0; else noData">
+    <!-- Estadísticas rápidas -->
+    <div class="stats-container" *ngIf="diagnosticos.length > 0">
+      <div class="stat-item">
+        <div class="stat-number">{{ diagnosticos.length }}</div>
+        <div class="stat-label">Diagnósticos</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">{{ getDiagnosticosRecientes() }}</div>
+        <div class="stat-label">Recientes</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">{{ getDiagnosticosActivos() }}</div>
+        <div class="stat-label">Activos</div>
+      </div>
+    </div>
+
+    <!-- Lista de diagnósticos -->
+    <div class="diagnosticos-section" *ngIf="diagnosticos.length > 0; else noData">
+      <div class="section-header">
+        <h3>Historial de Diagnósticos</h3>
+      </div>
+      
       <app-diagnostico-card 
-        *ngFor="let diag of diagnosticos" 
+        *ngFor="let diag of diagnosticos; trackBy: trackByDiagnostico" 
         [diagnostico]="diag">
       </app-diagnostico-card>
     </div>
 
+    <!-- Estado vacío mejorado -->
     <ng-template #noData>
-      <p class="sin-datos">Este paciente no tiene diagnósticos registrados.</p>
+      <div class="estado-vacio">
+        <div class="icono-vacio">
+          <ion-icon name="clipboard-outline"></ion-icon>
+        </div>
+        <h3>Sin diagnósticos registrados</h3>
+        <p>Este paciente no tiene diagnósticos médicos en su historial.</p>
+        <ion-button fill="outline" color="primary">
+          <ion-icon name="add-outline" slot="start"></ion-icon>
+          Agregar diagnóstico
+        </ion-button>
+      </div>
     </ng-template>
   </div>
 </ion-content>
