@@ -1,0 +1,167 @@
+
+.alergia-card {
+  background: var(--ion-color-step-100);
+  border: 1px solid rgba(100, 116, 139, 0.2);
+  border-radius: 12px;
+  margin-bottom: 16px;
+  overflow: hidden;
+  position: relative;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: var(--ion-color-step-500);
+    .severity-indicator {
+      width: 6px;
+    }
+  }
+
+  .severity-indicator {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    transition: width 0.3s ease;
+    z-index: 2;
+
+    &.leve { background: rgb(52, 168, 83); }
+    &.moderado { background: rgb(251, 146, 60); }
+    &.grave { background: rgb(239, 68, 68); }
+  }
+
+  .card-header {
+    display: flex;
+    align-items: flex-start;
+    padding: 16px 16px 8px 20px;
+    background: var(--ion-color-step-100);
+    border-bottom: 1px solid var(--ion-color-step-300);
+
+    .alergia-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: rgba(var(--ion-color-primary-rgb), 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 12px;
+      flex-shrink: 0;
+
+      ion-icon {
+        font-size: 22px;
+        color: rgb(var(--ion-color-primary-rgb));
+      }
+    }
+
+    .alergia-info {
+      flex: 1;
+      min-width: 0;
+
+      .titulo {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--ion-text-color);
+        line-height: 1.3;
+        margin: 0 0 4px 0;
+        word-break: break-word;
+      }
+
+      .codigo {
+        font-size: 0.75rem;
+        font-weight: 500;
+        color: var(--ion-color-medium);
+        margin: 0;
+        background: var(--ion-color-step-200);
+        padding: 2px 6px;
+        border-radius: 4px;
+        display: inline-block;
+      }
+    }
+
+    .card-actions {
+      .more-btn {
+        --color: var(--ion-color-medium);
+        --padding-start: 8px;
+        --padding-end: 8px;
+        margin: -8px -4px 0 0;
+      }
+    }
+  }
+
+  .card-content {
+    padding: 12px 16px 16px 20px;
+
+    .info-row {
+      margin-bottom: 12px;
+
+      .info-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 8px 0;
+
+        ion-icon {
+          font-size: 16px;
+          color: rgb(var(--ion-color-primary-rgb));
+          flex-shrink: 0;
+          opacity: 0.8;
+          margin-top: 2px;
+        }
+
+        .label {
+          font-size: 0.85rem;
+          font-weight: 500;
+          color: var(--ion-color-medium);
+          min-width: 80px;
+        }
+
+        .value {
+          font-size: 0.9rem;
+          font-weight: 600;
+          color: var(--ion-text-color);
+          text-align: left;
+          flex: 1;
+        }
+      }
+    }
+
+    .alergia-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--ion-color-step-300);
+
+      .tiempo-transcurrido {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.8rem;
+        color: var(--ion-color-medium);
+        font-weight: 500;
+      }
+
+      .estado-badge {
+        font-size: 0.7rem;
+        font-weight: 600;
+        padding: 4px 8px;
+        border-radius: 6px;
+        text-transform: uppercase;
+
+        &.leve-badge {
+          background: rgba(52, 168, 83, 0.1);
+          color: rgb(52, 168, 83);
+        }
+        &.moderado-badge {
+          background: rgba(251, 146, 60, 0.1);
+          color: rgb(251, 146, 60);
+        }
+        &.grave-badge {
+          background: rgba(239, 68, 68, 0.1);
+          color: rgb(239, 68, 68);
+        }
+      }
+    }
+  }
+}

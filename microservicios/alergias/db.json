@@ -1,0 +1,49 @@
+{
+  "alergias": [
+    {
+      "id": 1,
+      "idPaciente": 1,
+      "nombre": "Penicilina",
+      "tipo": "Medicamento",
+      "severidad": "Alta",
+      "reaccion": "Anafilaxia, dificultad para respirar.",
+      "fechaDiagnostico": "2010-08-15"
+    },
+    {
+      "id": 2,
+      "idPaciente": 1,
+      "nombre": "Polen de abedul",
+      "tipo": "Ambiental",
+      "severidad": "Moderada",
+      "reaccion": "Rinitis alérgica, estornudos, picazón en los ojos.",
+      "fechaDiagnostico": "2005-04-20"
+    },
+    {
+      "id": 3,
+      "idPaciente": 3,
+      "nombre": "Látex",
+      "tipo": "Contacto",
+      "severidad": "Moderada",
+      "reaccion": "Dermatitis de contacto, enrojecimiento y picazón en la piel.",
+      "fechaDiagnostico": "2019-03-12"
+    },
+    {
+      "id": 4,
+      "idPaciente": 4,
+      "nombre": "Mariscos",
+      "tipo": "Alimentaria",
+      "severidad": "Alta",
+      "reaccion": "Urticaria, hinchazón de labios y dificultad para respirar.",
+      "fechaDiagnostico": "2021-07-22"
+    },
+    {
+      "id": 5,
+      "idPaciente": 4,
+      "nombre": "Pelo de gato",
+      "tipo": "Ambiental",
+      "severidad": "Leve",
+      "reaccion": "Estornudos y congestión nasal.",
+      "fechaDiagnostico": "2015-11-05"
+    }
+  ]
+}

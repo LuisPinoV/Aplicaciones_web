@@ -1,0 +1,36 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/ficha-medica"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Alergias</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="contenido" *ngIf="paciente">
+    <div class="paciente-header">
+      <div class="avatar-small">
+        {{ getInitials(paciente.nombre) }}
+      </div>
+      <div class="paciente-info">
+        <h2>{{ paciente.nombre }}</h2>
+        <p class="rut">{{ paciente.rut }}</p>
+      </div>
+    </div>
+
+    <div class="alergias-section" *ngIf="alergias.length > 0; else noData">
+      <app-alergia-card *ngFor="let alergia of alergias" [alergia]="alergia"></app-alergia-card>
+    </div>
+
+    <ng-template #noData>
+      <div class="estado-vacio">
+        <div class="icono-vacio">
+          <ion-icon name="shield-checkmark-outline"></ion-icon>
+        </div>
+        <h3>Sin Alergias Registradas</h3>
+        <p>Este paciente no tiene alergias conocidas.</p>
+      </div>
+    </ng-template>
+  </div>
+</ion-content>

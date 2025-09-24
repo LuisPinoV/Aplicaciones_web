@@ -1,0 +1,34 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/ficha-medica"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Medicamentos</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="contenido" *ngIf="paciente">
+    <div class="paciente-header">
+      <div class="avatar-small">{{ getInitials(paciente.nombre) }}</div>
+      <div class="paciente-info">
+        <h2>{{ paciente.nombre }}</h2>
+        <p class="rut">{{ paciente.rut }}</p>
+      </div>
+    </div>
+
+    <div *ngIf="medicamentos.length > 0; else noData">
+      <app-medicamentos-card *ngFor="let med of medicamentos" [medicamento]="med"></app-medicamentos-card>
+    </div>
+
+    <ng-template #noData>
+      <div class="estado-vacio">
+        <div class="icono-vacio">
+          <ion-icon name="medkit-outline"></ion-icon>
+        </div>
+        <h3>Sin Medicamentos Registrados</h3>
+        <p>Este paciente no tiene medicamentos activos o registrados.</p>
+      </div>
+    </ng-template>
+  </div>
+</ion-content>

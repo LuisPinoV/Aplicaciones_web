@@ -1,0 +1,49 @@
+{
+  "medicamentos": [
+    {
+      "id": 1,
+      "idPaciente": 1,
+      "nombre": "Losartán 50mg",
+      "dosis": "1 comprimido al día",
+      "via": "Oral",
+      "frecuencia": "Cada 24 horas",
+      "motivo": "Hipertensión Arterial",
+      "estado": "Activo",
+      "fechaInicio": "2023-01-20"
+    },
+    {
+      "id": 2,
+      "idPaciente": 1,
+      "nombre": "Atorvastatina 20mg",
+      "dosis": "1 comprimido en la noche",
+      "via": "Oral",
+      "frecuencia": "Cada 24 horas",
+      "motivo": "Colesterol alto",
+      "estado": "Finalizado",
+      "fechaInicio": "2023-01-20"
+    },
+    {
+      "id": 3,
+      "idPaciente": 3,
+      "nombre": "Amoxicilina 500mg",
+      "dosis": "1 comprimido cada 8 horas por 7 días",
+      "via": "Oral",
+      "frecuencia": "Cada 8 horas",
+      "motivo": "Infección respiratoria",
+      "estado": "Finalizado",
+      "fechaInicio": "2025-09-10",
+      "fechaFin": "2025-09-17"
+    },
+    {
+      "id": 4,
+      "idPaciente": 4,
+      "nombre": "Salbutamol Inhalador",
+      "dosis": "2 puffs según necesidad",
+      "via": "Inhalatoria",
+      "frecuencia": "S.O.S.",
+      "motivo": "Asma",
+      "estado": "Activo",
+      "fechaInicio": "2020-05-01"
+    }
+  ]
+}
