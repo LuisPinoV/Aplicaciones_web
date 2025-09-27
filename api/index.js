@@ -14,16 +14,6 @@ const pool = mysql.createPool({
   database: 'bbdd_web'
 });
 
-// Health check endpoint
-app.get('/health', async (req, res) => {
-  try {
-    const [rows] = await pool.query('SELECT 1 as test');
-    res.json({ status: 'OK', database: 'Connected', test: rows });
-  } catch (err) {
-    console.error('Database connection error:', err);
-    res.status(500).json({ status: 'ERROR', error: err.message });
-  }
-});
 
 // Endpoint de prueba
 app.get('/fichas', async (req, res) => {
@@ -104,6 +94,33 @@ app.get('/consultas', async (req, res) => {
   try {
     const [rows] = await pool.query('SELECT * FROM Consulta');
     res.json(rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get('/fichas/:id', async (req, res) => {
+  const id = req.params.id;
+  try {
+    const [ficha] = await pool.query('SELECT * FROM FichaMedica WHERE idFichaMedica = ?', [id]);
+    if (!ficha.length) return res.status(404).json({ error: 'Ficha no encontrada' });
+
+    const [diagnosticos] = await pool.query('SELECT * FROM Diagnostico WHERE idFichaMedica = ?', [id]);
+    const [hospitalizaciones] = await pool.query('SELECT * FROM Hospitalizacion WHERE idFichaMedica = ?', [id]);
+    const [consultas] = await pool.query(
+      `SELECT c.*, m.nombre AS medicoNombre, tm.tipoMedico
+       FROM Consulta c
+       LEFT JOIN Medico m ON c.idMedico = m.idMedico
+       LEFT JOIN TipoMedico tm ON m.idTipoMedico = tm.idTipoMedico
+       WHERE c.idFichaMedica = ?`, [id]);
+
+    res.json({
+      ficha: ficha[0],
+      diagnosticos,
+      hospitalizaciones,
+      consultas
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: err.message });

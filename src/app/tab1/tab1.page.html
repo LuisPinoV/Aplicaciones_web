@@ -1,41 +1,85 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Fichas Médicas</ion-title>
+    <ion-title>Ficha Médica</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <ion-list *ngFor="let ficha of fichas">
-    <ion-item>
-      <ion-label>
-        <h2>{{ ficha.nombre }}</h2>
-        <p>Rut: {{ ficha.Rut }}</p>
-        <p>Fecha Nacimiento: {{ ficha.fechaNacimiento }}</p>
-        <p>Sexo: {{ ficha.sexo }}</p>
-        <p>Tipo Sangre: {{ ficha.tipoSangre }}</p>
-        <p>Altura: {{ ficha.altura }} m - Peso: {{ ficha.peso }} kg</p>
+  <ng-container *ngIf="!loading; else cargando">
 
-        <div *ngIf="ficha.diagnosticos?.length">
-          <strong>Diagnósticos:</strong>
-          <ul>
-            <li *ngFor="let d of ficha.diagnosticos">{{ d.fecha }} - {{ d.descripcion }}</li>
-          </ul>
-        </div>
+    <ion-card *ngIf="ficha">
+      <ion-card-header>
+        <ion-card-title>{{ ficha.nombre }}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p><strong>RUT:</strong> {{ ficha.Rut }}</p>
+        <p><strong>Fecha de Nacimiento:</strong> {{ ficha.fechaNacimiento | date }}</p>
+        <p><strong>Sexo:</strong> {{ ficha.sexo }}</p>
+        <p><strong>Género:</strong> {{ ficha.genero }}</p>
+        <p><strong>Tipo de Sangre:</strong> {{ ficha.tipoSangre }}</p>
+        <p><strong>Altura:</strong> {{ ficha.altura }} m</p>
+        <p><strong>Peso:</strong> {{ ficha.peso }} kg</p>
+      </ion-card-content>
+    </ion-card>
 
-        <div *ngIf="ficha.hospitalizaciones?.length">
-          <strong>Hospitalizaciones:</strong>
-          <ul>
-            <li *ngFor="let h of ficha.hospitalizaciones">{{ h.fecha }} - {{ h.institucionMedica }} ({{ h.duracion }} días)</li>
-          </ul>
-        </div>
+    <!-- Diagnósticos -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Diagnósticos</ion-card-title>
+      </ion-card-header>
+      <ion-list>
+        <ion-item *ngFor="let d of diagnosticos">
+          <ion-label>
+            <h2>{{ d.fecha | date:'short' }}</h2>
+            <p>{{ d.descripcion }}</p>
+          </ion-label>
+        </ion-item>
+        <ion-item *ngIf="diagnosticos.length === 0">
+          <ion-label>No hay diagnósticos.</ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-card>
 
-        <div *ngIf="ficha.padecimientos?.length">
-          <strong>Padecimientos:</strong>
-          <ul>
-            <li *ngFor="let p of ficha.padecimientos">{{ p.tipoPadecimiento }}: {{ p.nombre }} - {{ p.descripcion }} (fecha: {{ p.fecha }})</li>
-          </ul>
-        </div>
-      </ion-label>
-    </ion-item>
-  </ion-list>
+    <!-- Hospitalizaciones -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Hospitalizaciones</ion-card-title>
+      </ion-card-header>
+      <ion-list>
+        <ion-item *ngFor="let h of hospitalizaciones">
+          <ion-label>
+            <h2>{{ h.fecha | date:'short' }} – {{ h.institucionMedica }}</h2>
+            <p>Duración: {{ h.duracion }} días</p>
+          </ion-label>
+        </ion-item>
+        <ion-item *ngIf="hospitalizaciones.length === 0">
+          <ion-label>No hay hospitalizaciones.</ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-card>
+
+    <!-- Consultas -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Consultas</ion-card-title>
+      </ion-card-header>
+      <ion-list>
+        <ion-item *ngFor="let c of consultas">
+          <ion-label>
+            <h2>{{ c.fecha | date:'short' }} – {{ c.institucionMedica }}</h2>
+            <p>{{ c.descripcion }}</p>
+            <p *ngIf="c.medicoNombre">Médico: {{ c.medicoNombre }} ({{ c.tipoMedico }})</p>
+          </ion-label>
+        </ion-item>
+        <ion-item *ngIf="consultas.length === 0">
+          <ion-label>No hay consultas.</ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-card>
+
+  </ng-container>
+
+  <ng-template #cargando>
+    <ion-spinner></ion-spinner>
+  </ng-template>
 </ion-content>
