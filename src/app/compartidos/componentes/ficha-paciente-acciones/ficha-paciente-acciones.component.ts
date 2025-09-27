@@ -39,18 +39,22 @@ export class FichaPacienteAccionesComponent {
     });
   }
 
-  irAProcedimientos() {
-    console.log('Click en botón Ver procedimientos');
-    this.router.navigate(['/ficha-medica/procedimienos']).then(success => {
-      console.log('Resultado navegación:', success);
-    });
-  }
-
   irAMedicamentos() {
     console.log('Click en botón Ver medicamentos');
     this.router.navigate(['/ficha-medica/medicamentos']).then(success => {
       console.log('Resultado navegación:', success);
     });
   }
-
+  irAAlergias() {
+    console.log('Click en botón Ver alergias');
+    this.router.navigate(['/ficha-medica/alergias']).then(success => {
+      console.log('Resultado navegación:', success);
+    });
+  }
+  irAProcedimientos() {
+    console.log('Click en botón Ver procedimientos');
+    this.router.navigate(['/ficha-medica/procedimientos']).then(success => {
+      console.log('Resultado navegación:', success);
+    });
+  }
 }

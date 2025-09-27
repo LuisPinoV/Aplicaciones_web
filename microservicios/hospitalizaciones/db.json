@@ -66,20 +66,20 @@
     }
   ],
   "estadosHospitalizacion": [
-    "Activa",
-    "Finalizada",
-    "Suspendida",
-    "En evaluación"
+    { "id": 1, "nombre": "Activa" },
+    { "id": 2, "nombre": "Finalizada" },
+    { "id": 3, "nombre": "Suspendida" },
+    { "id": 4, "nombre": "En evaluación" }
   ],
   "gravedadHospitalizacion": [
-    "leve",
-    "moderado",
-    "grave"
+    { "id": 1, "nombre": "leve" },
+    { "id": 2, "nombre": "moderado" },
+    { "id": 3, "nombre": "grave" }
   ],
   "tiposHospitalizacion": [
-    "Urgencia",
-    "Programada",
-    "Ambulatoria",
-    "Observación"
+    { "id": 1, "nombre": "Urgencia" },
+    { "id": 2, "nombre": "Programada" },
+    { "id": 3, "nombre": "Ambulatoria" },
+    { "id": 4, "nombre": "Observación" }
   ]
 }

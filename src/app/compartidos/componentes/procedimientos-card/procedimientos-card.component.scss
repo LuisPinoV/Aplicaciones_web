@@ -1,0 +1,94 @@
+// Estilos adaptados de alergia-card.component.scss
+.procedimiento-card {
+  background: var(--ion-color-step-100);
+  border: 1px solid rgba(100, 116, 139, 0.2);
+  border-radius: 12px;
+  margin-bottom: 16px;
+  overflow: hidden;
+  position: relative;
+
+  .tipo-indicator {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    &.diagnostico { background: #3880ff; }
+    &.quirurgico { background: #eb445a; }
+    &.preventivo { background: #2dd36f; }
+  }
+
+  .card-header {
+    display: flex;
+    align-items: flex-start;
+    padding: 16px 16px 8px 20px;
+    border-bottom: 1px solid var(--ion-color-step-300);
+
+    .procedimiento-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: rgba(var(--ion-color-primary-rgb), 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 12px;
+      flex-shrink: 0;
+      ion-icon {
+        font-size: 22px;
+        color: rgb(var(--ion-color-primary-rgb));
+      }
+    }
+
+    .procedimiento-info {
+      flex: 1;
+      .titulo {
+        font-size: 1rem;
+        font-weight: 600;
+        margin: 0 0 4px 0;
+      }
+      .codigo {
+        font-size: 0.75rem;
+        font-weight: 500;
+        color: var(--ion-color-medium);
+        background: var(--ion-color-step-200);
+        padding: 2px 6px;
+        border-radius: 4px;
+        display: inline-block;
+      }
+    }
+  }
+
+  .card-content {
+    padding: 12px 16px 16px 20px;
+    .info-row {
+      margin-bottom: 12px;
+      .info-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 4px 0;
+        ion-icon { font-size: 16px; color: var(--ion-color-medium); }
+        .label { font-size: 0.85rem; color: var(--ion-color-medium); min-width: 80px; }
+        .value { font-size: 0.9rem; font-weight: 500; }
+      }
+    }
+    .resultado-section {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--ion-color-step-300);
+      .resultado-label { font-size: 0.8rem; font-weight: 600; color: var(--ion-color-medium); margin: 0 0 4px 0; }
+      .resultado-texto { font-size: 0.9rem; margin: 0; line-height: 1.5; }
+    }
+    .procedimiento-footer {
+      margin-top: 16px;
+      .fecha-procedimiento {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.8rem;
+        color: var(--ion-color-medium);
+      }
+    }
+  }
+}

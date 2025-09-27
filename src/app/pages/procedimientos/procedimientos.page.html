@@ -1,0 +1,34 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/ficha-medica"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Procedimientos</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="contenido" *ngIf="paciente">
+    <div class="paciente-header">
+      <div class="avatar-small">{{ getInitials(paciente.nombre) }}</div>
+      <div class="paciente-info">
+        <h2>{{ paciente.nombre }}</h2>
+        <p class="rut">{{ paciente.rut }}</p>
+      </div>
+    </div>
+
+    <div class="procedimientos-section" *ngIf="procedimientos.length > 0; else noData">
+      <app-procedimientos-card *ngFor="let proc of procedimientos" [procedimiento]="proc"></app-procedimientos-card>
+    </div>
+
+    <ng-template #noData>
+      <div class="estado-vacio">
+        <div class="icono-vacio">
+          <ion-icon name="document-text-outline"></ion-icon>
+        </div>
+        <h3>Sin Procedimientos Registrados</h3>
+        <p>Este paciente no tiene procedimientos registrados.</p>
+      </div>
+    </ng-template>
+  </div>
+</ion-content>

@@ -1,0 +1,34 @@
+{
+  "procedimientos": [
+    {
+      "id": 1,
+      "idPaciente": 1,
+      "nombre": "Endoscopía Digestiva Alta",
+      "tipo": "Diagnóstico",
+      "fecha": "2025-03-15",
+      "medico": "Dr. Carlos Soto",
+      "institucion": "Clínica Alemana",
+      "resultado": "Se observa gastritis leve. Se toman biopsias."
+    },
+    {
+      "id": 2,
+      "idPaciente": 1,
+      "nombre": "Artroscopia de rodilla",
+      "tipo": "Quirúrgico",
+      "fecha": "2024-08-20",
+      "medico": "Dra. Laura Muñoz",
+      "institucion": "Hospital del Trabajador",
+      "resultado": "Reparación de menisco medial exitosa."
+    },
+    {
+      "id": 3,
+      "idPaciente": 4,
+      "nombre": "Colonoscopía",
+      "tipo": "Preventivo",
+      "fecha": "2025-01-10",
+      "medico": "Dr. Carlos Soto",
+      "institucion": "Clínica Dávila",
+      "resultado": "Sin hallazgos patológicos. Se recomienda control en 5 años."
+    }
+  ]
+}

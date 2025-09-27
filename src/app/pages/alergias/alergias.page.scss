@@ -1,0 +1,67 @@
+// Estilos basados en consultas.page.scss
+
+.contenido {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0 4px;
+}
+
+.paciente-header {
+  display: flex;
+  align-items: center;
+  margin: 1rem 0 2rem 0;
+  padding: 16px 20px;
+  background: var(--ion-color-step-100);
+  border-radius: 12px;
+  border: 1px solid var(--ion-color-step-200);
+
+  .avatar-small {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgb(var(--ion-color-primary-rgb)) 0%, rgb(var(--ion-color-secondary-rgb)) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: white;
+    margin-right: 16px;
+    flex-shrink: 0;
+  }
+
+  .paciente-info {
+    flex: 1;
+    h2 {
+      margin: 0;
+      font-size: 1.3rem;
+      font-weight: 600;
+    }
+    .rut {
+      margin: 0;
+      font-size: 0.85rem;
+      color: var(--ion-color-medium);
+    }
+  }
+}
+
+.estado-vacio {
+  text-align: center;
+  padding: 3rem 2rem;
+  color: var(--ion-color-medium);
+
+  .icono-vacio ion-icon {
+    font-size: 4rem;
+    color: var(--ion-color-step-400);
+  }
+  h3 {
+    margin: 1rem 0 0.5rem 0;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--ion-text-color);
+  }
+  p {
+    margin: 0;
+    font-size: 0.95rem;
+  }
+}

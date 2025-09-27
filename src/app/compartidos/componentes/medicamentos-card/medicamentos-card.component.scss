@@ -1,0 +1,54 @@
+// Estilos adaptados de los otros componentes card
+.medicamento-card {
+  background: var(--ion-color-step-100);
+  border: 1px solid var(--ion-color-step-300);
+  border-radius: 12px;
+  margin-bottom: 16px;
+  overflow: hidden;
+  position: relative;
+
+  .estado-indicator {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+    &.activo { background: var(--ion-color-success); }
+    &.suspendido { background: var(--ion-color-warning); }
+    &.finalizado { background: var(--ion-color-medium); }
+  }
+
+  .card-header {
+    padding: 16px 16px 8px 20px;
+    .titulo { font-size: 1rem; font-weight: 600; margin: 0 0 4px 0; }
+    .motivo { font-size: 0.85rem; color: var(--ion-color-medium); margin: 0; }
+  }
+
+  .card-content {
+    padding: 12px 16px 16px 20px;
+    border-top: 1px solid var(--ion-color-step-200);
+
+    .info-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 6px 0;
+      ion-icon { font-size: 16px; color: var(--ion-color-primary); }
+      .label { font-size: 0.8rem; color: var(--ion-color-medium); min-width: 70px; }
+      .value { font-size: 0.9rem; font-weight: 500; }
+    }
+
+    .medicamento-footer {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 12px; padding-top: 12px;
+      border-top: 1px solid var(--ion-color-step-200);
+
+      .fecha-inicio {
+        display: flex; align-items: center; gap: 6px;
+        font-size: 0.8rem; color: var(--ion-color-medium);
+      }
+      .estado-badge {
+        font-size: 0.7rem; font-weight: 600; padding: 4px 8px; border-radius: 6px;
+        &.activo { background: rgba(var(--ion-color-success-rgb), 0.1); color: var(--ion-color-success); }
+        &.suspendido { background: rgba(var(--ion-color-warning-rgb), 0.1); color: var(--ion-color-warning); }
+        &.finalizado { background: rgba(var(--ion-color-medium-rgb), 0.15); color: var(--ion-color-medium); }
+      }
+    }
+  }
+}
