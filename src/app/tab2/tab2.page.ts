@@ -1,26 +1,44 @@
 import { Component } from '@angular/core';
-import { IonHeader, IonToolbar, IonTitle, IonContent, IonButton } from '@ionic/angular/standalone';
-import { IonAccordion, IonAccordionGroup, IonItem} from '@ionic/angular/standalone';
-import { Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { IonicModule, IonItem, IonInput, IonLabel, IonButton, IonDatetime } from '@ionic/angular';
+import { CommonModule } from '@angular/common';
+import { ApiService } from '../services/api';
 
 @Component({
   selector: 'app-tab2',
-  templateUrl: 'tab2.page.html',
-  styleUrls: ['tab2.page.scss'],
-  imports: [IonHeader, IonToolbar, IonTitle, IonContent, 
-    IonItem, IonAccordion, IonAccordionGroup,IonButton],
+  templateUrl: './tab2.page.html',
+  styleUrls: ['./tab2.page.scss'],
+  standalone: true,
+  imports: [
+    IonicModule,
+    CommonModule,
+    FormsModule
+  ]
 })
 export class Tab2Page {
+  ficha = {
+    Rut: null,
+    nombre: '',
+    fechaNacimiento: '',
+    sexo: '',
+    tipoSangre: '',
+    altura: null,
+    peso: null,
+    genero: ''
+  };
 
-  constructor(private router: Router) {}
+  constructor(private api: ApiService) {}
 
-  goToAgendamientoMedico() {
-  this.router.navigate(['/agendamiento-medico']);
+  async guardarFicha() {
+    try {
+      const res = await this.api.crearFicha(this.ficha);
+      if (res.success) {
+        alert(`Ficha creada con ID: ${res.idFichaMedica}`);
+        this.ficha = { Rut: null, nombre: '', fechaNacimiento: '', sexo: '', tipoSangre: '', altura: null, peso: null, genero: '' };
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Error al guardar la ficha');
+    }
   }
-
-  goToAgendamientoNoMedico() {
-  this.router.navigate(['/agendamiento-no-medico']);
-  }
-
 }
-export class ExampleComponent {}

@@ -1,32 +1,51 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>
-      Tab 2
-    </ion-title>
+    <ion-title>Insertar Ficha Médica</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 2</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="ion-padding">
+  <form (ngSubmit)="guardarFicha()">
+    <ion-item>
+      <ion-label position="floating">Rut</ion-label>
+      <ion-input type="number" [(ngModel)]="ficha.Rut" name="Rut" required></ion-input>
+    </ion-item>
 
-  <ion-accordion-group>
-    <ion-accordion value="first">
-      <ion-item slot="header" color="light">
-        <ion-button slot="end" (click)="goToAgendamientoMedico()">
-          Ir a Agendamiento Medico
-        </ion-button>
-      </ion-item>
-    </ion-accordion>
-    <ion-accordion value="second">
-      <ion-item slot="header" color="light">
-        <ion-button slot="end" (click)="goToAgendamientoNoMedico()">
-          Ir a Agendamiento No Medico
-        </ion-button>
-      </ion-item>
-    </ion-accordion>
-  </ion-accordion-group>
+    <ion-item>
+      <ion-label position="floating">Nombre</ion-label>
+      <ion-input type="text" [(ngModel)]="ficha.nombre" name="nombre" required></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Fecha Nacimiento</ion-label>
+      <ion-datetime display-format="YYYY-MM-DD" [(ngModel)]="ficha.fechaNacimiento" name="fechaNacimiento"></ion-datetime>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Sexo</ion-label>
+      <ion-input type="text" [(ngModel)]="ficha.sexo" name="sexo"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Tipo Sangre</ion-label>
+      <ion-input type="text" [(ngModel)]="ficha.tipoSangre" name="tipoSangre"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Altura (m)</ion-label>
+      <ion-input type="number" [(ngModel)]="ficha.altura" name="altura"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Peso (kg)</ion-label>
+      <ion-input type="number" [(ngModel)]="ficha.peso" name="peso"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Género</ion-label>
+      <ion-input type="text" [(ngModel)]="ficha.genero" name="genero"></ion-input>
+    </ion-item>
+
+    <ion-button expand="block" type="submit">Guardar</ion-button>
+  </form>
 </ion-content>

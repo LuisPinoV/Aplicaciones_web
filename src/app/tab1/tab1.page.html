@@ -1,8 +1,41 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>
-      Tab1
-    </ion-title>
+    <ion-title>Fichas Médicas</ion-title>
   </ion-toolbar>
 </ion-header>
 
+<ion-content class="ion-padding">
+  <ion-list *ngFor="let ficha of fichas">
+    <ion-item>
+      <ion-label>
+        <h2>{{ ficha.nombre }}</h2>
+        <p>Rut: {{ ficha.Rut }}</p>
+        <p>Fecha Nacimiento: {{ ficha.fechaNacimiento }}</p>
+        <p>Sexo: {{ ficha.sexo }}</p>
+        <p>Tipo Sangre: {{ ficha.tipoSangre }}</p>
+        <p>Altura: {{ ficha.altura }} m - Peso: {{ ficha.peso }} kg</p>
+
+        <div *ngIf="ficha.diagnosticos?.length">
+          <strong>Diagnósticos:</strong>
+          <ul>
+            <li *ngFor="let d of ficha.diagnosticos">{{ d.fecha }} - {{ d.descripcion }}</li>
+          </ul>
+        </div>
+
+        <div *ngIf="ficha.hospitalizaciones?.length">
+          <strong>Hospitalizaciones:</strong>
+          <ul>
+            <li *ngFor="let h of ficha.hospitalizaciones">{{ h.fecha }} - {{ h.institucionMedica }} ({{ h.duracion }} días)</li>
+          </ul>
+        </div>
+
+        <div *ngIf="ficha.padecimientos?.length">
+          <strong>Padecimientos:</strong>
+          <ul>
+            <li *ngFor="let p of ficha.padecimientos">{{ p.tipoPadecimiento }}: {{ p.nombre }} - {{ p.descripcion }} (fecha: {{ p.fecha }})</li>
+          </ul>
+        </div>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

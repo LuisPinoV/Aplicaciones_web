@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
+import { ApiService } from '../services/api';
 
 @Component({
   selector: 'app-tab1',
@@ -10,6 +11,18 @@ import { IonicModule } from '@ionic/angular';
   imports: [IonicModule, CommonModule]
 })
 
-export class Tab1Page {
+export class Tab1Page implements OnInit {
 
+  fichas: any[] = [];
+
+  constructor(private api: ApiService) {}
+
+  ngOnInit() {
+    this.cargarFichas();
+  }
+
+  async cargarFichas() {
+    this.fichas = await this.api.getFichasDetalle(); // trae datos completos
+    console.log(this.fichas);
+  }
 }
