@@ -7,9 +7,9 @@ app.use(cors());
 app.use(express.json());
 
 const pool = mysql.createPool({
-  host: "localhost", //Ip publica de la EC2
-  user: "root", // usuario de la base de datos
-  password: "123456", // contraseña del usuairio
+  host: "54.160.52.164", //Ip publica de la EC2
+  user: "ionic", // usuario de la base de datos
+  password: "Larsi@123456", // contraseña del usuairio
   database: "bbdd_web" // esquema base de datos
 });
 
