@@ -8,6 +8,22 @@
 
   <!-- Grid de acciones -->
   <div class="actions-grid">
+    <!-- Examenes -->
+    <div class="action-card examenes-card" (click)="irAExamenes()">
+      <div class="card-header">
+        <div class="icon-container">
+          <ion-icon name="document-text"></ion-icon>
+        </div>
+        <div class="card-badge">{{contadorExamenes}}</div>
+      </div>
+      <div class="card-content">
+        <h4 class="card-title">Examenes</h4>
+        <p class="card-description">Resultados de laboratorio y pruebas diagnósticas</p>
+      </div>
+      <div class="card-arrow">
+        <ion-icon name="chevron-forward"></ion-icon>
+      </div>
+    </div>
     
     <!-- Diagnósticos -->
     <div class="action-card diagnostics-card" (click)="irADiagnosticos()">

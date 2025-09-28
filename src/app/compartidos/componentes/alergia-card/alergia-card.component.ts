@@ -12,6 +12,7 @@ import { Alergia } from 'src/app/core/servicios/alergias.service';
 })
 export class AlergiaCardComponent {
   @Input() alergia!: Alergia;
+  @Input() index?: number;
 
   constructor() { }
 

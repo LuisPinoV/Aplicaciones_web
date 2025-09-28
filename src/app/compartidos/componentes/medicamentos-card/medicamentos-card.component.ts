@@ -12,6 +12,7 @@ import { Medicamento } from 'src/app/core/servicios/medicamentos.service';
 })
 export class MedicamentosCardComponent {
   @Input() medicamento!: Medicamento;
+  @Input() index?: number;
 
   constructor() { }
 

@@ -65,9 +65,8 @@ export class DiagnosticosPage implements OnInit {
   }
 
   getDiagnosticosActivos(): number {
-    const unAnoAtras = new Date();
-    unAnoAtras.setFullYear(unAnoAtras.getFullYear() - 1);
-    return this.diagnosticos.filter(d => new Date(d.fecha) >= unAnoAtras).length;
+    const estadosActivos = ['activo', 'cronico', 'en_tratamiento'];
+    return this.diagnosticos.filter(d => d.estado && estadosActivos.includes(d.estado)).length;
   }
 
   // Función para generar iniciales del paciente
@@ -195,13 +194,8 @@ export class DiagnosticosPage implements OnInit {
   }
 
   private filterActive() {
-    const unAnoAtras = new Date();
-    unAnoAtras.setFullYear(unAnoAtras.getFullYear() - 1);
-    
-    this.diagnosticos = this.diagnosticos.filter(d => 
-      new Date(d.fecha) >= unAnoAtras
-    );
-    
+    const activeStates = ['activo', 'cronico', 'en_tratamiento'];
+    this.diagnosticos = this.diagnosticos.filter(d => d.estado && activeStates.includes(d.estado));
     this.showSuccessToast(`Mostrando ${this.diagnosticos.length} diagnósticos activos`);
   }
 

@@ -12,6 +12,7 @@ import { Hospitalizacion, HospitalizacionesService } from 'src/app/core/servicio
 })
 export class HospitalizacionCardComponent {
   @Input() hospitalizacion?: Hospitalizacion;
+  @Input() index?: number;
 
   getHospitalizacionSeverityClass(): string {
     if (!this.hospitalizacion) return 'leve';

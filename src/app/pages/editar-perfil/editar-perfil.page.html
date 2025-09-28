@@ -1,0 +1,172 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/perfil"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Editar Perfil</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="edit-profile-content">
+  
+  <!-- Avatar Section -->
+  <div class="avatar-section">
+    <div class="avatar-container">
+      <div class="current-avatar">
+        {{ getInitials() }}
+      </div>
+      <ion-button fill="clear" class="change-avatar-btn" (click)="cambiarAvatar()">
+        <ion-icon name="camera" slot="icon-only"></ion-icon>
+      </ion-button>
+    </div>
+    <p class="avatar-text">Toca para cambiar foto</p>
+  </div>
+
+  <!-- Formulario -->
+  <form class="edit-form" (ngSubmit)="guardarCambios()">
+    
+    <!-- Información Personal -->
+    <div class="form-section">
+      <h3 class="section-title">Información Personal</h3>
+      
+      <div class="form-group">
+        <ion-item class="form-input" lines="none">
+          <ion-input
+            [(ngModel)]="formData.nombre"
+            name="nombre"
+            label="Nombre completo"
+            labelPlacement="floating"
+            placeholder="Ingresa tu nombre"
+            required>
+          </ion-input>
+        </ion-item>
+      </div>
+
+      <div class="form-group">
+        <ion-item class="form-input" lines="none">
+          <ion-input
+            [(ngModel)]="formData.rut"
+            name="rut"
+            label="RUT"
+            labelPlacement="floating"
+            placeholder="12.345.678-9"
+            readonly>
+          </ion-input>
+        </ion-item>
+        <p class="input-help">El RUT no se puede modificar</p>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group half">
+          <ion-item class="form-input" lines="none">
+            <ion-input
+              [(ngModel)]="formData.edad"
+              name="edad"
+              type="number"
+              label="Edad"
+              labelPlacement="floating"
+              placeholder="30"
+              required>
+            </ion-input>
+          </ion-item>
+        </div>
+
+        <div class="form-group half">
+          <ion-item class="form-input" lines="none">
+            <ion-select
+              [(ngModel)]="formData.sexo"
+              name="sexo"
+              label="Sexo"
+              labelPlacement="floating"
+              placeholder="Seleccionar"
+              interface="popover">
+              <ion-select-option value="Masculino">Masculino</ion-select-option>
+              <ion-select-option value="Femenino">Femenino</ion-select-option>
+              <ion-select-option value="Otro">Otro</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <ion-item class="form-input" lines="none">
+          <ion-select
+            [(ngModel)]="formData.grupo_sanguineo"
+            name="grupo_sanguineo"
+            label="Grupo sanguíneo"
+            labelPlacement="floating"
+            placeholder="Seleccionar"
+            interface="popover">
+            <ion-select-option value="A+">A+</ion-select-option>
+            <ion-select-option value="A-">A-</ion-select-option>
+            <ion-select-option value="B+">B+</ion-select-option>
+            <ion-select-option value="B-">B-</ion-select-option>
+            <ion-select-option value="AB+">AB+</ion-select-option>
+            <ion-select-option value="AB-">AB-</ion-select-option>
+            <ion-select-option value="O+">O+</ion-select-option>
+            <ion-select-option value="O-">O-</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </div>
+    </div>
+
+    <!-- Información de Contacto -->
+    <div class="form-section">
+      <h3 class="section-title">Información de Contacto</h3>
+      
+      <div class="form-group">
+        <ion-item class="form-input" lines="none">
+          <ion-input
+            [(ngModel)]="formData.telefono"
+            name="telefono"
+            type="tel"
+            label="Teléfono"
+            labelPlacement="floating"
+            placeholder="+56 9 1111 1111"
+            required>
+          </ion-input>
+        </ion-item>
+      </div>
+
+      <div class="form-group">
+        <ion-item class="form-input" lines="none">
+          <ion-input
+            [(ngModel)]="formData.mail"
+            name="mail"
+            type="email"
+            label="Correo electrónico"
+            labelPlacement="floating"
+            placeholder="ejemplo@gmail.com"
+            required>
+          </ion-input>
+        </ion-item>
+      </div>
+    </div>
+
+    <!-- Botones de acción -->
+    <div class="form-actions">
+      <ion-button 
+        expand="block" 
+        type="submit"
+        class="save-button"
+        [disabled]="isLoading">
+        <ion-icon name="checkmark-outline" slot="start"></ion-icon>
+        <span *ngIf="!isLoading">Guardar Cambios</span>
+        <span *ngIf="isLoading">Guardando...</span>
+      </ion-button>
+
+      <ion-button 
+        expand="block" 
+        fill="outline"
+        color="medium"
+        class="cancel-button"
+        (click)="cancelarEdicion()"
+        [disabled]="isLoading">
+        <ion-icon name="close-outline" slot="start"></ion-icon>
+        Cancelar
+      </ion-button>
+    </div>
+
+  </form>
+
+</ion-content>

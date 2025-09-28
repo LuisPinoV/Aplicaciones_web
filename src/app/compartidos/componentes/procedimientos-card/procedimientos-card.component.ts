@@ -12,6 +12,7 @@ import { Procedimiento } from 'src/app/core/servicios/procedimientos.service';
 })
 export class ProcedimientosCardComponent {
   @Input() procedimiento!: Procedimiento;
+  @Input() index?: number;
 
   constructor() { }
 

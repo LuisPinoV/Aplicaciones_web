@@ -12,6 +12,7 @@ export const environment = {
     alergias: 'http://localhost:4006/alergias',
     procedimientos: 'http://localhost:4007/procedimientos',
     medicamentos: 'http://localhost:4008/medicamentos',
+    examenes: 'http://localhost:4009/examenes',
   }
 };
 

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { Paciente } from 'src/app/core/servicios/pacientes.service';
+import { ExamenesService } from 'src/app/core/servicios/examenes.service';
 import { DiagnosticosService } from 'src/app/core/servicios/diagnosticos.service';
 import { HospitalizacionesService } from 'src/app/core/servicios/hospitalizaciones.service';
 import { ConsultasService } from 'src/app/core/servicios/consultas.service';
@@ -21,6 +22,7 @@ import { firstValueFrom } from 'rxjs';
 export class FichaPacienteAccionesComponent implements OnChanges {
   @Input() paciente?: Paciente;
 
+  contadorExamenes = 0;
   contadorDiagnosticos = 0;
   contadorHospitalizaciones = 0;
   contadorConsultas = 0;
@@ -30,6 +32,7 @@ export class FichaPacienteAccionesComponent implements OnChanges {
 
   constructor(
     private router: Router,
+    private examenesService: ExamenesService,
     private diagnosticosService: DiagnosticosService,
     private hospitalizacionesService: HospitalizacionesService,
     private consultasService: ConsultasService,
@@ -46,6 +49,11 @@ export class FichaPacienteAccionesComponent implements OnChanges {
 
   private async cargarContadores(idPaciente: number) {
     try {
+      this.examenesService.getContadorPorPaciente(1).subscribe({
+        next: (cantidad) => {
+          this.contadorExamenes = cantidad;
+        }
+      });
       this.diagnosticosService.getContadorPorPaciente(1).subscribe({
         next: (cantidad) => {
           this.contadorDiagnosticos = cantidad;
@@ -81,27 +89,31 @@ export class FichaPacienteAccionesComponent implements OnChanges {
     }
   }
 
+  irAExamenes() {
+    this.router.navigate(['/tabs/historial/examenes']);
+  }
+
   irADiagnosticos() {
-    this.router.navigate(['/ficha-medica/diagnosticos']);
+    this.router.navigate(['/tabs/historial/diagnosticos']);
   }
 
   irAHospitalizaciones() {
-    this.router.navigate(['/ficha-medica/hospitalizaciones']);
+    this.router.navigate(['/tabs/historial/hospitalizaciones']);
   }
 
   irAConsultas() {
-    this.router.navigate(['/ficha-medica/consultas']);
+    this.router.navigate(['/tabs/historial/consultas']);
   }
 
   irAMedicamentos() {
-    this.router.navigate(['/ficha-medica/medicamentos']);
+    this.router.navigate(['/tabs/historial/medicamentos']);
   }
 
   irAAlergias() {
-    this.router.navigate(['/ficha-medica/alergias']);
+    this.router.navigate(['/tabs/historial/alergias']);
   }
 
   irAProcedimientos() {
-    this.router.navigate(['/ficha-medica/procedimientos']);
+    this.router.navigate(['/tabs/historial/procedimientos']);
   }
 }

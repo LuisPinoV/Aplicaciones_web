@@ -12,6 +12,7 @@ import { Consultas } from 'src/app/core/servicios/consultas.service';
 })
 export class ConsultasCardComponent {
   @Input() consultas?: Consultas;
+  @Input() index?: number;
 
   /**
    * Obtiene la clase CSS para el indicador de severidad/prioridad

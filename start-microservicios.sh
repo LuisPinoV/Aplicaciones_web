@@ -21,4 +21,7 @@ echo $! >> microservicios.pid
 json-server --watch microservicios/medicamentos/db.json --port 4008 &
 echo $! >> microservicios.pid
 
+json-server --watch microservicios/examenes/db.json --port 4009 &
+echo $! >> microservicios.pid
+
 echo "Microservicios iniciados. PIDs guardados en microservicios.pid"
