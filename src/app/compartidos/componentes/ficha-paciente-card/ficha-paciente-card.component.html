@@ -1,69 +1,93 @@
-<ion-card class="perfil-card" *ngIf="paciente">
-  <ion-card-header class="perfil-header">
-    <div class="avatar-container">
-      <div class="avatar-fallback">
-        {{ getInitials(paciente.nombre) }}
+<ion-card class="modern-profile-card" *ngIf="paciente">
+  
+  <!-- Header con avatar y nombre -->
+  <div class="profile-header">
+    <div class="header-background"></div>
+    <div class="header-content">
+      <div class="avatar-section">
+        <div class="avatar-wrapper">
+          <div class="avatar-circle">
+            {{ getInitials(paciente.nombre) }}
+          </div>
+          <div class="avatar-status"></div>
+        </div>
       </div>
-      <div class="avatar-border"></div>
+      <div class="name-section">
+        <h2 class="patient-name">{{ paciente.nombre || 'Paciente' }}</h2>
+        <p class="patient-id">ID: {{ paciente.rut }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Grid de información -->
+  <div class="profile-body">
+    <div class="info-cards-grid">
+      
+      <!-- Card Edad -->
+      <div class="info-mini-card age-card">
+        <div class="card-icon">
+          <ion-icon name="calendar"></ion-icon>
+        </div>
+        <div class="card-content">
+          <span class="card-value">{{ displayAge }}</span>
+          <span class="card-label">Edad</span>
+        </div>
+      </div>
+
+      <!-- Card Sexo -->
+      <div class="info-mini-card gender-card">
+        <div class="card-icon">
+          <ion-icon name="person"></ion-icon>
+        </div>
+        <div class="card-content">
+          <span class="card-value">{{ displaySex }}</span>
+          <span class="card-label">Sexo</span>
+        </div>
+      </div>
+
+      <!-- Card Grupo Sanguíneo -->
+      <div class="info-mini-card blood-card">
+        <div class="card-icon">
+          <ion-icon name="water"></ion-icon>
+        </div>
+        <div class="card-content">
+          <span class="card-value">{{ paciente.grupo_sanguineo }}</span>
+          <span class="card-label">Grupo</span>
+        </div>
+      </div>
+
     </div>
 
-    <div class="perfil-info">
-      <ion-card-title class="nombre-paciente">{{ paciente.nombre || 'Paciente' }}</ion-card-title>
-      <div class="rut-paciente">{{ paciente.rut }}</div>
-    </div>
-  </ion-card-header>
-
-  <ion-card-content class="perfil-content">
-    <div class="info-grid">
-      <div class="info-item">
-        <div class="info-icon">
-          <ion-icon name="calendar-outline"></ion-icon>
+    <!-- Información de contacto -->
+    <div class="contact-section">
+      <h3 class="section-title">Información de Contacto</h3>
+      
+      <div class="contact-item">
+        <div class="contact-icon phone-icon">
+          <ion-icon name="call"></ion-icon>
         </div>
-        <div class="info-content">
-          <span class="info-label">Edad</span>
-          <span class="info-value">{{ displayAge }}</span>
+        <div class="contact-info">
+          <span class="contact-value">{{ paciente.telefono }}</span>
+          <span class="contact-label">Teléfono</span>
         </div>
-      </div>
-
-      <div class="info-item">
-        <div class="info-icon">
-          <ion-icon name="person-outline"></ion-icon>
-        </div>
-        <div class="info-content">
-          <span class="info-label">Sexo</span>
-          <span class="info-value">{{ displaySex }}</span>
-        </div>
-      </div>
-
-      <div class="info-item">
-        <div class="info-icon">
-          <ion-icon name="water-outline"></ion-icon>
-        </div>
-        <div class="info-content">
-          <span class="info-label">Grupo sanguíneo</span>
-          <span class="info-value">{{ paciente.grupo_sanguineo}}</span>
-        </div>
-      </div>
-
-      <div class="info-item">
-        <div class="info-icon">
+        <ion-button fill="clear" size="small" class="contact-action">
           <ion-icon name="call-outline"></ion-icon>
-        </div>
-        <div class="info-content">
-          <span class="info-label">Teléfono</span>
-          <span class="info-value">{{ paciente.telefono}}</span>
-        </div>
+        </ion-button>
       </div>
 
-      <div class="info-item">
-        <div class="info-icon">
+      <div class="contact-item">
+        <div class="contact-icon email-icon">
+          <ion-icon name="mail"></ion-icon>
+        </div>
+        <div class="contact-info">
+          <span class="contact-value">{{ paciente.mail }}</span>
+          <span class="contact-label">Correo electrónico</span>
+        </div>
+        <ion-button fill="clear" size="small" class="contact-action">
           <ion-icon name="mail-outline"></ion-icon>
-        </div>
-        <div class="info-content">
-          <span class="info-label">Mail</span>
-          <span class="info-value">{{ paciente.mail}}</span>
-        </div>
+        </ion-button>
       </div>
     </div>
-  </ion-card-content>
+  </div>
+
 </ion-card>

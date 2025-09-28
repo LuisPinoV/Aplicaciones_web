@@ -1,0 +1,97 @@
+<ion-content class="login-content">
+  <div class="background-overlay"></div>
+  
+  <div class="login-container">
+    <!-- Header con logo/título -->
+    <div class="header-section">
+      <div class="logo-container">
+        <ion-icon name="medical" class="logo-icon"></ion-icon>
+      </div>
+      <h1 class="app-title">MediNet</h1>
+      <p class="welcome-text">¡Bienvenido de vuelta!</p>
+    </div>
+
+    <!-- Formulario de login -->
+    <ion-card class="login-card">
+      <ion-card-content>
+        <form class="login-form">
+          
+          <!-- Campo de correo -->
+          <div class="input-group">
+            <ion-item class="custom-input" lines="none">
+              <ion-icon name="mail-outline" slot="start" class="input-icon"></ion-icon>
+              <ion-input
+                [(ngModel)]="email"
+                name="email"
+                type="email"
+                label="Correo electrónico"
+                labelPlacement="floating"
+                placeholder="ejemplo@gmail.com"
+                required
+                class="custom-input-field"
+                (ionInput)="onInputChange()"
+                (keypress)="onKeyPress($event)">
+              </ion-input>
+            </ion-item>
+          </div>
+
+          <!-- Campo de contraseña -->
+          <div class="input-group">
+            <ion-item class="custom-input" lines="none">
+              <ion-icon name="lock-closed-outline" slot="start" class="input-icon"></ion-icon>
+              <ion-input
+                [(ngModel)]="password"
+                name="password"
+                type="password"
+                label="Contraseña"
+                labelPlacement="floating"
+                placeholder="••••••••"
+                required
+                class="custom-input-field"
+                (ionInput)="onInputChange()"
+                (keypress)="onKeyPress($event)">
+              </ion-input>
+            </ion-item>
+          </div>
+
+          <!-- Mensaje de error -->
+          <ion-text color="danger" class="error-message" *ngIf="error">
+            <div class="error-container">
+              <ion-icon name="alert-circle-outline"></ion-icon>
+              <span>{{ error }}</span>
+            </div>
+          </ion-text>
+
+          <!-- Botón de login -->
+          <ion-button 
+            expand="block" 
+            shape="round"
+            size="large"
+            class="login-button"
+            (click)="login()">
+            <ion-icon name="log-in-outline" slot="start"></ion-icon>
+            Iniciar Sesión
+          </ion-button>
+
+          <!-- Enlaces adicionales -->
+          <div class="additional-links">
+            <ion-button fill="clear" size="small" class="forgot-password">
+              ¿Olvidaste tu contraseña?
+            </ion-button>
+          </div>
+
+        </form>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Footer -->
+    <div class="footer-section">
+      <p class="footer-text">¿No tienes cuenta? 
+        <ion-button fill="clear" size="small" class="register-link">
+          Regístrate aquí
+        </ion-button>
+      </p>
+    </div>
+
+  </div>
+</ion-content>

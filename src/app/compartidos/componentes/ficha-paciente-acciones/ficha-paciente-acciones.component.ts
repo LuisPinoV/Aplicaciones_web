@@ -1,7 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { Router } from '@angular/router';
+import { Paciente } from 'src/app/core/servicios/pacientes.service';
+import { DiagnosticosService } from 'src/app/core/servicios/diagnosticos.service';
+import { HospitalizacionesService } from 'src/app/core/servicios/hospitalizaciones.service';
+import { ConsultasService } from 'src/app/core/servicios/consultas.service';
+import { MedicamentosService } from 'src/app/core/servicios/medicamentos.service';
+import { AlergiasService } from 'src/app/core/servicios/alergias.service';
+import { ProcedimientosService } from 'src/app/core/servicios/procedimientos.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-ficha-paciente-acciones',
@@ -10,51 +18,90 @@ import { Router } from '@angular/router';
   standalone: true,
   imports: [IonicModule, CommonModule]
 })
-export class FichaPacienteAccionesComponent {
+export class FichaPacienteAccionesComponent implements OnChanges {
+  @Input() paciente?: Paciente;
+
+  contadorDiagnosticos = 0;
+  contadorHospitalizaciones = 0;
+  contadorConsultas = 0;
+  contadorMedicamentos = 0;
+  contadorAlergias = 0;
+  contadorProcedimientos = 0;
 
   constructor(
-    private router: Router
+    private router: Router,
+    private diagnosticosService: DiagnosticosService,
+    private hospitalizacionesService: HospitalizacionesService,
+    private consultasService: ConsultasService,
+    private medicamentosService: MedicamentosService,
+    private alergiasService: AlergiasService,
+    private procedimientosService: ProcedimientosService
   ) {}
 
-  ngOnInit() {}
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['paciente'] && this.paciente?.id) {
+      this.cargarContadores(this.paciente.id);
+    }
+  }
+
+  private async cargarContadores(idPaciente: number) {
+    try {
+      this.diagnosticosService.getContadorPorPaciente(1).subscribe({
+        next: (cantidad) => {
+          this.contadorDiagnosticos = cantidad;
+        }
+      });
+      this.hospitalizacionesService.getContadorPorPaciente(1).subscribe({
+        next: (cantidad) => {
+          this.contadorHospitalizaciones = cantidad;
+        }
+      });
+      this.consultasService.getContadorPorPaciente(1).subscribe({
+        next: (cantidad) => {
+          this.contadorConsultas = cantidad;
+        }
+      });
+      this.medicamentosService.getContadorPorPaciente(1).subscribe({
+        next: (cantidad) => {
+          this.contadorMedicamentos = cantidad;
+        }
+      });
+      this.alergiasService.getContadorPorPaciente(1).subscribe({
+        next: (cantidad) => {
+          this.contadorAlergias = cantidad;
+        }
+      });
+      this.procedimientosService.getContadorPorPaciente(1).subscribe({
+        next: (cantidad) => {
+          this.contadorProcedimientos = cantidad;
+        }
+      });
+    } catch (err) {
+      console.error('Error cargando contadores', err);
+    }
+  }
 
   irADiagnosticos() {
-    console.log('Click en botón Ver diagnósticos');
-    this.router.navigate(['/ficha-medica/diagnosticos']).then(success => {
-      console.log('Resultado navegación:', success);
-    });
+    this.router.navigate(['/ficha-medica/diagnosticos']);
   }
 
   irAHospitalizaciones() {
-    console.log('Click en botón Ver hospitalizaciones');
-    this.router.navigate(['/ficha-medica/hospitalizaciones']).then(success => {
-      console.log('Resultado navegación:', success);
-    });
+    this.router.navigate(['/ficha-medica/hospitalizaciones']);
   }
 
   irAConsultas() {
-    console.log('Click en botón Ver consultas');
-    this.router.navigate(['/ficha-medica/consultas']).then(success => {
-      console.log('Resultado navegación:', success);
-    });
+    this.router.navigate(['/ficha-medica/consultas']);
   }
 
   irAMedicamentos() {
-    console.log('Click en botón Ver medicamentos');
-    this.router.navigate(['/ficha-medica/medicamentos']).then(success => {
-      console.log('Resultado navegación:', success);
-    });
+    this.router.navigate(['/ficha-medica/medicamentos']);
   }
+
   irAAlergias() {
-    console.log('Click en botón Ver alergias');
-    this.router.navigate(['/ficha-medica/alergias']).then(success => {
-      console.log('Resultado navegación:', success);
-    });
+    this.router.navigate(['/ficha-medica/alergias']);
   }
+
   irAProcedimientos() {
-    console.log('Click en botón Ver procedimientos');
-    this.router.navigate(['/ficha-medica/procedimientos']).then(success => {
-      console.log('Resultado navegación:', success);
-    });
+    this.router.navigate(['/ficha-medica/procedimientos']);
   }
 }

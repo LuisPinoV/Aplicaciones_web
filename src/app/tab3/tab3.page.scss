@@ -1,0 +1,373 @@
+.health-container {
+  padding: 16px;
+  max-width: 100%;
+}
+
+// Header Section
+.header-section {
+  text-align: center;
+  margin-bottom: 24px;
+  padding-top: 10px;
+
+  h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, var(--ion-color-primary) 0%, var(--ion-color-secondary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  p {
+    color: var(--ion-color-medium);
+    font-size: 16px;
+  }
+}
+
+// Welcome Card
+.welcome-card {
+  background: linear-gradient(135deg, var(--ion-color-primary) 0%, var(--ion-color-secondary) 100%);
+  margin-bottom: 24px;
+  border-radius: 16px;
+  box-shadow: none;
+
+  ion-card-content {
+    padding: 20px;
+    
+    h2 {
+      color: white;
+      font-size: 20px;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    p {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 14px;
+      margin: 0;
+    }
+  }
+}
+
+// Section Styling
+.section {
+  margin-bottom: 24px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+
+  h3 {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0;
+    color: var(--ion-color-dark);
+  }
+
+  ion-button {
+    --color: var(--ion-color-primary);
+    font-size: 14px;
+    font-weight: 500;
+  }
+}
+
+// Medication Cards
+.medication-card {
+  margin-bottom: 12px;
+  border-radius: 16px;
+  border-left: 4px solid var(--ion-color-warning);
+
+  &.urgent {
+    animation: pulse 2s infinite;
+    border-left-color: var(--ion-color-danger);
+  }
+
+  ion-card-content {
+    padding: 16px;
+  }
+
+  .medication-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+
+    .medication-info {
+      flex: 1;
+
+      h4 {
+        font-weight: 600;
+        font-size: 16px;
+        margin: 0 0 4px 0;
+        color: var(--ion-color-dark);
+      }
+
+      p {
+        color: var(--ion-color-medium);
+        font-size: 14px;
+        margin: 0;
+      }
+    }
+
+    ion-badge {
+      font-size: 12px;
+      font-weight: 600;
+    }
+  }
+
+  .medication-actions {
+    display: flex;
+    gap: 8px;
+
+    ion-button {
+      --border-radius: 8px;
+      font-size: 12px;
+      height: 32px;
+    }
+  }
+}
+
+// Stats Grid
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+
+  .stat-card {
+    text-align: center;
+    border-radius: 12px;
+
+    &.medications {
+      border-top: 3px solid var(--ion-color-warning);
+    }
+
+    &.exams {
+      border-top: 3px solid var(--ion-color-danger);
+    }
+
+    ion-card-content {
+      padding: 16px;
+    }
+
+    .stat-icon {
+      width: 32px;
+      height: 32px;
+      margin: 0 auto 8px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      ion-icon {
+        font-size: 18px;
+      }
+    }
+
+    &.medications .stat-icon {
+      background: rgba(var(--ion-color-warning-rgb), 0.2);
+      color: var(--ion-color-warning);
+    }
+
+    &.exams .stat-icon {
+      background: rgba(var(--ion-color-danger-rgb), 0.2);
+      color: var(--ion-color-danger);
+    }
+
+    .stat-number {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: var(--ion-color-dark);
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--ion-color-medium);
+      margin: 0;
+    }
+  }
+}
+
+// Quick Actions Grid
+.quick-actions-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+
+  .action-card {
+    text-align: center;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:active {
+      transform: scale(0.95);
+    }
+
+    ion-card-content {
+      padding: 16px;
+      
+      p {
+        margin: 0;
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--ion-color-dark);
+      }
+    }
+
+    .action-icon {
+      width: 40px;
+      height: 40px;
+      margin: 0 auto 8px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      ion-icon {
+        font-size: 20px;
+      }
+    }
+
+    &.add-medication .action-icon {
+      background: rgba(var(--ion-color-warning-rgb), 0.2);
+      color: var(--ion-color-warning);
+    }
+
+    &.add-exam .action-icon {
+      background: rgba(var(--ion-color-primary-rgb), 0.2);
+      color: var(--ion-color-primary);
+    }
+
+    &.schedule-appointment .action-icon {
+      background: rgba(var(--ion-color-secondary-rgb), 0.2);
+      color: var(--ion-color-secondary);
+    }
+
+    &.emergency .action-icon {
+      background: rgba(var(--ion-color-danger-rgb), 0.2);
+      color: var(--ion-color-danger);
+    }
+  }
+}
+
+// Activity Section
+.activity-card {
+  border-radius: 12px;
+
+  .activity-item {
+    --padding-start: 0;
+    --padding-end: 0;
+    --min-height: 60px;
+
+    .activity-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 12px;
+
+      ion-icon {
+        font-size: 18px;
+      }
+
+      &.medication {
+        background: rgba(var(--ion-color-warning-rgb), 0.2);
+        color: var(--ion-color-warning);
+      }
+
+      &.exam {
+        background: rgba(var(--ion-color-primary-rgb), 0.2);
+        color: var(--ion-color-primary);
+      }
+    }
+
+    ion-label {
+      h4 {
+        font-size: 14px;
+        font-weight: 500;
+        margin: 0 0 4px 0;
+        color: var(--ion-color-dark);
+      }
+
+      p {
+        font-size: 12px;
+        color: var(--ion-color-medium);
+        margin: 0;
+      }
+    }
+
+    .progress-indicator {
+      margin-left: auto;
+
+      ion-icon {
+        font-size: 24px;
+      }
+    }
+
+    ion-badge {
+      font-size: 10px;
+    }
+  }
+}
+
+// Animations
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+// Dark Mode Support
+@media (prefers-color-scheme: dark) {
+  .header-section {
+    h1 {
+      background: linear-gradient(135deg, var(--ion-color-primary) 0%, var(--ion-color-secondary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+  }
+
+  .section-header h3 {
+    color: #fff;
+  }
+
+  .medication-card .medication-header .medication-info h4 {
+    color: #fff;
+  }
+
+  .stat-card .stat-number {
+    color: #fff;
+  }
+
+  .action-card ion-card-content p {
+    color: #fff;
+  }
+
+  .activity-card .activity-item ion-label h4 {
+    color: #fff;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 576px) {
+  .health-container {
+    padding: 12px;
+  }
+
+  .stats-grid {
+    gap: 8px;
+  }
+
+  .quick-actions-grid {
+    gap: 8px;
+  }
+}

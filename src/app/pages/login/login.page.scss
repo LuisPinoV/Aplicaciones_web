@@ -1,0 +1,305 @@
+// Variables de colores
+:root {
+  --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --card-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  --input-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.login-content {
+  --background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  position: relative;
+  min-height: 100vh;
+}
+
+.background-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(120, 119, 198, 0.2) 0%, transparent 50%);
+}
+
+.login-container {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+// Header Section
+.header-section {
+  text-align: center;
+  margin-bottom: 30px;
+  animation: fadeInDown 0.8s ease-out;
+
+  .logo-container {
+    margin-bottom: 15px;
+    
+    .logo-icon {
+      font-size: 60px;
+      color: white;
+      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+    }
+  }
+
+  .app-title {
+    color: white;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  .welcome-text {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.1rem;
+    font-weight: 300;
+    margin: 0;
+  }
+}
+
+// Card de login
+.login-card {
+  width: 100%;
+  max-width: 400px;
+  margin: 0;
+  border-radius: 20px;
+  box-shadow: var(--card-shadow);
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.95);
+  animation: fadeInUp 0.8s ease-out 0.2s both;
+
+  ion-card-content {
+    padding: 30px 25px;
+  }
+}
+
+// Formulario
+.login-form {
+  .input-group {
+    margin-bottom: 25px;
+    
+    .custom-input {
+      --background: rgba(248, 249, 250, 0.8);
+      --border-radius: 12px;
+      border-radius: 12px;
+      box-shadow: var(--input-shadow);
+      transition: all 0.3s ease;
+      overflow: hidden;
+
+      &:hover {
+        --background: rgba(248, 249, 250, 1);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .input-icon {
+        color: #667eea;
+        margin-right: 12px;
+        font-size: 20px;
+      }
+
+      ion-input {
+        --color: #333;
+        font-size: 16px;
+        --padding-start: 0;
+        --padding-end: 0;
+        
+        // Estilo del label flotante
+        --placeholder-color: #999;
+        --placeholder-opacity: 0.7;
+      }
+
+      // Cuando el input tiene focus o contenido
+      &.has-focus,
+      &.has-value {
+        ion-input {
+          --placeholder-opacity: 0;
+        }
+      }
+    }
+  }
+}
+
+// Mensaje de error
+.error-message {
+  margin-bottom: 20px;
+  animation: shakeX 0.5s ease-in-out;
+
+  .error-container {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 193, 193, 0.2);
+    padding: 12px 16px;
+    margin-bottom: 30px;
+    border-radius: 10px;
+    border-left: 4px solid var(--ion-color-danger);
+
+    ion-icon {
+      margin-right: 8px;
+      font-size: 18px;
+    }
+
+    span {
+      font-size: 14px;
+      font-weight: 500;
+    }
+  }
+}
+
+// Botón de login
+.login-button {
+  --background: var(--primary-gradient);
+  --box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+  --color: #333333; // Añadido para color de texto oscuro
+  margin-top: 10px;
+  margin-bottom: 20px;
+  height: 55px;
+  font-weight: 600;
+  font-size: 16px;
+  transition: all 0.3s ease;
+
+  ion-icon {
+    color: #333333; // Añadido para color del icono oscuro
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    --box-shadow: 0 12px 30px rgba(102, 126, 234, 0.5);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+// Enlaces adicionales
+.additional-links {
+  text-align: center;
+  margin-top: 10px;
+
+  .forgot-password {
+    --color: #6c757d;
+    font-size: 14px;
+    text-decoration: none;
+    
+    &:hover {
+      --color: #667eea;
+    }
+  }
+}
+
+// Footer
+.footer-section {
+  margin-top: 30px;
+  animation: fadeInUp 0.8s ease-out 0.4s both;
+
+  .footer-text {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 14px;
+    text-align: center;
+    margin: 0;
+
+    .register-link {
+      --color: white;
+      font-weight: 600;
+      text-decoration: underline;
+      margin-bottom: 12px;
+      
+      &:hover {
+        --color: rgba(255, 255, 255, 0.8);
+      }
+    }
+  }
+}
+
+// Animaciones
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shakeX {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-8px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(8px);
+  }
+}
+
+// Responsive design
+@media (max-width: 480px) {
+  .login-container {
+    padding: 15px;
+  }
+
+  .header-section {
+    .logo-icon {
+      font-size: 50px;
+    }
+
+    .app-title {
+      font-size: 2rem;
+    }
+  }
+
+  .login-card {
+    ion-card-content {
+      padding: 25px 20px;
+    }
+  }
+}
+
+// Estados de loading (opcional)
+.login-button.loading {
+  --background: #ccc;
+  pointer-events: none;
+  
+  &::after {
+    content: '';
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid transparent;
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-left: 8px;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

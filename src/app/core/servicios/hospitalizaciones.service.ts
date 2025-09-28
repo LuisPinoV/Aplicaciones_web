@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { map } from 'rxjs/operators';
 
 export interface Hospitalizacion {
   id: number;
@@ -96,6 +97,12 @@ export class HospitalizacionesService {
     const diferenciaAnios = Math.floor(diferenciaDias / 365);
     if (diferenciaAnios === 1) return 'Hace 1 año';
     return `Hace ${diferenciaAnios} años`;
+  }
+
+  getContadorPorPaciente(pacienteId: number): Observable<number> {
+    return this.getPorPaciente(pacienteId).pipe(
+      map(hospitalizaciones => hospitalizaciones.length)
+    );
   }
 
   static obtenerClaseEstado(estado: string): string {

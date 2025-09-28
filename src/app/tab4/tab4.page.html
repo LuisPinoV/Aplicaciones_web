@@ -1,0 +1,11 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Historial</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="contenido" *ngIf="paciente">
+    <app-ficha-paciente-acciones [paciente]="paciente"></app-ficha-paciente-acciones>
+  </div>
+</ion-content>

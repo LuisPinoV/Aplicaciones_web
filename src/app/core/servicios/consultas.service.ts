@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { map } from 'rxjs/operators';
 
 export interface Consultas {
   id: number;
@@ -43,5 +44,11 @@ export class ConsultasService {
 
   eliminar(id: number): Observable<void> {
     return this.http.delete<void>(`${this.base}/${id}`);
+  }
+
+  getContadorPorPaciente(pacienteId: number): Observable<number> {
+    return this.getPorPaciente(pacienteId).pipe(
+      map(consultas => consultas.length)
+    );
   }
 }

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { map } from 'rxjs/operators';
 
 export interface Alergia {
   id: number;
@@ -23,5 +24,11 @@ export class AlergiasService {
 
   getPorPaciente(pacienteId: number): Observable<Alergia[]> {
     return this.http.get<Alergia[]>(`${this.apiUrl}?idPaciente=${pacienteId}`);
+  }
+
+  getContadorPorPaciente(pacienteId: number): Observable<number> {
+    return this.getPorPaciente(pacienteId).pipe(
+      map(alergias => alergias.length)
+    );
   }
 }

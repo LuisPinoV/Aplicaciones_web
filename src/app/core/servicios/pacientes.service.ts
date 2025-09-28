@@ -12,12 +12,12 @@ export interface Paciente {
   grupo_sanguineo: string;
   telefono: string;
   mail: string;
+  password: string;
 }
 
 @Injectable({
   providedIn: 'root'
 })
-
 export class PacientesService {
   private http = inject(HttpClient);
   private base = environment.servicios.pacientes;
@@ -26,7 +26,7 @@ export class PacientesService {
     return this.http.get<Paciente[]>(this.base);
   }
 
-  getPacientePorRut(rut: string): Observable<Paciente[]> {
-    return this.http.get<Paciente[]>(`${this.base}?rut=${rut}`);
+  getPacientePorRut(rut: string): Observable<Paciente> {
+    return this.http.get<Paciente>(`${this.base}?rut=${rut}`);
   }
 }

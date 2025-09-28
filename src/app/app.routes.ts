@@ -14,14 +14,6 @@ export const routes: Routes = [
     loadComponent: () => import('./agendamiento-no-medico/agendamiento-no-medico.page').then( m => m.AgendamientoNoMedicoPage)
   },
   {
-    path: 'buscar',
-    loadComponent: () => import('./pages/buscar/buscar.page').then( m => m.BuscarPage)
-  },
-  {
-    path: 'ficha-medica',
-    loadComponent: () => import('./pages/ficha-medica/ficha-medica.page').then( m => m.FichaMedicaPage)
-  },
-  {
     path: 'ficha-medica/diagnosticos',
     loadComponent: () => import('./pages/diagnosticos/diagnosticos.page').then( m => m.DiagnosticosPage)
   },
@@ -44,5 +36,9 @@ export const routes: Routes = [
   {
     path: 'ficha-medica/medicamentos',
     loadComponent: () => import('./pages/medicamentos/medicamentos.page').then( m => m.MedicamentosPage)
+  },
+  {
+    path: 'login',
+    loadComponent: () => import('./pages/login/login.page').then( m => m.LoginPage)
   }
 ];

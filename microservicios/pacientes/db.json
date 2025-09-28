@@ -8,7 +8,8 @@
       "sexo": "Masculino",
       "grupo_sanguineo": "A+",
       "telefono": "+56 9 1111 1111",
-      "mail": "felipe.vazquez@gmail.com"
+      "mail": "feli.vazpro@gmail.com",
+      "password": "qwertf"
     },
     { 
       "id": 2, 
@@ -18,7 +19,8 @@
       "sexo": "Masculino",
       "grupo_sanguineo": "B-",
       "telefono": "+56 9 2222 2222",
-      "mail": "david.hernandez@gmail.com"
+      "mail": "david.hernandez@gmail.com",
+      "password": "qwertf"
     },
     { 
       "id": 3, 
@@ -28,7 +30,8 @@
       "sexo": "Masculino",
       "grupo_sanguineo": "O+",
       "telefono": "+56 9 3333 3333",
-      "mail": "luis.pino@gmail.com"
+      "mail": "luis.pino@gmail.com",
+      "password": "qwertf"
     },
     { 
       "id": 4, 
@@ -38,7 +41,8 @@
       "sexo": "Femenino",
       "grupo_sanguineo": "O+",
       "telefono": "+56 9 1234 5678",
-      "mail": "ignacia.herrera@gmail.com"
+      "mail": "ignacia.herrera@gmail.com",
+      "password": "qwertf"
     }
   ]
 }

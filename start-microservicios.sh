@@ -12,4 +12,13 @@ echo $! >> microservicios.pid
 json-server --watch microservicios/consultas/db.json --port 4005 &
 echo $! >> microservicios.pid
 
+json-server --watch microservicios/alergias/db.json --port 4006 &
+echo $! >> microservicios.pid
+
+json-server --watch microservicios/procedimientos/db.json --port 4007 &
+echo $! >> microservicios.pid
+
+json-server --watch microservicios/medicamentos/db.json --port 4008 &
+echo $! >> microservicios.pid
+
 echo "Microservicios iniciados. PIDs guardados en microservicios.pid"

@@ -5,42 +5,165 @@
       "idPaciente": 4,
       "nombre": "Resfriado común",
       "codigo": "J00",
-      "fecha": "2025-08-21"
+      "fecha": "2024-08-21",
+      "descripcion": "Infección viral del tracto respiratorio superior con síntomas leves",
+      "medico": "Dr. García López",
+      "gravedad": "leve",
+      "estado": "resuelto"
     },
     {
       "id": 2,
       "idPaciente": 4,
       "nombre": "Hipertensión esencial (primaria)",
       "codigo": "I10",
-      "fecha": "2025-07-03"
+      "fecha": "2024-07-03",
+      "descripcion": "Presión arterial elevada de causa desconocida, requiere control periódico",
+      "medico": "Dr. Martínez Ruiz",
+      "gravedad": "moderado",
+      "estado": "cronico"
     },
     {
       "id": 3,
       "idPaciente": 4,
       "nombre": "Diabetes mellitus tipo 2",
       "codigo": "E11",
-      "fecha": "2025-03-18"
-    },
-    {
-      "id": 3,
-      "idPaciente": 1,
-      "nombre": "Resfriado común",
-      "codigo": "J00",
-      "fecha": "2025-08-21"
+      "fecha": "2024-03-18",
+      "descripcion": "Trastorno metabólico caracterizado por hiperglucemia crónica",
+      "medico": "Dra. Rodríguez Silva",
+      "gravedad": "moderado",
+      "estado": "cronico"
     },
     {
       "id": 4,
-      "idPaciente": 1,
-      "nombre": "Hipertensión esencial (primaria)",
-      "codigo": "I10",
-      "fecha": "2025-07-03"
+      "idPaciente": 4,
+      "nombre": "Gastroenteritis aguda",
+      "codigo": "K59.1",
+      "fecha": "2024-09-15",
+      "descripcion": "Inflamación del tracto gastrointestinal, probablemente de origen viral",
+      "medico": "Dr. López Fernández",
+      "gravedad": "leve",
+      "estado": "resuelto"
     },
     {
       "id": 5,
+      "idPaciente": 4,
+      "nombre": "Migraña sin aura",
+      "codigo": "G43.0",
+      "fecha": "2024-11-02",
+      "descripcion": "Episodios recurrentes de cefalea intensa con características migrañosas",
+      "medico": "Dra. Herrera Castro",
+      "gravedad": "moderado",
+      "estado": "activo"
+    },
+    {
+      "id": 6,
+      "idPaciente": 1,
+      "nombre": "Fractura de radio distal",
+      "codigo": "S52.5",
+      "fecha": "2024-06-10",
+      "descripcion": "Fractura cerrada del extremo distal del radio derecho",
+      "medico": "Dr. Morales Vega",
+      "gravedad": "moderado",
+      "estado": "en_recuperacion"
+    },
+    {
+      "id": 7,
+      "idPaciente": 1,
+      "nombre": "Hipertensión esencial (primaria)",
+      "codigo": "I10",
+      "fecha": "2024-05-20",
+      "descripcion": "Presión arterial consistentemente elevada, bajo tratamiento farmacológico",
+      "medico": "Dr. Martínez Ruiz",
+      "gravedad": "moderado",
+      "estado": "cronico"
+    },
+    {
+      "id": 8,
       "idPaciente": 1,
       "nombre": "Diabetes mellitus tipo 2",
       "codigo": "E11",
-      "fecha": "2025-03-18"
+      "fecha": "2024-01-15",
+      "descripcion": "Diabetes tipo 2 bien controlada con metformina",
+      "medico": "Dra. Rodríguez Silva",
+      "gravedad": "moderado",
+      "estado": "cronico"
+    },
+    {
+      "id": 9,
+      "idPaciente": 1,
+      "nombre": "Bronquitis aguda",
+      "codigo": "J20.9",
+      "fecha": "2024-10-05",
+      "descripcion": "Inflamación aguda de los bronquios, probable origen viral",
+      "medico": "Dr. González Torres",
+      "gravedad": "leve",
+      "estado": "resuelto"
+    },
+    {
+      "id": 10,
+      "idPaciente": 1,
+      "nombre": "Artritis reumatoide",
+      "codigo": "M06.9",
+      "fecha": "2024-02-28",
+      "descripcion": "Enfermedad autoinmune que afecta las articulaciones",
+      "medico": "Dra. Sánchez Mora",
+      "gravedad": "grave",
+      "estado": "en_tratamiento"
+    },
+    {
+      "id": 11,
+      "idPaciente": 2,
+      "nombre": "Asma bronquial",
+      "codigo": "J45.9",
+      "fecha": "2024-04-12",
+      "descripcion": "Asma alérgica con episodios esporádicos, bien controlada",
+      "medico": "Dr. Ramírez Ortega",
+      "gravedad": "moderado",
+      "estado": "cronico"
+    },
+    {
+      "id": 12,
+      "idPaciente": 2,
+      "nombre": "Dermatitis atópica",
+      "codigo": "L20.9",
+      "fecha": "2024-08-30",
+      "descripcion": "Eccema crónico con brotes intermitentes",
+      "medico": "Dra. Vargas León",
+      "gravedad": "leve",
+      "estado": "activo"
+    },
+    {
+      "id": 13,
+      "idPaciente": 3,
+      "nombre": "Hipotiroidismo",
+      "codigo": "E03.9",
+      "fecha": "2024-01-08",
+      "descripcion": "Deficiencia de hormonas tiroideas, en tratamiento con levotiroxina",
+      "medico": "Dr. Castillo Peña",
+      "gravedad": "moderado",
+      "estado": "cronico"
+    },
+    {
+      "id": 14,
+      "idPaciente": 3,
+      "nombre": "Anemia ferropénica",
+      "codigo": "D50.9",
+      "fecha": "2024-07-22",
+      "descripcion": "Anemia por deficiencia de hierro, respondiendo bien al tratamiento",
+      "medico": "Dra. Jiménez Ramos",
+      "gravedad": "leve",
+      "estado": "en_tratamiento"
+    },
+    {
+      "id": 15,
+      "idPaciente": 3,
+      "nombre": "Colitis ulcerosa",
+      "codigo": "K51.9",
+      "fecha": "2024-03-05",
+      "descripcion": "Enfermedad inflamatoria intestinal crónica en remisión",
+      "medico": "Dr. Torres Mendoza",
+      "gravedad": "grave",
+      "estado": "estable"
     }
   ]
 }

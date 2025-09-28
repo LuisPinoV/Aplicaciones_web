@@ -5,10 +5,10 @@
 export const environment = {
   production: false,
   servicios: {
-    pacientes: 'http://localhost:3000/pacientes',
-    diagnosticos: 'http://localhost:3000/diagnosticos',
-    hospitalizaciones: 'http://localhost:3000/hospitalizaciones',
-    consultas: 'http://localhost:3000/consultas',
+    pacientes: 'http://localhost:4002/pacientes',
+    diagnosticos: 'http://localhost:4003/diagnosticos',
+    hospitalizaciones: 'http://localhost:4004/hospitalizaciones',
+    consultas: 'http://localhost:4005/consultas',
     alergias: 'http://localhost:4006/alergias',
     procedimientos: 'http://localhost:4007/procedimientos',
     medicamentos: 'http://localhost:4008/medicamentos',

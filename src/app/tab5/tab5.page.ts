@@ -5,16 +5,16 @@ import { Router } from '@angular/router';
 import { Paciente } from 'src/app/core/servicios/pacientes.service';
 import { PacienteStoreService } from 'src/app/core/servicios/paciente-store.service';
 import { FichaPacienteCardComponent } from 'src/app/compartidos/componentes/ficha-paciente-card/ficha-paciente-card.component';
-import { FichaPacienteAccionesComponent } from 'src/app/compartidos/componentes/ficha-paciente-acciones/ficha-paciente-acciones.component';
+import { PerfilAccionesCardComponent } from 'src/app/compartidos/componentes/perfil-acciones-card/perfil-acciones-card.component';
 
 @Component({
-  selector: 'app-ficha-medica',
-  templateUrl: './ficha-medica.page.html',
-  styleUrls: ['./ficha-medica.page.scss'],
+  selector: 'app-tab5',
+  templateUrl: './tab5.page.html',
+  styleUrls: ['./tab5.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FichaPacienteCardComponent, FichaPacienteAccionesComponent]
+  imports: [IonicModule, CommonModule, FichaPacienteCardComponent, PerfilAccionesCardComponent]
 })
-export class FichaMedicaPage implements OnInit {
+export class Tab5Page implements OnInit {
   paciente?: Paciente;
 
   constructor(
@@ -25,7 +25,7 @@ export class FichaMedicaPage implements OnInit {
   ngOnInit() {
     this.paciente = this.pacienteStore.getPaciente();
     if (!this.paciente) {
-      this.router.navigate(['/buscar']);
+      this.router.navigate(['/login']);
     }
   }
 

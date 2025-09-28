@@ -1,201 +1,381 @@
-.acciones {
-  padding: 0px 0 16px 0;
-  
-  .acciones-grid {
-    --ion-grid-padding: 0;
-    --ion-grid-column-padding: 0;
-    padding-left: 0;
-    padding-right: 0;
+.medical-actions-container {
+  padding: 24px 16px;
+}
+
+// Section Header
+.section-header {
+  margin-bottom: 34px!important;
+  text-align: center;
+
+  .section-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0 0 4px 0;
   }
 
-  ion-col {
-    padding-bottom: 12px;
-    
-    &.left {
-      padding-left: 0;
-      padding-right: 6px;
-    }
-    
-    &.right {
-      padding-left: 6px;
-      padding-right: 0;
-    }
-  }
-
-  .accion-btn {
-    --border-radius: 12px;
-    --border-width: 1.5px;
-    --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-    --transition: all 0.2s ease;
-    
-    font-weight: 500;
-    height: auto;
-    min-height: 100px;
+  .section-subtitle {
+    font-size: 14px;
+    color: #666;
     margin: 0;
+    font-weight: 400;
+  }
+}
 
-    &:hover {
-      --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      transform: translateY(-2px);
-    }
+// Actions Grid
+.actions-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
 
-    &:active {
-      --box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
-      transform: translateY(0);
-    }
+// Base Action Card
+.action-card {
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
 
-    .btn-content {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      padding: 8px 4px;
-      text-align: center;
-    }
+  // Hover effect
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+  }
+
+  &:active {
+    transform: translateY(-2px);
+    transition: transform 0.1s;
+  }
+
+  // Background pattern
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    opacity: 0.05;
+    transition: all 0.3s ease;
+  }
+
+  &:hover::before {
+    opacity: 0.1;
+    transform: scale(1.2);
+  }
+}
+
+// Card Header
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+
+  .icon-container {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
 
     ion-icon {
-      font-size: 28px;
-      margin-bottom: 10px;
-      opacity: 0.85;
-      transition: all 0.2s ease;
-    }
-
-    &:hover ion-icon {
-      opacity: 1;
-      transform: scale(1.05);
-    }
-
-    .btn-text {
-      font-size: 0.9rem;
-      font-weight: 600;
-      line-height: 1.2;
-      margin-bottom: 3px;
-    }
-
-    .btn-subtitle {
-      font-size: 0.75rem;
-      font-weight: 400;
-      line-height: 1.1;
-      opacity: 0.7;
+      font-size: 24px;
+      color: white;
     }
   }
+
+  .card-badge {
+    min-width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    background: #e5e7eb;
+    color: #374151;
+    font-size: 11px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 6px;
+  }
 }
 
-// Colores más casuales y naturales para cada botón
-.acciones ion-col:nth-child(1) .accion-btn { // Diagnósticos - Azul slate suave
-  --background: rgba(100, 116, 139, 0.06);
-  --border-color: rgba(100, 116, 139, 0.2);
-  --box-shadow: 0 2px 8px rgba(100, 116, 139, 0.08);
-  
+// Card Content
+.card-content {
+  flex: 1;
+
+  .card-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0 0 4px 0;
+    line-height: 1.2;
+  }
+
+  .card-description {
+    font-size: 13px;
+    color: #6b7280;
+    margin: 0;
+    font-weight: 400;
+  }
+}
+
+// Card Arrow
+.card-arrow {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  opacity: 0.4;
+  transition: all 0.3s ease;
+
   ion-icon {
-    color: rgb(100, 116, 139);
-  }
-  
-  &:hover {
-    --background: rgba(100, 116, 139, 0.1);
-    --border-color: rgba(100, 116, 139, 0.3);
-    --box-shadow: 0 4px 12px rgba(100, 116, 139, 0.12);
+    font-size: 16px;
+    color: #9ca3af;
   }
 }
 
-.acciones ion-col:nth-child(2) .accion-btn { // Hospitalizaciones - Rosa suave
-  --background: rgba(219, 112, 147, 0.06);
-  --border-color: rgba(219, 112, 147, 0.2);
-  --box-shadow: 0 2px 8px rgba(219, 112, 147, 0.08);
-  
-  ion-icon {
-    color: rgb(219, 112, 147);
+.action-card:hover .card-arrow {
+  opacity: 1;
+  transform: translateX(4px);
+}
+
+// Specific Card Styles
+.diagnostics-card {
+  .icon-container {
+    background: #3b82f6;
   }
-  
+
+  &::before {
+    background: #3b82f6;
+  }
+
   &:hover {
-    --background: rgba(219, 112, 147, 0.1);
-    --border-color: rgba(219, 112, 147, 0.3);
-    --box-shadow: 0 4px 12px rgba(219, 112, 147, 0.12);
+    border-color: rgba(59, 130, 246, 0.2);
   }
 }
 
-.acciones ion-col:nth-child(3) .accion-btn { // Consultas - Azul cielo natural
-  --background: rgba(56, 139, 193, 0.06);
-  --border-color: rgba(56, 139, 193, 0.2);
-  --box-shadow: 0 2px 8px rgba(56, 139, 193, 0.08);
-  
-  ion-icon {
-    color: rgb(56, 139, 193);
+.hospitalizations-card {
+  .icon-container {
+    background: #ec4899;
   }
-  
+
+  &::before {
+    background: #ec4899;
+  }
+
   &:hover {
-    --background: rgba(56, 139, 193, 0.1);
-    --border-color: rgba(56, 139, 193, 0.3);
-    --box-shadow: 0 4px 12px rgba(56, 139, 193, 0.12);
+    border-color: rgba(236, 72, 153, 0.2);
   }
 }
 
-.acciones ion-col:nth-child(4) .accion-btn { // Procedimientos - Verde bosque
-  --background: rgba(52, 168, 83, 0.06);
-  --border-color: rgba(52, 168, 83, 0.2);
-  --box-shadow: 0 2px 8px rgba(52, 168, 83, 0.08);
-  
-  ion-icon {
-    color: rgb(52, 168, 83);
+.consultations-card {
+  .icon-container {
+    background: #06b6d4;
   }
-  
+
+  &::before {
+    background: #06b6d4;
+  }
+
   &:hover {
-    --background: rgba(52, 168, 83, 0.1);
-    --border-color: rgba(52, 168, 83, 0.3);
-    --box-shadow: 0 4px 12px rgba(52, 168, 83, 0.12);
+    border-color: rgba(6, 182, 212, 0.2);
   }
 }
 
-.acciones ion-col:nth-child(5) .accion-btn { // Medicamentos - Naranja cálido
-  --background: rgba(251, 146, 60, 0.06);
-  --border-color: rgba(251, 146, 60, 0.2);
-  --box-shadow: 0 2px 8px rgba(251, 146, 60, 0.08);
-  
-  ion-icon {
-    color: rgb(251, 146, 60);
+.procedures-card {
+  .icon-container {
+    background: #10b981;
   }
-  
+
+  &::before {
+    background: #10b981;
+  }
+
   &:hover {
-    --background: rgba(251, 146, 60, 0.1);
-    --border-color: rgba(251, 146, 60, 0.3);
-    --box-shadow: 0 4px 12px rgba(251, 146, 60, 0.12);
+    border-color: rgba(16, 185, 129, 0.2);
   }
 }
 
-.acciones ion-col:nth-child(6) .accion-btn { // Alergias - Rojo coral
-  --background: rgba(239, 68, 68, 0.06);
-  --border-color: rgba(239, 68, 68, 0.2);
-  --box-shadow: 0 2px 8px rgba(239, 68, 68, 0.08);
-  
-  ion-icon {
-    color: rgb(239, 68, 68);
+.medications-card {
+  .icon-container {
+    background: #f59e0b;
   }
-  
+
+  &::before {
+    background: #f59e0b;
+  }
+
   &:hover {
-    --background: rgba(239, 68, 68, 0.1);
-    --border-color: rgba(239, 68, 68, 0.3);
-    --box-shadow: 0 4px 12px rgba(239, 68, 68, 0.12);
+    border-color: rgba(245, 158, 11, 0.2);
   }
 }
 
-// Responsive
+.allergies-card {
+  .icon-container {
+    background: #ef4444;
+  }
+
+  &::before {
+    background: #ef4444;
+  }
+
+  &:hover {
+    border-color: rgba(239, 68, 68, 0.2);
+  }
+}
+
+// Responsive Design
 @media (max-width: 768px) {
-  .acciones {
-    .accion-btn {
-      min-height: 90px;
-      
-      ion-icon {
-        font-size: 24px;
-        margin-bottom: 6px;
+  .medical-actions-container {
+    padding: 20px 12px;
+  }
+
+  .section-header {
+    margin-bottom: 20px;
+
+    .section-title {
+      font-size: 18px;
+    }
+
+    .section-subtitle {
+      font-size: 13px;
+    }
+  }
+
+  .actions-grid {
+    gap: 12px;
+  }
+
+  .action-card {
+    padding: 16px;
+    min-height: 110px;
+
+    .card-header {
+      margin-bottom: 12px;
+
+      .icon-container {
+        width: 40px;
+        height: 40px;
+
+        ion-icon {
+          font-size: 20px;
+        }
       }
 
-      .btn-text {
-        font-size: 0.85rem;
-      }
-
-      .btn-subtitle {
-        font-size: 0.7rem;
+      .card-badge {
+        font-size: 10px;
+        min-width: 18px;
+        height: 18px;
       }
     }
+
+    .card-content {
+      .card-title {
+        font-size: 14px;
+      }
+
+      .card-description {
+        font-size: 12px;
+      }
+    }
+
+    .card-arrow {
+      bottom: 12px;
+      right: 12px;
+
+      ion-icon {
+        font-size: 14px;
+      }
+    }
+  }
+}
+
+// Dark mode support
+@media (prefers-color-scheme: dark) {
+  .medical-actions-container {
+    .section-title {
+      color: #f9fafb;
+    }
+
+    .section-subtitle {
+      color: #9ca3af;
+    }
+  }
+
+  .action-card {
+    background: #222222;
+    border-color: rgba(255, 255, 255, 0.1);
+
+    .card-title {
+      color: #f9fafb;
+    }
+
+    .card-description {
+      color: #9ca3af;
+    }
+
+    .card-badge {
+      background: #374151;
+      color: #d1d5db;
+    }
+
+    .card-arrow ion-icon {
+      color: #6b7280;
+    }
+
+    &:hover {
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+    }
+  }
+}
+
+// Animation for page load
+.actions-grid {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Staggered animation for cards
+.action-card {
+  animation: slideInCard 0.4s ease-out;
+  animation-fill-mode: both;
+}
+
+.action-card:nth-child(1) { animation-delay: 0.1s; }
+.action-card:nth-child(2) { animation-delay: 0.2s; }
+.action-card:nth-child(3) { animation-delay: 0.3s; }
+.action-card:nth-child(4) { animation-delay: 0.4s; }
+.action-card:nth-child(5) { animation-delay: 0.5s; }
+.action-card:nth-child(6) { animation-delay: 0.6s; }
+
+@keyframes slideInCard {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }

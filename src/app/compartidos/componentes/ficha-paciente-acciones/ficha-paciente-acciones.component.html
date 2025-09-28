@@ -1,65 +1,115 @@
-<div class="acciones">
-  <ion-grid class="acciones-grid">
-    <ion-row>
-      <ion-col size="6" class="left">
-        <ion-button expand="block" fill="outline" (click)="irADiagnosticos()" class="accion-btn">
-          <div class="btn-content">
-            <ion-icon name="clipboard-outline"></ion-icon>
-            <span class="btn-text">Ver diagnósticos</span>
-            <span class="btn-subtitle">Historial médico</span>
-          </div>
-        </ion-button>
-      </ion-col>
+<div class="medical-actions-container">
+  
+  <!-- Título de la sección -->
+  <div class="section-header">
+    <h3 class="section-title">Historial Médico</h3>
+    <p class="section-subtitle">Accede a tu información médica completa</p>
+  </div>
 
-      <ion-col size="6" class="right">
-        <ion-button expand="block" fill="outline" (click)="irAHospitalizaciones()" class="accion-btn">
-          <div class="btn-content">
-            <ion-icon name="bed-outline"></ion-icon>
-            <span class="btn-text">Ver hospitalizaciones</span>
-            <span class="btn-subtitle">Ingresos y altas</span>
-          </div>
-        </ion-button>
-      </ion-col>
+  <!-- Grid de acciones -->
+  <div class="actions-grid">
+    
+    <!-- Diagnósticos -->
+    <div class="action-card diagnostics-card" (click)="irADiagnosticos()">
+      <div class="card-header">
+        <div class="icon-container">
+          <ion-icon name="document-text"></ion-icon>
+        </div>
+        <div class="card-badge">{{contadorDiagnosticos}}</div>
+      </div>
+      <div class="card-content">
+        <h4 class="card-title">Diagnósticos</h4>
+        <p class="card-description">Historial médico</p>
+      </div>
+      <div class="card-arrow">
+        <ion-icon name="chevron-forward"></ion-icon>
+      </div>
+    </div>
 
-      <ion-col size="6" class="left">
-        <ion-button expand="block" fill="outline" (click)="irAConsultas()" class="accion-btn">
-          <div class="btn-content">
-            <ion-icon name="chatbubbles-outline"></ion-icon>
-            <span class="btn-text">Ver consultas</span>
-            <span class="btn-subtitle">Citas médicas</span>
-          </div>
-        </ion-button>
-      </ion-col>
+    <!-- Hospitalizaciones -->
+    <div class="action-card hospitalizations-card" (click)="irAHospitalizaciones()">
+      <div class="card-header">
+        <div class="icon-container">
+          <ion-icon name="business"></ion-icon>
+        </div>
+        <div class="card-badge">{{contadorHospitalizaciones}}</div>
+      </div>
+      <div class="card-content">
+        <h4 class="card-title">Hospitalizaciones</h4>
+        <p class="card-description">Ingresos y altas</p>
+      </div>
+      <div class="card-arrow">
+        <ion-icon name="chevron-forward"></ion-icon>
+      </div>
+    </div>
 
-      <ion-col size="6" class="right">
-        <ion-button expand="block" fill="outline" (click)="irAProcedimientos()" class="accion-btn">
-          <div class="btn-content">
-            <ion-icon name="construct-outline"></ion-icon>
-            <span class="btn-text">Ver procedimientos</span>
-            <span class="btn-subtitle">Cirugías y estudios</span>
-          </div>
-        </ion-button>
-      </ion-col>
+    <!-- Consultas -->
+    <div class="action-card consultations-card" (click)="irAConsultas()">
+      <div class="card-header">
+        <div class="icon-container">
+          <ion-icon name="people"></ion-icon>
+        </div>
+        <div class="card-badge">{{contadorConsultas}}</div>
+      </div>
+      <div class="card-content">
+        <h4 class="card-title">Consultas</h4>
+        <p class="card-description">Citas médicas</p>
+      </div>
+      <div class="card-arrow">
+        <ion-icon name="chevron-forward"></ion-icon>
+      </div>
+    </div>
 
-      <ion-col size="6" class="left">
-        <ion-button expand="block" fill="outline" (click)="irAMedicamentos()" class="accion-btn">
-          <div class="btn-content">
-            <ion-icon name="medkit-outline"></ion-icon>
-            <span class="btn-text">Ver medicamentos</span>
-            <span class="btn-subtitle">Prescripciones activas</span>
-          </div>
-        </ion-button>
-      </ion-col>
+    <!-- Procedimientos -->
+    <div class="action-card procedures-card" (click)="irAProcedimientos()">
+      <div class="card-header">
+        <div class="icon-container">
+          <ion-icon name="fitness"></ion-icon>
+        </div>
+        <div class="card-badge">{{contadorProcedimientos}}</div>
+      </div>
+      <div class="card-content">
+        <h4 class="card-title">Procedimientos</h4>
+        <p class="card-description">Cirugías y estudios</p>
+      </div>
+      <div class="card-arrow">
+        <ion-icon name="chevron-forward"></ion-icon>
+      </div>
+    </div>
 
-      <ion-col size="6" class="right">
-        <ion-button expand="block" fill="outline" (click)="irAAlergias()" class="accion-btn">
-          <div class="btn-content">
-            <ion-icon name="warning-outline"></ion-icon>
-            <span class="btn-text">Ver alergias</span>
-            <span class="btn-subtitle">Reacciones conocidas</span>
-          </div>
-        </ion-button>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+    <!-- Medicamentos -->
+    <div class="action-card medications-card" (click)="irAMedicamentos()">
+      <div class="card-header">
+        <div class="icon-container">
+          <ion-icon name="medical"></ion-icon>
+        </div>
+        <div class="card-badge">{{contadorMedicamentos}}</div>
+      </div>
+      <div class="card-content">
+        <h4 class="card-title">Medicamentos</h4>
+        <p class="card-description">Prescripciones activas</p>
+      </div>
+      <div class="card-arrow">
+        <ion-icon name="chevron-forward"></ion-icon>
+      </div>
+    </div>
+
+    <!-- Alergias -->
+    <div class="action-card allergies-card" (click)="irAAlergias()">
+      <div class="card-header">
+        <div class="icon-container">
+          <ion-icon name="shield-checkmark"></ion-icon>
+        </div>
+        <div class="card-badge">{{contadorAlergias}}</div>
+      </div>
+      <div class="card-content">
+        <h4 class="card-title">Alergias</h4>
+        <p class="card-description">Reacciones conocidas</p>
+      </div>
+      <div class="card-arrow">
+        <ion-icon name="chevron-forward"></ion-icon>
+      </div>
+    </div>
+
+  </div>
 </div>
