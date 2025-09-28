@@ -8,7 +8,6 @@
     </div>
     <div class="diagnostico-info">
       <h3 class="titulo">{{ consultas.institucionMedica }}</h3>
-      <p class="codigo" *ngIf="consultas.especialidad">{{ consultas.especialidad }}</p>
     </div>
     <div class="card-actions">
       <ion-button fill="clear" size="small" class="more-btn">
@@ -46,9 +45,6 @@
       <div class="tiempo-transcurrido" *ngIf="getTiempoTranscurrido()">
         <ion-icon name="time-outline"></ion-icon>
         <span>{{ getTiempoTranscurrido() }}</span>
-      </div>
-      <div class="estado-badge" [class]="getConsultaEstadoClass()" *ngIf="consultas.estado">
-        {{ getEstadoTexto() }}
       </div>
     </div>
   </div>

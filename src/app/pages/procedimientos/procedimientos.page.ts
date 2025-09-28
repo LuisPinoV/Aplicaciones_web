@@ -30,7 +30,7 @@ export class ProcedimientosPage implements OnInit {
       this.router.navigate(['/buscar']);
       return;
     }
-    this.procedimientosService.getPorPaciente(this.paciente.id).subscribe({
+    this.procedimientosService.getPorPaciente(this.paciente.idFichaMedica).subscribe({
       next: (data: Procedimiento[]) => (this.procedimientos = data),
       error: (err: any) => console.error('Error cargando procedimientos:', err)
     });

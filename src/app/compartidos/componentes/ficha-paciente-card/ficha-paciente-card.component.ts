@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { Paciente } from 'src/app/core/servicios/pacientes.service';
@@ -10,22 +10,23 @@ import { Paciente } from 'src/app/core/servicios/pacientes.service';
   standalone: true,
   imports: [IonicModule, CommonModule]
 })
-export class FichaPacienteCardComponent {
-  @Input() paciente?: Paciente;
+export class FichaPacienteCardComponent implements OnInit {
+  @Input() paciente: Paciente | null = null;
 
-  getInitials(nombre?: string): string {
-    if (!nombre) return '?';
-    return nombre
-      .split(' ')
-      .map(n => n[0])
-      .join('')
-      .toUpperCase()
-      .substring(0, 2); // Limitamos a 2 iniciales máximo
-  }
+  constructor() { }
 
-  get displayAge(): string {
-    if (!this.paciente?.edad) return '—';
-    return `${this.paciente.edad}`;
+  ngOnInit() {}
+
+  get edad(): string {
+    if (!this.paciente?.fechaNacimiento) return '—';
+    const birthDate = new Date(this.paciente.fechaNacimiento);
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+    }
+    return age.toString();
   }
 
   get displaySex(): string {
@@ -50,42 +51,18 @@ export class FichaPacienteCardComponent {
       : '—';
   }
 
-  // Métodos para acciones de contacto
-  callPhone() {
-    if (this.paciente?.telefono) {
-      window.open(`tel:${this.paciente.telefono}`, '_system');
-    }
+  getInitials(nombre?: string): string {
+    if (!nombre) return '?';
+    return nombre
+      .split(' ')
+      .map(n => n[0])
+      .join('')
+      .toUpperCase()
+      .substring(0, 2); // Limitamos a 2 iniciales máximo
   }
 
-  sendEmail() {
-    if (this.paciente?.mail) {
-      window.open(`mailto:${this.paciente.mail}`, '_system');
-    }
-  }
-
-  // Getter para formatear teléfono
-  get formattedPhone(): string {
-    if (!this.paciente?.telefono) return '—';
-    
-    const phone = this.paciente.telefono.toString();
-    // Formato chileno +56 9 XXXX XXXX
-    if (phone.length === 11 && phone.startsWith('569')) {
-      return `+56 9 ${phone.slice(3, 7)} ${phone.slice(7)}`;
-    }
-    return phone;
-  }
-
-  // Getter para email truncado si es muy largo
-  get displayEmail(): string {
-    if (!this.paciente?.mail) return '—';
-    
-    const email = this.paciente.mail;
-    if (email.length > 25) {
-      const [localPart, domain] = email.split('@');
-      if (localPart.length > 15) {
-        return `${localPart.substring(0, 12)}...@${domain}`;
-      }
-    }
-    return email;
+  editarPaciente() {
+    // TODO: Implementar la lógica para editar el paciente
+    console.log('Editar paciente');
   }
 }

@@ -5,11 +5,7 @@ import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
 
 export interface Alergia {
-  id: number;
-  idPaciente: number;
-  nombre: string;
-  tipo: string;
-  severidad: string;
+  alergia: string;
   reaccion: string;
   fechaDiagnostico: string;
 }
@@ -18,16 +14,16 @@ export interface Alergia {
   providedIn: 'root'
 })
 export class AlergiasService {
-  private apiUrl = environment.servicios.alergias;
+  private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) { }
 
-  getPorPaciente(pacienteId: number): Observable<Alergia[]> {
-    return this.http.get<Alergia[]>(`${this.apiUrl}?idPaciente=${pacienteId}`);
+  getPorPaciente(idFichaMedica: number): Observable<Alergia[]> {
+    return this.http.get<Alergia[]>(`${this.apiUrl}/pacientes/${idFichaMedica}/padecimientos`);
   }
 
-  getContadorPorPaciente(pacienteId: number): Observable<number> {
-    return this.getPorPaciente(pacienteId).pipe(
+  getContadorPorPaciente(idFichaMedica: number): Observable<number> {
+    return this.getPorPaciente(idFichaMedica).pipe(
       map(alergias => alergias.length)
     );
   }

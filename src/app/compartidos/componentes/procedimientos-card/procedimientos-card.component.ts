@@ -16,18 +16,19 @@ export class ProcedimientosCardComponent {
   constructor() { }
 
   getTipoClass(): string {
-    if (!this.procedimiento?.tipo) return 'diagnostico';
-    const tipo = this.procedimiento.tipo.toLowerCase();
-    if (tipo.includes('quirúrgico')) return 'quirurgico';
-    if (tipo.includes('preventivo')) return 'preventivo';
+    if (!this.procedimiento?.nombre) return 'diagnostico';
+    const tipo = this.procedimiento.nombre.toLowerCase();
+    if (tipo.includes('cirugía') || tipo.includes('extirpación')) return 'cirugia';
+    if (tipo.includes('examen') || tipo.includes('muestra')) return 'examen';
     return 'diagnostico';
   }
 
   getTipoIcon(): string {
-    if (!this.procedimiento?.tipo) return 'document-text-outline';
-    const tipo = this.procedimiento.tipo.toLowerCase();
-    if (tipo.includes('quirúrgico')) return 'cut-outline';
-    if (tipo.includes('preventivo')) return 'shield-checkmark-outline';
-    return 'analytics-outline';
+    if (!this.procedimiento?.nombre) return 'document-text-outline';
+    const tipo = this.procedimiento.nombre.toLowerCase();
+    if (tipo.includes('cirugía')) return 'cut-outline';
+    if (tipo.includes('examen')) return 'flask-outline';
+    if (tipo.includes('radiografía') || tipo.includes('rayos')) return 'pulse-outline';
+    return 'document-text-outline';
   }
 }

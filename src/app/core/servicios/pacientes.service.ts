@@ -4,15 +4,15 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface Paciente {
-  id: number;
-  rut: string;
+  idFichaMedica: number;
+  Rut: number;
   nombre: string;
-  edad: number;
+  fechaNacimiento: string;
   sexo: string;
-  grupo_sanguineo: string;
-  telefono: string;
-  mail: string;
-  password: string;
+  tipoSangre: string;
+  altura: number;
+  peso: number;
+  genero: string;
 }
 
 @Injectable({
@@ -20,13 +20,13 @@ export interface Paciente {
 })
 export class PacientesService {
   private http = inject(HttpClient);
-  private base = environment.servicios.pacientes;
+  private apiUrl = environment.apiUrl;
 
   getPacientes(): Observable<Paciente[]> {
-    return this.http.get<Paciente[]>(this.base);
+    return this.http.get<Paciente[]>(`${this.apiUrl}/pacientes`);
   }
 
   getPacientePorRut(rut: string): Observable<Paciente> {
-    return this.http.get<Paciente>(`${this.base}?rut=${rut}`);
+    return this.http.get<Paciente>(`${this.apiUrl}/pacientes/rut/${rut}`);
   }
 }

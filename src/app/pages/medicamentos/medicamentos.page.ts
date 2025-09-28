@@ -30,7 +30,7 @@ export class MedicamentosPage implements OnInit {
       this.router.navigate(['/buscar']);
       return;
     }
-    this.medicamentosService.getPorPaciente(this.paciente.id).subscribe({
+    this.medicamentosService.getPorPaciente(this.paciente.idFichaMedica).subscribe({
       next: (data: Medicamento[]) => (this.medicamentos = data),
       error: (err: any) => console.error('Error cargando medicamentos:', err)
     });

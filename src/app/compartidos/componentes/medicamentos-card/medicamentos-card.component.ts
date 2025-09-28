@@ -15,21 +15,13 @@ export class MedicamentosCardComponent {
 
   constructor() { }
 
-  getEstadoClass(): string {
-    if (!this.medicamento?.estado) return 'finalizado';
-    switch (this.medicamento.estado.toLowerCase()) {
-      case 'activo': return 'activo';
-      case 'suspendido': return 'suspendido';
-      default: return 'finalizado';
-    }
-  }
-
-  getViaIcon(): string {
-    if (!this.medicamento?.via) return 'ellipse-outline';
-    const via = this.medicamento.via.toLowerCase();
-    if (via.includes('oral')) return 'ellipse-outline';
-    if (via.includes('inhalatoria')) return 'cloud-outline';
-    if (via.includes('intravenosa')) return 'water-outline';
+  getIconoPorFormato(): string {
+    if (!this.medicamento?.formato) return 'ellipse-outline';
+    const formato = this.medicamento.formato.toLowerCase();
+    if (formato.includes('comprimido')) return 'ellipse-outline';
+    if (formato.includes('cápsula')) return 'hardware-chip-outline';
+    if (formato.includes('jarabe')) return 'beaker-outline';
+    if (formato.includes('inyección')) return 'eyedrop-outline';
     return 'ellipse-outline';
   }
 }

@@ -1,74 +1,29 @@
-<ion-card *ngIf="diagnostico" class="diagnostic-card" [class]="getSeverityClass()">
-  <!-- Indicador de gravedad -->
-  <div class="severity-bar" [class]="getSeverityClass()"></div>
-  
-  <!-- Header de la card -->
-  <div class="card-header">
-    <div class="diagnostic-icon" [class]="getSeverityClass()">
+<ion-card class="diagnostic-card" [ngClass]="getSeverityClass()" *ngIf="diagnostico">
+  <div class="card-content-wrapper">
+    <div class="icon-container">
       <ion-icon [name]="getDiagnosticoIcon()"></ion-icon>
     </div>
-    
-    <div class="diagnostic-main-info">
-      <h3 class="diagnostic-title">{{ diagnostico.nombre }}</h3>
-      <div class="diagnostic-meta">
-        <ion-badge 
-          *ngIf="diagnostico.codigo" 
-          color="medium" 
-          class="code-badge">
-          {{ diagnostico.codigo }}
-        </ion-badge>
-        <div class="diagnostic-date">
-          <ion-icon name="calendar-outline"></ion-icon>
-          <span>{{ diagnostico.fecha | date:'MMM d, y' }}</span>
-        </div>
+    <div class="text-container">
+      <h3 class="diagnostic-title">{{ diagnostico.enfermedad }}</h3>
+      
+      <div class="date-container">
+        <ion-icon name="calendar-outline"></ion-icon>
+        <span class="date-text">{{ diagnostico.fecha | date:'dd/MM/yyyy' }}</span>
       </div>
     </div>
-    
-    <div class="card-actions">
-      <ion-button fill="clear" size="small" class="more-btn">
-        <ion-icon name="ellipsis-vertical" slot="icon-only"></ion-icon>
+    <div class="actions-container">
+      <ion-button fill="clear" (click)="onMoreOptions()">
+        <ion-icon slot="icon-only" name="ellipsis-vertical"></ion-icon>
       </ion-button>
     </div>
   </div>
-
-  <!-- Contenido de la card -->
-  <ion-card-content class="card-body">
-    <!-- Información principal -->
-    <div class="diagnostic-details">
-      <div class="detail-item">
-        <div class="detail-icon">
-          <ion-icon name="time-outline"></ion-icon>
-        </div>
-        <div class="detail-content">
-          <span class="detail-label">Tiempo transcurrido</span>
-          <span class="detail-value">{{ getTiempoTranscurrido() }}</span>
-        </div>
-      </div>
-      
-      <div class="detail-item" *ngIf="diagnostico.descripcion">
-        <div class="detail-icon">
-          <ion-icon name="document-text-outline"></ion-icon>
-        </div>
-        <div class="detail-content">
-          <span class="detail-label">Descripción</span>
-          <span class="detail-value">{{ diagnostico.descripcion }}</span>
-        </div>
-      </div>
+  <div class="footer-bar">
+    <div class="severity-indicator">
+      <span class="indicator-dot"></span>
+      <span class="indicator-text">{{ getSeverityText() }}</span>
     </div>
-
-    <!-- Footer con estado -->
-    <div class="card-footer">
-      <div class="severity-info">
-        <div class="severity-dot" [class]="getSeverityClass()"></div>
-        <span class="severity-text">{{ getSeverityText() }}</span>
-      </div>
-      
-      <ion-badge 
-        [color]="getEstadoBadgeColor()" 
-        class="status-badge">
-        <ion-icon [name]="getEstadoIcon()" slot="start"></ion-icon>
-        {{ getEstadoTexto() }}
-      </ion-badge>
+    <div class="time-elapsed">
+      <span>{{ getTiempoTranscurrido() }}</span>
     </div>
-  </ion-card-content>
+  </div>
 </ion-card>

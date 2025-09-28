@@ -17,7 +17,7 @@ export class DiagnosticoCardComponent {
   getDiagnosticoIcon(): string {
     if (!this.diagnostico) return 'medical-outline';
     
-    const nombre = this.diagnostico.nombre.toLowerCase();
+    const nombre = this.diagnostico.enfermedad.toLowerCase();
     
     // Mapeo mejorado de palabras clave a iconos
     if (nombre.includes('diabetes')) return 'water-outline';
@@ -40,7 +40,7 @@ export class DiagnosticoCardComponent {
   getSeverityClass(): string {
     if (!this.diagnostico) return 'leve';
     
-    const nombre = this.diagnostico.nombre.toLowerCase();
+    const nombre = this.diagnostico.enfermedad.toLowerCase();
     
     // Detectar si el diagnóstico está resuelto
     if (this.isResolved()) {
@@ -103,7 +103,7 @@ export class DiagnosticoCardComponent {
     const fechaDiagnostico = new Date(this.diagnostico.fecha);
     const ahora = new Date();
     const diasTranscurridos = Math.floor((ahora.getTime() - fechaDiagnostico.getTime()) / (1000 * 60 * 60 * 24));
-    const nombre = this.diagnostico.nombre.toLowerCase();
+    const nombre = this.diagnostico.enfermedad.toLowerCase();
     
     // Condiciones que se resuelven rápidamente
     if (nombre.includes('resfriado') || nombre.includes('gripe') || 
@@ -188,7 +188,7 @@ export class DiagnosticoCardComponent {
     const fechaDiagnostico = new Date(this.diagnostico.fecha);
     const ahora = new Date();
     const diasTranscurridos = Math.floor((ahora.getTime() - fechaDiagnostico.getTime()) / (1000 * 60 * 60 * 24));
-    const nombre = this.diagnostico.nombre.toLowerCase();
+    const nombre = this.diagnostico.enfermedad.toLowerCase();
     
     // Condiciones que se consideran resueltas después de cierto tiempo
     const condicionesTemporales = [
@@ -204,6 +204,6 @@ export class DiagnosticoCardComponent {
   // Método para manejar el clic en el botón de más opciones
   onMoreOptions() {
     // Aquí implementarías la lógica para mostrar más opciones
-    console.log('Show more options for diagnostic:', this.diagnostico?.id);
+    console.log('Show more options for diagnostic:', this.diagnostico?.idDiagnostico);
   }
 }

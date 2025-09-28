@@ -5,14 +5,9 @@ import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
 
 export interface Procedimiento {
-  id: number;
-  idPaciente: number;
   nombre: string;
-  tipo: string;
+  descripcion: string;
   fecha: string;
-  medico: string;
-  institucion: string;
-  resultado: string;
 }
 
 @Injectable({
@@ -20,16 +15,16 @@ export interface Procedimiento {
 })
 
 export class ProcedimientosService {
-  private apiUrl = environment.servicios.procedimientos;
+  private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) { }
 
-  getPorPaciente(pacienteId: number): Observable<Procedimiento[]> {
-    return this.http.get<Procedimiento[]>(`${this.apiUrl}?idPaciente=${pacienteId}`);
+  getPorPaciente(idFichaMedica: number): Observable<Procedimiento[]> {
+    return this.http.get<Procedimiento[]>(`${this.apiUrl}/pacientes/${idFichaMedica}/procedimientos`);
   }
 
-  getContadorPorPaciente(pacienteId: number): Observable<number> {
-    return this.getPorPaciente(pacienteId).pipe(
+  getContadorPorPaciente(idFichaMedica: number): Observable<number> {
+    return this.getPorPaciente(idFichaMedica).pipe(
       map(procedimientos => procedimientos.length)
     );
   }

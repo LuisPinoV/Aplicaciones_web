@@ -30,30 +30,27 @@ export class DiagnosticosPage implements OnInit {
 
   ngOnInit() {
     this.paciente = this.pacienteStore.getPaciente();
-
     if (!this.paciente) {
-      this.router.navigate(['/buscar']);
+      this.router.navigate(['/login']);
       return;
     }
-
     this.loadDiagnostics();
   }
 
-  private loadDiagnostics() {
+  loadDiagnostics() {
+    if (!this.paciente) return;
     this.isLoading = true;
-    
-    this.diagnosticosService.getPorPaciente(this.paciente!.id).subscribe({
-      next: (data) => {
-        this.diagnosticos = data.sort((a, b) => 
-          new Date(b.fecha).getTime() - new Date(a.fecha).getTime()
-        );
+    this.diagnosticosService.getDiagnosticos(this.paciente.idFichaMedica).subscribe({
+      next: (data: Diagnostico[]) => {
+        this.diagnosticos = data;
+        this.isLoading = false;
+        this.sortByDate(this.sortOrder);
+      },
+      error: (err: any) => {
+        console.error('Error al cargar diagnósticos:', err);
+        this.showErrorToast('No se pudieron cargar los diagnósticos.');
         this.isLoading = false;
       },
-      error: (err) => {
-        console.error('Error cargando diagnósticos:', err);
-        this.showErrorToast('Error al cargar los diagnósticos');
-        this.isLoading = false;
-      }
     });
   }
 
@@ -83,7 +80,7 @@ export class DiagnosticosPage implements OnInit {
 
   // Función para optimizar el renderizado de la lista
   trackByDiagnostico(index: number, item: Diagnostico): number {
-    return item.id;
+    return item.idDiagnostico;
   }
 
   // Nuevos métodos para las acciones
@@ -219,8 +216,8 @@ export class DiagnosticosPage implements OnInit {
 
   private sortByName(order: 'asc' | 'desc') {
     this.diagnosticos.sort((a, b) => {
-      const nameA = a.nombre.toLowerCase();
-      const nameB = b.nombre.toLowerCase();
+      const nameA = a.enfermedad.toLowerCase();
+      const nameB = b.enfermedad.toLowerCase();
       
       if (order === 'asc') {
         return nameA.localeCompare(nameB);

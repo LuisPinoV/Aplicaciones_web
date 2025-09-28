@@ -32,7 +32,7 @@ export class HospitalizacionesPage implements OnInit {
       return;
     }
 
-    this.hospitalizacionesService.getPorPaciente(this.paciente.id).subscribe({
+    this.hospitalizacionesService.getPorPaciente(this.paciente.idFichaMedica).subscribe({
       next: (data) => (this.hospitalizaciones = data),
       error: (err) => console.error('Error cargando hospitalizaciones:', err)
     });

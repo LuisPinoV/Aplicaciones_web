@@ -39,7 +39,15 @@ export class Tab5Page implements OnInit {
   }
 
   get displayAge(): string {
-    return this.paciente ? `${this.paciente.edad} años` : '—';
+    if (!this.paciente?.fechaNacimiento) return '—';
+    const birthDate = new Date(this.paciente.fechaNacimiento);
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    return `${age} años`;
   }
 
   get displaySex(): string {
@@ -48,5 +56,22 @@ export class Tab5Page implements OnInit {
       : this.paciente?.sexo === 'F'
       ? 'Femenino'
       : this.paciente?.sexo || '—';
+  }
+
+  get edad(): string {
+    if (!this.paciente?.fechaNacimiento) return '—';
+    const birthDate = new Date(this.paciente.fechaNacimiento);
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+    }
+    return age.toString();
+  }
+
+  logout() {
+    this.pacienteStore.clearPaciente();
+    this.router.navigate(['/login']);
   }
 }

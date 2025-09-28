@@ -1,35 +1,19 @@
 <div *ngIf="procedimiento" class="procedimiento-card">
-  <div class="tipo-indicator" [class]="getTipoClass()"></div>
   <div class="card-header">
-    <div class="procedimiento-icon">
+    <div class="icon-container">
       <ion-icon [name]="getTipoIcon()"></ion-icon>
     </div>
-    <div class="procedimiento-info">
-      <h3 class="titulo">{{ procedimiento.nombre }}</h3>
-      <p class="codigo">{{ procedimiento.tipo }}</p>
+    <div class="title-container">
+      <h3 class="nombre">{{ procedimiento.nombre }}</h3>
+      <p class="codigo">{{ procedimiento.descripcion }}</p>
     </div>
   </div>
   <div class="card-content">
     <div class="info-row">
       <div class="info-item">
-        <ion-icon name="person-outline"></ion-icon>
-        <span class="label">Médico</span>
-        <span class="value">{{ procedimiento.medico }}</span>
-      </div>
-      <div class="info-item">
-        <ion-icon name="business-outline"></ion-icon>
-        <span class="label">Institución</span>
-        <span class="value">{{ procedimiento.institucion }}</span>
-      </div>
-    </div>
-    <div class="resultado-section">
-      <p class="resultado-label">Resultado:</p>
-      <p class="resultado-texto">{{ procedimiento.resultado }}</p>
-    </div>
-    <div class="procedimiento-footer">
-      <div class="fecha-procedimiento">
         <ion-icon name="calendar-outline"></ion-icon>
-        <span>Realizado: {{ procedimiento.fecha | date:'dd/MM/yyyy' }}</span>
+        <span class="label">Fecha</span>
+        <span class="value">{{ procedimiento.fecha | date:'dd/MM/yyyy' }}</span>
       </div>
     </div>
   </div>

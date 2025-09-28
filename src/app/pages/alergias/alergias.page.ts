@@ -32,7 +32,7 @@ export class AlergiasPage implements OnInit {
       return;
     }
 
-    this.alergiasService.getPorPaciente(this.paciente.id).subscribe({
+    this.alergiasService.getPorPaciente(this.paciente.idFichaMedica).subscribe({
       next: (data) => (this.alergias = data),
       error: (err) => console.error('Error cargando alergias:', err)
     });
@@ -46,5 +46,9 @@ export class AlergiasPage implements OnInit {
       .join('')
       .toUpperCase()
       .substring(0, 2);
+  }
+
+  goBack() {
+    this.router.navigate(['/tabs/tab1']);
   }
 }

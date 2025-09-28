@@ -1,37 +1,33 @@
 <div *ngIf="medicamento" class="medicamento-card">
-  <div class="estado-indicator" [class]="getEstadoClass()"></div>
+  <div class="estado-indicator severity-normal"></div>
   <div class="card-header">
     <div class="medicamento-info">
       <h3 class="titulo">{{ medicamento.nombre }}</h3>
-      <p class="motivo">{{ medicamento.motivo }}</p>
+      <p class="motivo">{{ medicamento.descripcion }}</p>
     </div>
   </div>
   <div class="card-content">
     <div class="info-row">
       <div class="info-item">
         <ion-icon name="eyedrop-outline"></ion-icon>
-        <span class="label">Dosis</span>
-        <span class="value">{{ medicamento.dosis }}</span>
-      </div>
-      <div class="info-item">
-        <ion-icon [name]="getViaIcon()"></ion-icon>
-        <span class="label">Vía</span>
-        <span class="value">{{ medicamento.via }}</span>
+        <span class="label">Formato</span>
+        <span class="value">{{ medicamento.formato }} ({{medicamento.cantidad}})</span>
       </div>
       <div class="info-item">
         <ion-icon name="time-outline"></ion-icon>
         <span class="label">Frecuencia</span>
-        <span class="value">{{ medicamento.frecuencia }}</span>
+        <span class="value">{{ medicamento.frecuenciaConsumo }}</span>
       </div>
     </div>
-    <div class="medicamento-footer">
-      <div class="fecha-inicio">
-        <ion-icon name="calendar-outline"></ion-icon>
-        <span>Iniciado: {{ medicamento.fechaInicio | date:'dd/MM/yyyy' }}</span>
-      </div>
-      <div class="estado-badge" [class]="getEstadoClass()">
-        {{ medicamento.estado }}
-      </div>
+  </div>
+  <div class="medicamento-footer">
+    <div class="fecha-inicio">
+      <ion-icon name="calendar-outline"></ion-icon>
+      <span>Inicio: {{ medicamento.fechaInicio | date:'dd/MM/yy' }}</span>
     </div>
+    <div class="fecha-inicio" *ngIf="medicamento.tiempoConsumo">
+        <ion-icon name="hourglass-outline"></ion-icon>
+        <span>Por: {{ medicamento.tiempoConsumo }} días</span>
+      </div>
   </div>
 </div>

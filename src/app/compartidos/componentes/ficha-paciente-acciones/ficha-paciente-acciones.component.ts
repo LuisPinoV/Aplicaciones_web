@@ -39,12 +39,12 @@ export class FichaPacienteAccionesComponent implements OnChanges {
   ) {}
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['paciente'] && this.paciente?.id) {
-      this.cargarContadores(this.paciente.id);
+    if (changes['paciente'] && this.paciente?.idFichaMedica) {
+      this.cargarContadores(this.paciente.idFichaMedica);
     }
   }
 
-  private async cargarContadores(idPaciente: number) {
+  async cargarContadores(idFichaMedica: number) {
     try {
       this.diagnosticosService.getContadorPorPaciente(1).subscribe({
         next: (cantidad) => {
