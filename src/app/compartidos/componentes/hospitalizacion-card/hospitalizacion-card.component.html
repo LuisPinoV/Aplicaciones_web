@@ -1,19 +1,10 @@
-<div *ngIf="hospitalizacion" class="hospitalizacion-card">
-  <!-- Indicador de gravedad/tipo para hospitalizaciones -->
-  <div class="severity-indicator" [class]="getHospitalizacionSeverityClass()"></div>
-  
+<div class="hospitalizacion-card">
   <div class="card-header">
     <div class="hospitalizacion-icon">
       <ion-icon name="business-outline"></ion-icon>
     </div>
     <div class="hospitalizacion-info">
-      <h3 class="titulo">{{ hospitalizacion.institucionMedica }}</h3>
-      <p class="codigo" *ngIf="hospitalizacion.tipoHospitalizacion">{{ hospitalizacion.tipoHospitalizacion }}</p>
-    </div>
-    <div class="card-actions">
-      <ion-button fill="clear" size="small" class="more-btn">
-        <ion-icon name="ellipsis-horizontal" slot="icon-only"></ion-icon>
-      </ion-button>
+      <h3>{{ hospitalizacion.institucionMedica }}</h3>
     </div>
   </div>
 
@@ -21,26 +12,11 @@
     <div class="info-row">
       <div class="info-item">
         <ion-icon name="calendar-outline"></ion-icon>
-        <span class="label">Fecha</span>
-        <span class="value">{{ hospitalizacion.fecha | date:'MMM d, y' }}</span>
+        <span>{{ getFechaFormateada() }}</span>
       </div>
-    </div>
-    
-    <div class="info-row">
       <div class="info-item">
         <ion-icon name="time-outline"></ion-icon>
-        <span class="label">Duración</span>
-        <span class="value">{{ hospitalizacion.duracion }}</span>
-      </div>
-    </div>
-    
-    <div class="hospitalizacion-footer" *ngIf="hospitalizacion.estado || getDuracionTranscurrida()">
-      <div class="tiempo-transcurrido" *ngIf="getDuracionTranscurrida()">
-        <ion-icon name="hourglass-outline"></ion-icon>
-        <span>{{ getDuracionTranscurrida() }}</span>
-      </div>
-      <div class="estado-badge" [class]="getHospitalizacionEstadoClass()" *ngIf="hospitalizacion.estado">
-        {{ hospitalizacion.estado }}
+        <span>{{ getDuracionFormateada() }}</span>
       </div>
     </div>
   </div>

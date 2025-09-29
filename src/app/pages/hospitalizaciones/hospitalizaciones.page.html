@@ -1,121 +1,24 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/tabs/historial"></ion-back-button>
-    </ion-buttons>
     <ion-title>Hospitalizaciones</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Hospitalizaciones</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <div class="health-container" *ngIf="paciente">
-    <!-- Estadísticas mejoradas -->
-    <div class="stats-section" *ngIf="hospitalizaciones.length > 0">
-      <div class="section-header">
-        <h3>Resumen Médico</h3>
-      </div>
-      
-      <div class="enhanced-stats-grid">
-        <ion-card class="stat-card total">
-          <ion-card-content>
-            <div class="stat-icon">
-              <ion-icon name="medical"></ion-icon>
-            </div>
-            <div class="stat-number">{{ hospitalizaciones.length }}</div>
-            <div class="stat-label">Total Hospitalizaciones</div>
-          </ion-card-content>
-        </ion-card>
-
-        <ion-card class="stat-card recent">
-          <ion-card-content>
-            <div class="stat-icon">
-              <ion-icon name="time"></ion-icon>
-            </div>
-            <div class="stat-number">{{ getHospitalizacionesRecientes() }}</div>
-            <div class="stat-label">Recientes (3m)</div>
-          </ion-card-content>
-        </ion-card>
-      </div>
-    </div>
-    <!-- Acciones rápidas -->
-    <div class="quick-actions-section" *ngIf="hospitalizaciones.length > 0">
-      <div class="actions-row">
-        <ion-button 
-          fill="clear" 
-          size="small" 
-          class="action-btn filter-btn"
-          (click)="openFilter()">
-          <ion-icon name="funnel" slot="start"></ion-icon>
-          Filtrar
-        </ion-button>
-        
-        <ion-button 
-          fill="clear" 
-          size="small" 
-          class="action-btn sort-btn"
-          (click)="sortHospitalizaciones()">
-          <ion-icon name="swap-vertical" slot="start"></ion-icon>
-          Ordenar
-        </ion-button>
-        
-        <ion-button 
-          fill="solid" 
-          size="small" 
-          class="action-btn add-btn"
-          (click)="addHospitalizacion()">
-          <ion-icon name="add" slot="start"></ion-icon>
-          Nuevo
-        </ion-button>
-      </div>
-    </div>
-    <div class="hospitalizaciones-section" *ngIf="hospitalizaciones.length > 0; else noData">
-      <div class="section-header">
-        <h3>Historial Completo</h3>
-      </div>
-      
-      <div class="hospitalizaciones-list">
-        <app-hospitalizacion-card 
-          *ngFor="let h of hospitalizaciones; trackBy: trackByHospitalizacion; let i = index" 
-          [hospitalizacion]="h"
-          [index]="i"
-          class="hospitalizacion-item">
-        </app-hospitalizacion-card>
-      </div>
-    </div>
-    <ng-template #noData>
-      <div class="empty-state">
-        <div class="empty-icon">
-          <ion-icon name="document-text-outline"></ion-icon>
-        </div>
-        <h3>Sin hospitalizaciones registradas</h3>
-        <p>Este paciente no tiene hospitalizaciones médicas registradas en su historial clínico.</p>
-        
-        <div class="empty-actions">
-          <ion-button 
-            expand="block" 
-            fill="solid" 
-            color="primary"
-            (click)="addHospitalizacion()">
-            <ion-icon name="add-circle" slot="start"></ion-icon>
-            Agregar primera hospitalizacion
-          </ion-button>
-          
-          <ion-button 
-            expand="block" 
-            fill="outline" 
-            color="medium"
-            (click)="importHospitalizaciones()">
-            <ion-icon name="cloud-upload" slot="start"></ion-icon>
-            Importar historial
-          </ion-button>
-        </div>
-      </div>
-    </ng-template>
-  </div>
+<ion-content *ngIf="!isLoading; else loading">
+  <ion-list>
+    <ion-item *ngFor="let h of hospitalizaciones">
+      <ion-label>
+        <h2>{{ h.institucionMedica }}</h2>
+        <p>Fecha: {{ h.fecha | date:'mediumDate' }}</p>
+        <p>Duración: {{ h.duracion }} días</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
 </ion-content>
+
+<ng-template #loading>
+  <ion-content>
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Cargando hospitalizaciones...</p>
+  </ion-content>
+</ng-template>

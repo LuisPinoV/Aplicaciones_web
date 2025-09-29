@@ -3,12 +3,12 @@
     { 
       "id": 1, 
       "rut": "22845534-2", 
-      "nombre": "Felipe Vázquez",
+      "nombre": "Juan Pérez",
       "edad": 30,
       "sexo": "Masculino",
       "grupo_sanguineo": "A+",
       "telefono": "+56 9 1111 1111",
-      "mail": "feli.vazpro@gmail.com",
+      "mail": "juan.perez@gmail.com",
       "password": "qwertf"
     },
     { 

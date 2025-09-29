@@ -145,7 +145,7 @@ app.get('/fichas/:id/medicamentos', async (req, res) => {
   }
 });
 
-// procedimientos de una ficha
+// procedimientos(examenes) de una ficha
 app.get('/fichas/:id/procedimientos', async (req, res) => {
   const id = req.params.id;
   try {
@@ -155,8 +155,8 @@ app.get('/fichas/:id/procedimientos', async (req, res) => {
       JOIN ConsultaProcedimiento cp ON c.idConsulta = cp.idConsulta
       JOIN Procedimiento p ON cp.idProcedimiento = p.idProcedimiento
       JOIN TipoProcedimiento tp ON p.IdTipoProcedimiento = tp.idTipoProcedimiento
-      WHERE c.idFichaMedica = ?
-    `, [id]);
+      WHERE c.idFichaMedica = ? AND tp.idTipoProcedimiento = 1
+    `, [id])
 
     res.json(procedimientos);
   } catch (err) {
@@ -164,5 +164,185 @@ app.get('/fichas/:id/procedimientos', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+// procedimientos totales de una ficha
+app.get('/fichas/:id/medicamentos', async (req, res) => {
+  const idFicha = req.params.id;
+  try {
+    const [medicamentos] = await pool.query(`
+      SELECT m.idMedicamento,
+             m.nombre AS nombreMedicamento,
+             m.dosis,
+             m.frecuencia
+      FROM Consulta c
+      JOIN ConsultaMedicamento cm ON c.idConsulta = cm.idConsulta
+      JOIN Medicamento m ON cm.idMedicamento = m.idMedicamento
+      WHERE c.idFichaMedica = ?
+    `, [idFicha]);
+    res.json(medicamentos);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// alergias de un paciente
+app.get('/fichas/:id/alergias', async (req, res) => {
+  const idFicha = req.params.id;
+  try {
+    const [alergias] = await pool.query(`
+      SELECT pa.idPadecimiento,
+             pa.nombre AS nombrePadecimiento,
+             pa.descripcion
+      FROM padecimiento pa
+      JOIN fichamedicapadecimiento fp ON fp.idFichaMedica = pa.idPadecimiento
+      JOIN fichamedica f ON f.idFichaMedica = fp.idFichaMedica
+      JOIN tipopadecimiento tp ON tp.idTipoPadecimiento = pa.idTipoPadecimiento
+      WHERE f.idFichaMedica = ?;
+    `, [idFicha]);
+    res.json(alergias);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get('/fichas/:id/examenes', async (req, res) => {
+  const idFicha = req.params.id;
+
+  try {
+    const [examenes] = await pool.query(`
+      SELECT p.idProcedimiento,
+             p.nombre      AS nombreExamen,
+             p.descripcion AS descripcionExamen,
+             tp.idTipoProcedimiento,
+             tp.tipoprocedimiento     AS tipoProcedimiento
+      FROM Consulta c
+      JOIN ConsultaProcedimiento cp ON c.idConsulta = cp.idConsulta
+      JOIN Procedimiento p          ON cp.idProcedimiento = p.idProcedimiento
+      JOIN TipoProcedimiento tp     ON p.idTipoProcedimiento = tp.idTipoProcedimiento
+      WHERE c.idFichaMedica = ?
+        AND p.idTipoProcedimiento = 2
+    `, [idFicha]);
+
+    res.json(examenes);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// hospitalizaciones de una ficha médica
+app.get('/fichas/:id/hospitalizaciones', async (req, res) => {
+  const idFicha = req.params.id;
+
+  try {
+    const [hospitalizaciones] = await pool.query(`
+      SELECT 
+          h.idHospitalizacion,
+          h.fecha,
+          h.duracion,
+          h.institucionMedica
+      FROM Hospitalizacion h
+      JOIN FichaMedica f ON f.idFichaMedica = h.idFichaMedica
+      WHERE f.idFichaMedica = ?;
+    `, [idFicha]);
+
+    res.json(hospitalizaciones);
+  } catch (err) {
+    console.error('Error obteniendo hospitalizaciones:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Obtener consultas de una ficha médica
+app.get('/fichas/:id/consultas', async (req, res) => {
+  const idFicha = req.params.id;
+
+  try {
+    const [consultas] = await pool.query(`
+      SELECT 
+        c.fecha,
+        m.nombre AS medicoNombre,
+        c.institucionMedica,
+        c.descripcion
+      FROM Consulta c
+      JOIN Medico m ON m.idMedico = c.idMedico
+      WHERE c.idFichaMedica = ?;
+    `, [idFicha]);
+
+    res.json(consultas);
+  } catch (err) {
+    console.error('Error obteniendo consultas:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Obtener diagnósticos de una ficha médica
+app.get('/fichas/:id/diagnosticos', async (req, res) => {
+  const idFicha = req.params.id;
+
+  try {
+    const [diagnosticos] = await pool.query(`
+      SELECT 
+        fecha,
+        descripcion
+      FROM Diagnostico
+      WHERE idFichaMedica = ?;
+    `, [idFicha]);
+
+    res.json(diagnosticos);
+  } catch (err) {
+    console.error('Error obteniendo diagnósticos:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Obtener medicamentos de una ficha médica
+app.get('/fichas/:id/medicamentos', async (req, res) => {
+  const idFicha = req.params.id;
+
+  try {
+    const [medicamentos] = await pool.query(`
+      SELECT 
+        m.nombre,
+        m.descripcion,
+        cm.cantidad,
+        cm.formato,
+        cm.tiempoConsumo,
+        cm.frecuenciaConsumo
+      FROM ConsultaMedicamento cm
+      JOIN Medicamento m ON cm.idMedicamento = m.idMedicamento
+      JOIN Consulta c ON cm.idConsulta = c.idConsulta
+      WHERE c.idFichaMedica = ?;
+    `, [idFicha]);
+
+    res.json(medicamentos);
+  } catch (err) {
+    console.error('Error obteniendo medicamentos:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Procedimientos (idTipoProcedimiento = 1) de una ficha
+app.get('/fichas/:id/procedimientos', async (req, res) => {
+  const id = req.params.id;
+  try {
+    const [procedimientos] = await pool.query(`
+      SELECT p.idProcedimiento, p.nombre, p.descripcion, tp.idTipoProcedimiento, tp.tipoprocedimiento AS tipoProcedimiento
+      FROM Consulta c
+      JOIN ConsultaProcedimiento cp ON c.idConsulta = cp.idConsulta
+      JOIN Procedimiento p ON cp.idProcedimiento = p.idProcedimiento
+      JOIN TipoProcedimiento tp ON p.IdTipoProcedimiento = tp.idTipoProcedimiento
+      WHERE c.idFichaMedica = ? AND tp.idTipoProcedimiento = 1
+    `, [id]);
+
+    res.json(procedimientos);
+  } catch (err) {
+    console.error('Error obteniendo procedimientos:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 
 app.listen(3000, () => console.log('API escuchando en http://localhost:3000'));

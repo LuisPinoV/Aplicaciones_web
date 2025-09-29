@@ -1,31 +1,32 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonicModule, ToastController, ActionSheetController } from '@ionic/angular';
+import { IonicModule } from '@ionic/angular';
 import { Router } from '@angular/router';
-import { Diagnostico, DiagnosticosService } from 'src/app/core/servicios/diagnosticos.service';
-import { Paciente } from 'src/app/core/servicios/pacientes.service';
 import { PacienteStoreService } from 'src/app/core/servicios/paciente-store.service';
-import { DiagnosticoCardComponent } from 'src/app/compartidos/componentes/diagnostico-card/diagnostico-card.component';
+import { Paciente } from 'src/app/core/servicios/pacientes.service';
+import { ApiService } from 'src/app/services/api';
+
+interface DiagnosticoListado {
+  fecha: string;
+  descripcion: string;
+}
 
 @Component({
   selector: 'app-diagnosticos',
   templateUrl: './diagnosticos.page.html',
   styleUrls: ['./diagnosticos.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, DiagnosticoCardComponent]
+  imports: [IonicModule, CommonModule]
 })
 export class DiagnosticosPage implements OnInit {
   paciente?: Paciente;
-  diagnosticos: Diagnostico[] = [];
+  diagnosticos: DiagnosticoListado[] = [];
   isLoading = false;
-  sortOrder: 'asc' | 'desc' = 'desc';
 
   constructor(
     private pacienteStore: PacienteStoreService,
-    private diagnosticosService: DiagnosticosService,
-    private router: Router,
-    private toastController: ToastController,
-    private actionSheetController: ActionSheetController
+    private apiService: ApiService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -36,222 +37,18 @@ export class DiagnosticosPage implements OnInit {
       return;
     }
 
-    this.loadDiagnostics();
+    this.loadDiagnosticos();
   }
 
-  private loadDiagnostics() {
+  private async loadDiagnosticos() {
     this.isLoading = true;
-    
-    this.diagnosticosService.getPorPaciente(this.paciente!.id).subscribe({
-      next: (data) => {
-        this.diagnosticos = data.sort((a, b) => 
-          new Date(b.fecha).getTime() - new Date(a.fecha).getTime()
-        );
-        this.isLoading = false;
-      },
-      error: (err) => {
-        console.error('Error cargando diagnósticos:', err);
-        this.showErrorToast('Error al cargar los diagnósticos');
-        this.isLoading = false;
-      }
-    });
-  }
 
-  // Funciones para las estadísticas
-  getDiagnosticosRecientes(): number {
-    const tresMesesAtras = new Date();
-    tresMesesAtras.setMonth(tresMesesAtras.getMonth() - 3);
-    return this.diagnosticos.filter(d => new Date(d.fecha) >= tresMesesAtras).length;
-  }
-
-  getDiagnosticosActivos(): number {
-    const estadosActivos = ['activo', 'cronico', 'en_tratamiento'];
-    return this.diagnosticos.filter(d => d.estado && estadosActivos.includes(d.estado)).length;
-  }
-
-  // Función para generar iniciales del paciente
-  getInitials(nombre: string): string {
-    if (!nombre) return '';
-    return nombre
-      .split(' ')
-      .map(n => n[0])
-      .join('')
-      .toUpperCase()
-      .substring(0, 2);
-  }
-
-  // Función para optimizar el renderizado de la lista
-  trackByDiagnostico(index: number, item: Diagnostico): number {
-    return item.id;
-  }
-
-  // Nuevos métodos para las acciones
-  async openFilter() {
-    const actionSheet = await this.actionSheetController.create({
-      header: 'Filtrar diagnósticos',
-      buttons: [
-        {
-          text: 'Mostrar todos',
-          icon: 'list',
-          handler: () => {
-            this.loadDiagnostics();
-          }
-        },
-        {
-          text: 'Solo recientes (3 meses)',
-          icon: 'time',
-          handler: () => {
-            this.filterRecent();
-          }
-        },
-        {
-          text: 'Solo activos',
-          icon: 'pulse',
-          handler: () => {
-            this.filterActive();
-          }
-        },
-        {
-          text: 'Cancelar',
-          icon: 'close',
-          role: 'cancel'
-        }
-      ]
-    });
-    await actionSheet.present();
-  }
-
-  async sortDiagnostics() {
-    const actionSheet = await this.actionSheetController.create({
-      header: 'Ordenar por',
-      buttons: [
-        {
-          text: 'Fecha (más reciente primero)',
-          icon: 'arrow-down',
-          handler: () => {
-            this.sortByDate('desc');
-          }
-        },
-        {
-          text: 'Fecha (más antiguo primero)',
-          icon: 'arrow-up',
-          handler: () => {
-            this.sortByDate('asc');
-          }
-        },
-        {
-          text: 'Nombre (A-Z)',
-          icon: 'text',
-          handler: () => {
-            this.sortByName('asc');
-          }
-        },
-        {
-          text: 'Cancelar',
-          icon: 'close',
-          role: 'cancel'
-        }
-      ]
-    });
-    await actionSheet.present();
-  }
-
-  async addDiagnostic() {
-    const toast = await this.toastController.create({
-      message: 'Abriendo formulario de nuevo diagnóstico...',
-      duration: 2000,
-      color: 'primary',
-      position: 'bottom'
-    });
-    await toast.present();
-    
-    // Aquí implementarías la navegación al formulario de nuevo diagnóstico
-    console.log('Navigate to add diagnostic form');
-  }
-
-  async importDiagnostics() {
-    const toast = await this.toastController.create({
-      message: 'Función de importación en desarrollo...',
-      duration: 2000,
-      color: 'warning',
-      position: 'bottom'
-    });
-    await toast.present();
-    
-    console.log('Import diagnostics functionality');
-  }
-
-  // Métodos de filtrado
-  private filterRecent() {
-    const tresMesesAtras = new Date();
-    tresMesesAtras.setMonth(tresMesesAtras.getMonth() - 3);
-    
-    this.diagnosticos = this.diagnosticos.filter(d => 
-      new Date(d.fecha) >= tresMesesAtras
-    );
-    
-    this.showSuccessToast(`Mostrando ${this.diagnosticos.length} diagnósticos recientes`);
-  }
-
-  private filterActive() {
-    const activeStates = ['activo', 'cronico', 'en_tratamiento'];
-    this.diagnosticos = this.diagnosticos.filter(d => d.estado && activeStates.includes(d.estado));
-    this.showSuccessToast(`Mostrando ${this.diagnosticos.length} diagnósticos activos`);
-  }
-
-  // Métodos de ordenamiento
-  private sortByDate(order: 'asc' | 'desc') {
-    this.diagnosticos.sort((a, b) => {
-      const dateA = new Date(a.fecha).getTime();
-      const dateB = new Date(b.fecha).getTime();
-      return order === 'desc' ? dateB - dateA : dateA - dateB;
-    });
-    
-    this.sortOrder = order;
-    this.showSuccessToast(`Ordenado por fecha ${order === 'desc' ? 'descendente' : 'ascendente'}`);
-  }
-
-  private sortByName(order: 'asc' | 'desc') {
-    this.diagnosticos.sort((a, b) => {
-      const nameA = a.nombre.toLowerCase();
-      const nameB = b.nombre.toLowerCase();
-      
-      if (order === 'asc') {
-        return nameA.localeCompare(nameB);
-      } else {
-        return nameB.localeCompare(nameA);
-      }
-    });
-    
-    this.showSuccessToast(`Ordenado alfabéticamente ${order === 'asc' ? 'A-Z' : 'Z-A'}`);
-  }
-
-  // Métodos de utilidad para toasts
-  private async showSuccessToast(message: string) {
-    const toast = await this.toastController.create({
-      message,
-      duration: 2000,
-      color: 'success',
-      position: 'bottom'
-    });
-    await toast.present();
-  }
-
-  private async showErrorToast(message: string) {
-    const toast = await this.toastController.create({
-      message,
-      duration: 3000,
-      color: 'danger',
-      position: 'bottom'
-    });
-    await toast.present();
-  }
-
-  // Método para refrescar datos
-  doRefresh(event: any) {
-    this.loadDiagnostics();
-    setTimeout(() => {
-      event.target.complete();
-    }, 1000);
+    try {
+      this.diagnosticos = await this.apiService.getDiagnosticosPorFicha(this.paciente!.id);
+    } catch (err) {
+      console.error('Error cargando diagnósticos:', err);
+    } finally {
+      this.isLoading = false;
+    }
   }
 }

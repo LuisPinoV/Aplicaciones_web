@@ -34,9 +34,10 @@ export interface Diagnostico {
 export interface Hospitalizacion {
   idHospitalizacion: number;
   idFichaMedica: number;
-  fechaIngreso: string;
-  fechaSalida: string;
+  fecha: string;
+  duracion: number;
   motivo: string;
+  institucionMedica: string;
 }
 
 export interface Consulta {
@@ -47,7 +48,45 @@ export interface Consulta {
   descripcion: string;
   medicoNombre?: string;
   tipoMedico?: string;
+  institucionMedica?: string;
 }
+export interface MedicamentoListado {
+  nombre: string;
+  descripcion: string;
+  cantidad: number;
+  formato: string;
+  tiempoConsumo: number;
+  frecuenciaConsumo: string;
+}
+export interface ProcedimientoListado {
+  idProcedimiento: number;
+  nombre: string;
+  idTipoProcedimiento: number;
+  tipoProcedimiento: string;
+}
+
+export interface AlergiaListado {
+  nombre: string;
+  descripcion: string;
+}
+
+export interface ProcedimientoCirugia {
+  idProcedimiento: number;
+  nombre: string;
+  descripcion: string;
+  idTipoProcedimiento: number;
+  tipoProcedimiento: string;
+}
+
+export interface Procedimiento {
+  idProcedimiento: number;
+  nombre: string;
+  descripcion: string;
+  idTipoProcedimiento: number;
+  tipoProcedimiento: string;
+}
+
+
 
 @Injectable({
   providedIn: 'root'
@@ -85,19 +124,19 @@ export class ApiService {
     return res.data;
   }
 
-  // === Diagnósticos ===
+  //Diagnósticos 
   async getDiagnosticos(): Promise<Diagnostico[]> {
     const res = await axios.get(`${this.baseUrl}/diagnosticos`);
     return res.data;
   }
 
-  // === Hospitalizaciones ===
+  // Hospitalizaciones
   async getHospitalizaciones(): Promise<Hospitalizacion[]> {
     const res = await axios.get(`${this.baseUrl}/hospitalizaciones`);
     return res.data;
   }
 
-  // === Consultas ===
+  //  Consultas 
   async getConsultas(): Promise<Consulta[]> {
     const res = await axios.get(`${this.baseUrl}/consultas`);
     return res.data;
@@ -111,4 +150,57 @@ export class ApiService {
   const res = await axios.get(`${this.baseUrl}/fichas/${idFicha}/procedimientos`);
   return res.data;
   }
+    // Medicamentos por ficha
+  async getMedicamentosPorPaciente(idFicha: number) {
+    const res = await axios.get(`${this.baseUrl}/fichas/${idFicha}/medicamentos`);
+    return res.data;
+  }
+
+  //  Procedimientos por ficha
+  async getProcedimientosPorPaciente(idFicha: number) {
+    const res = await axios.get(`${this.baseUrl}/fichas/${idFicha}/procedimientos`);
+    return res.data;
+  }
+
+  // Alergias por ficha/paciente ===
+  async getAlergiasPorPaciente(idFicha: number) {
+    const res = await axios.get(`${this.baseUrl}/fichas/${idFicha}/alergias`);
+    return res.data;
+  }
+  // Exámenes por ficha
+  async getExamenesPorFicha(idFicha: number) {
+    const res = await axios.get(`${this.baseUrl}/fichas/${idFicha}/examenes`);
+    return res.data;
+  }
+  // Hospitalizaciones por ficha
+  async getHospitalizacionesPorFicha(idFicha: number) {
+    const res = await axios.get(`${this.baseUrl}/fichas/${idFicha}/hospitalizaciones`);
+    return res.data;
+  }
+  // En src/app/services/api.ts
+  async getConsultasPorFicha(idFicha: number) {
+    const res = await axios.get(`${this.baseUrl}/fichas/${idFicha}/consultas`);
+    return res.data;
+  }
+  // Diagnósticos por ficha
+  async getDiagnosticosPorFicha(idFicha: number) {
+    const res = await axios.get(`${this.baseUrl}/fichas/${idFicha}/diagnosticos`);
+    return res.data;
+  }
+
+  // Medicamentos por ficha
+  async getMedicamentosPorFicha(idFicha: number) {
+    const res = await axios.get(`${this.baseUrl}/fichas/${idFicha}/medicamentos`);
+    return res.data;
+  }
+  // Exámenes por ficha
+  async getExamenesFicha(idFicha: number) {
+    const res = await axios.get(`${this.baseUrl}/fichas/${idFicha}/examenes`);
+    return res.data;
+  }
+  async getProcedimientosCirugiaPorFicha(idFicha: number): Promise<ProcedimientoCirugia[]> {
+    const res = await axios.get(`${this.baseUrl}/fichas/${idFicha}/procedimientos`);
+    return res.data;
+  }
+
 }
