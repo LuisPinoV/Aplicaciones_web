@@ -13,7 +13,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-us-east-1-bfec0a90-e848",
-          "S3Key": "serverless/webb/dev/1759161622791-2025-09-29T16:00:22.791Z/webb.zip"
+          "S3Key": "serverless/webb/dev/1759166047836-2025-09-29T17:14:07.836Z/webb.zip"
         },
         "Handler": "handler.main",
         "Runtime": "nodejs18.x",
@@ -26,14 +26,14 @@
         "ApiLogGroup"
       ]
     },
-    "ApiLambdaVersionMo4BDvYHZjBGaFsyQhAy01bm8CiErRuTQom9BI2qFzE": {
+    "ApiLambdaVersionwNvJKc4ZrBUZvFmntwy6y4lu9ten9zIU23O1s6Gbg": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "ApiLambdaFunction"
         },
-        "CodeSha256": "rly6rfxrIkvMWKoAN1sbKpxNWv2TEqIW3nNchfDq5PU="
+        "CodeSha256": "O4jhT+Fr6zm7AbMZWyZ9l3qAcUuYSW0EaNmj/cmhOJc="
       }
     },
     "HttpApi": {
@@ -158,7 +158,7 @@
     "ApiLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "ApiLambdaVersionMo4BDvYHZjBGaFsyQhAy01bm8CiErRuTQom9BI2qFzE"
+        "Ref": "ApiLambdaVersionwNvJKc4ZrBUZvFmntwy6y4lu9ten9zIU23O1s6Gbg"
       },
       "Export": {
         "Name": "sls-webb-dev-ApiLambdaFunctionQualifiedArn"

@@ -56,7 +56,7 @@
               "Properties": {
                 "Code": {
                   "S3Bucket": "serverless-framework-deployments-us-east-1-bfec0a90-e848",
-                  "S3Key": "serverless/webb/dev/1759161622791-2025-09-29T16:00:22.791Z/webb.zip"
+                  "S3Key": "serverless/webb/dev/1759166047836-2025-09-29T17:14:07.836Z/webb.zip"
                 },
                 "Handler": "handler.main",
                 "Runtime": "nodejs18.x",
@@ -69,14 +69,14 @@
                 "ApiLogGroup"
               ]
             },
-            "ApiLambdaVersionMo4BDvYHZjBGaFsyQhAy01bm8CiErRuTQom9BI2qFzE": {
+            "ApiLambdaVersionwNvJKc4ZrBUZvFmntwy6y4lu9ten9zIU23O1s6Gbg": {
               "Type": "AWS::Lambda::Version",
               "DeletionPolicy": "Retain",
               "Properties": {
                 "FunctionName": {
                   "Ref": "ApiLambdaFunction"
                 },
-                "CodeSha256": "rly6rfxrIkvMWKoAN1sbKpxNWv2TEqIW3nNchfDq5PU="
+                "CodeSha256": "O4jhT+Fr6zm7AbMZWyZ9l3qAcUuYSW0EaNmj/cmhOJc="
               }
             },
             "HttpApi": {
@@ -201,7 +201,7 @@
             "ApiLambdaFunctionQualifiedArn": {
               "Description": "Current Lambda function version",
               "Value": {
-                "Ref": "ApiLambdaVersionMo4BDvYHZjBGaFsyQhAy01bm8CiErRuTQom9BI2qFzE"
+                "Ref": "ApiLambdaVersionwNvJKc4ZrBUZvFmntwy6y4lu9ten9zIU23O1s6Gbg"
               },
               "Export": {
                 "Name": "sls-webb-dev-ApiLambdaFunctionQualifiedArn"
@@ -245,6 +245,9 @@
         },
         "vpc": {}
       },
+      "plugins": [
+        "serverless-offline"
+      ],
       "functions": {
         "api": {
           "handler": "handler.main",
@@ -260,7 +263,7 @@
           "timeout": 6,
           "runtime": "nodejs18.x",
           "vpc": {},
-          "versionLogicalId": "ApiLambdaVersionMo4BDvYHZjBGaFsyQhAy01bm8CiErRuTQom9BI2qFzE"
+          "versionLogicalId": "ApiLambdaVersionwNvJKc4ZrBUZvFmntwy6y4lu9ten9zIU23O1s6Gbg"
         }
       }
     },
@@ -315,7 +318,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-us-east-1-bfec0a90-e848",
-                "S3Key": "serverless/webb/dev/1759161622791-2025-09-29T16:00:22.791Z/webb.zip"
+                "S3Key": "serverless/webb/dev/1759166047836-2025-09-29T17:14:07.836Z/webb.zip"
               },
               "Handler": "handler.main",
               "Runtime": "nodejs18.x",
@@ -328,14 +331,14 @@
               "ApiLogGroup"
             ]
           },
-          "ApiLambdaVersionMo4BDvYHZjBGaFsyQhAy01bm8CiErRuTQom9BI2qFzE": {
+          "ApiLambdaVersionwNvJKc4ZrBUZvFmntwy6y4lu9ten9zIU23O1s6Gbg": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "ApiLambdaFunction"
               },
-              "CodeSha256": "rly6rfxrIkvMWKoAN1sbKpxNWv2TEqIW3nNchfDq5PU="
+              "CodeSha256": "O4jhT+Fr6zm7AbMZWyZ9l3qAcUuYSW0EaNmj/cmhOJc="
             }
           },
           "HttpApi": {
@@ -460,7 +463,7 @@
           "ApiLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "ApiLambdaVersionMo4BDvYHZjBGaFsyQhAy01bm8CiErRuTQom9BI2qFzE"
+              "Ref": "ApiLambdaVersionwNvJKc4ZrBUZvFmntwy6y4lu9ten9zIU23O1s6Gbg"
             },
             "Export": {
               "Name": "sls-webb-dev-ApiLambdaFunctionQualifiedArn"
@@ -513,7 +516,7 @@
       "serviceProvider": null,
       "instanceParameters": null
     },
-    "serviceRawFile": "service: webb\r\n\r\nprovider:\r\n  name: aws\r\n  role: arn:aws:iam::992382436111:role/LabRole\r\n  runtime: nodejs18.x\r\n  region: us-east-1\r\n  environment:\r\n  logs:\r\n    httpApi: true\r\n    cors:\r\n      allowedOrigins:\r\n        - \"*\"\r\n      allowedMethods:\r\n        - GET\r\n        - POST\r\n        - PUT\r\n        - DELETE\r\n        - OPTIONS\r\n      allowedHeaders:\r\n        - \"*\"\r\n  iamRoleStatements:\r\n    - Effect: Allow\r\n      Action:\r\n        - sts:AssumeRole\r\n        - dynamodb:*\r\n      Resource:\r\n\r\nfunctions:\r\n  api:\r\n    handler: handler.main\r\n    events:\r\n      - httpApi: '*'\r\n",
+    "serviceRawFile": "service: webb\r\n\r\nprovider:\r\n  name: aws\r\n  role: arn:aws:iam::992382436111:role/LabRole\r\n  runtime: nodejs18.x\r\n  region: us-east-1\r\n  environment:\r\n  logs:\r\n    httpApi: true\r\n    cors:\r\n      allowedOrigins:\r\n        - \"*\"\r\n      allowedMethods:\r\n        - GET\r\n        - POST\r\n        - PUT\r\n        - DELETE\r\n        - OPTIONS\r\n      allowedHeaders:\r\n        - \"*\"\r\n  iamRoleStatements:\r\n    - Effect: Allow\r\n      Action:\r\n        - sts:AssumeRole\r\n        - dynamodb:*\r\n      Resource:\r\n\r\nplugins:\r\n  - serverless-offline\r\n  \r\nfunctions:\r\n  api:\r\n    handler: handler.main\r\n    events:\r\n      - httpApi: '*'\r\n",
     "command": [
       "deploy"
     ],
@@ -526,12 +529,12 @@
     "serviceProviderAwsCfStackName": "webb-dev",
     "serviceProviderAwsCfStackId": "arn:aws:cloudformation:us-east-1:992382436111:stack/webb-dev/6d570ef0-9d4d-11f0-95fe-0e6144787821",
     "serviceProviderAwsCfStackCreated": "2025-09-29T16:00:32.230Z",
-    "serviceProviderAwsCfStackUpdated": null,
-    "serviceProviderAwsCfStackStatus": "CREATE_COMPLETE",
+    "serviceProviderAwsCfStackUpdated": "2025-09-29T17:01:38.894Z",
+    "serviceProviderAwsCfStackStatus": "UPDATE_COMPLETE",
     "serviceProviderAwsCfStackOutputs": [
       {
         "OutputKey": "ApiLambdaFunctionQualifiedArn",
-        "OutputValue": "arn:aws:lambda:us-east-1:992382436111:function:webb-dev-api:1",
+        "OutputValue": "arn:aws:lambda:us-east-1:992382436111:function:webb-dev-api:2",
         "Description": "Current Lambda function version",
         "ExportName": "sls-webb-dev-ApiLambdaFunctionQualifiedArn"
       },
@@ -568,7 +571,7 @@
           "Properties": {
             "Code": {
               "S3Bucket": "serverless-framework-deployments-us-east-1-bfec0a90-e848",
-              "S3Key": "serverless/webb/dev/1759161622791-2025-09-29T16:00:22.791Z/webb.zip"
+              "S3Key": "serverless/webb/dev/1759166047836-2025-09-29T17:14:07.836Z/webb.zip"
             },
             "Handler": "handler.main",
             "Runtime": "nodejs18.x",
@@ -581,14 +584,14 @@
             "ApiLogGroup"
           ]
         },
-        "ApiLambdaVersionMo4BDvYHZjBGaFsyQhAy01bm8CiErRuTQom9BI2qFzE": {
+        "ApiLambdaVersionwNvJKc4ZrBUZvFmntwy6y4lu9ten9zIU23O1s6Gbg": {
           "Type": "AWS::Lambda::Version",
           "DeletionPolicy": "Retain",
           "Properties": {
             "FunctionName": {
               "Ref": "ApiLambdaFunction"
             },
-            "CodeSha256": "rly6rfxrIkvMWKoAN1sbKpxNWv2TEqIW3nNchfDq5PU="
+            "CodeSha256": "O4jhT+Fr6zm7AbMZWyZ9l3qAcUuYSW0EaNmj/cmhOJc="
           }
         },
         "HttpApi": {
@@ -713,7 +716,7 @@
         "ApiLambdaFunctionQualifiedArn": {
           "Description": "Current Lambda function version",
           "Value": {
-            "Ref": "ApiLambdaVersionMo4BDvYHZjBGaFsyQhAy01bm8CiErRuTQom9BI2qFzE"
+            "Ref": "ApiLambdaVersionwNvJKc4ZrBUZvFmntwy6y4lu9ten9zIU23O1s6Gbg"
           },
           "Export": {
             "Name": "sls-webb-dev-ApiLambdaFunctionQualifiedArn"

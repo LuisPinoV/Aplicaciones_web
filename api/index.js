@@ -15,17 +15,11 @@ app.use(express.json());
 });*/
 
 const pool = mysql.createPool({
-  host: process.env.DB_HOST || 'localhost',
+  host: process.env.DB_HOST || '98.88.78.23',
   user: process.env.DB_USER || 'ionic',
   password: process.env.DB_PASSWORD || 'Larsi@123456',
   database: process.env.DB_NAME || 'bbdd_web'
 });
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`API escuchando en http://0.0.0.0:${PORT}`);
-});
-
-
 
 // Endpoint de prueba
 app.get('/fichas', async (req, res) => {
