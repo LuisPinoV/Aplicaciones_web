@@ -265,6 +265,8 @@
 // Modo oscuro simplificado
 @media (prefers-color-scheme: dark) {
   .hospitalizacion-card {
+    background: #202020;
+
     .card-header .hospitalizacion-icon {
       background: rgba(var(--ion-color-primary-rgb), 0.15);
     }

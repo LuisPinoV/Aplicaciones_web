@@ -1,13 +1,18 @@
 {
-  "idPaciente": 1,
-  "nombre": "Perfil Lipídico",
-  "fecha": "2025-09-27",
-  "estado": "Completado",
-  "resultado": "Colesterol total elevado",
-  "valores": [
-    { "parametro": "Colesterol Total", "valor": "230 mg/dL", "referencia": "< 200 mg/dL" },
-    { "parametro": "HDL", "valor": "35 mg/dL", "referencia": "> 40 mg/dL" },
-    { "parametro": "LDL", "valor": "150 mg/dL", "referencia": "< 130 mg/dL" },
-    { "parametro": "Triglicéridos", "valor": "180 mg/dL", "referencia": "< 150 mg/dL" }
+  "examenes": [
+    {
+      "id": 1,
+      "idPaciente": 1,
+      "nombre": "Perfil Lipídico",
+      "fecha": "2025-09-27",
+      "estado": "Completado",
+      "resultado": "Colesterol total elevado",
+      "valores": [
+        { "parametro": "Colesterol Total", "valor": "230 mg/dL", "referencia": "< 200 mg/dL" },
+        { "parametro": "HDL", "valor": "35 mg/dL", "referencia": "> 40 mg/dL" },
+        { "parametro": "LDL", "valor": "150 mg/dL", "referencia": "< 130 mg/dL" },
+        { "parametro": "Triglicéridos", "valor": "180 mg/dL", "referencia": "< 150 mg/dL" }
+      ]
+    }
   ]
 }

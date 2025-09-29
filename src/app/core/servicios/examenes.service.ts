@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -24,12 +24,11 @@ export interface Examen {
   providedIn: 'root'
 })
 export class ExamenesService {
-  private apiUrl = environment.servicios.examenes;
-
-  constructor(private http: HttpClient) { }
+  private http = inject(HttpClient);
+  private base = environment.servicios.examenes;
 
   getPorPaciente(pacienteId: number): Observable<Examen[]> {
-    return this.http.get<Examen[]>(`${this.apiUrl}?idPaciente=${pacienteId}`);
+    return this.http.get<Examen[]>(`${this.base}?idPaciente=${pacienteId}`);
   }
 
   getContadorPorPaciente(pacienteId: number): Observable<number> {
@@ -39,6 +38,6 @@ export class ExamenesService {
   }
 
   crearExamen(examen: Omit<Examen, 'id'>): Observable<Examen> {
-    return this.http.post<Examen>(this.apiUrl, examen);
+    return this.http.post<Examen>(this.base, examen);
   }
 }

@@ -49,37 +49,37 @@ export class FichaPacienteAccionesComponent implements OnChanges {
 
   private async cargarContadores(idPaciente: number) {
     try {
-      this.examenesService.getContadorPorPaciente(1).subscribe({
+      this.examenesService.getContadorPorPaciente(idPaciente).subscribe({
         next: (cantidad) => {
           this.contadorExamenes = cantidad;
         }
       });
-      this.diagnosticosService.getContadorPorPaciente(1).subscribe({
+      this.diagnosticosService.getContadorPorPaciente(idPaciente).subscribe({
         next: (cantidad) => {
           this.contadorDiagnosticos = cantidad;
         }
       });
-      this.hospitalizacionesService.getContadorPorPaciente(1).subscribe({
+      this.hospitalizacionesService.getContadorPorPaciente(idPaciente).subscribe({
         next: (cantidad) => {
           this.contadorHospitalizaciones = cantidad;
         }
       });
-      this.consultasService.getContadorPorPaciente(1).subscribe({
+      this.consultasService.getContadorPorPaciente(idPaciente).subscribe({
         next: (cantidad) => {
           this.contadorConsultas = cantidad;
         }
       });
-      this.medicamentosService.getContadorPorPaciente(1).subscribe({
+      this.medicamentosService.getContadorPorPaciente(idPaciente).subscribe({
         next: (cantidad) => {
           this.contadorMedicamentos = cantidad;
         }
       });
-      this.alergiasService.getContadorPorPaciente(1).subscribe({
+      this.alergiasService.getContadorPorPaciente(idPaciente).subscribe({
         next: (cantidad) => {
           this.contadorAlergias = cantidad;
         }
       });
-      this.procedimientosService.getContadorPorPaciente(1).subscribe({
+      this.procedimientosService.getContadorPorPaciente(idPaciente).subscribe({
         next: (cantidad) => {
           this.contadorProcedimientos = cantidad;
         }

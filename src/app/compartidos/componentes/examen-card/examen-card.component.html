@@ -1,0 +1,45 @@
+<ion-card *ngIf="examen" class="exam-card" [class]="getEstadoClass()">
+  <!-- Barra lateral -->
+  <div class="status-bar" [class]="getEstadoClass()"></div>
+
+  <!-- Header -->
+  <div class="card-header">
+    <div class="exam-icon" [class]="getEstadoClass()">
+      <ion-icon [name]="getExamenIcon()"></ion-icon>
+    </div>
+    <div class="exam-main-info">
+      <h3 class="exam-title">{{ examen.nombre }}</h3>
+      <div class="exam-date">
+        <ion-icon name="calendar-outline"></ion-icon>
+        <span>{{ examen.fecha | date:'MMM d, y' }}</span>
+      </div>
+    </div>
+    <ion-button fill="clear" size="small" class="more-btn">
+      <ion-icon name="ellipsis-vertical" slot="icon-only"></ion-icon>
+    </ion-button>
+  </div>
+
+  <!-- Contenido -->
+  <ion-card-content class="card-body">
+    <!-- Resultado -->
+    <div *ngIf="examen.resultado" class="exam-result">
+      <ion-icon name="document-text-outline"></ion-icon>
+      <span class="label">Resultado:</span>
+      <span class="value">{{ examen.resultado }}</span>
+    </div>
+
+    <!-- Valores -->
+    <div *ngIf="examen.valores?.length" class="exam-values">
+      <h4 class="section-title">Valores</h4>
+      <ion-list lines="none">
+        <ion-item *ngFor="let v of examen.valores">
+          <ion-label>
+            <h3>{{ v.parametro }}</h3>
+            <p class="ref">Referencia: {{ v.referencia }}</p>
+          </ion-label>
+          <ion-badge slot="end" color="primary">{{ v.valor }}</ion-badge>
+        </ion-item>
+      </ion-list>
+    </div>
+  </ion-card-content>
+</ion-card>

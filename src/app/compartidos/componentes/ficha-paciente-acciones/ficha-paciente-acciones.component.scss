@@ -74,6 +74,10 @@
   }
 }
 
+.examenes-card {
+  grid-column: 1 / -1;
+}
+
 // Card Header
 .card-header {
   display: flex;
@@ -235,6 +239,20 @@
   }
 }
 
+.examenes-card {
+  .icon-container {
+    background: #6366f1; // Color índigo moderno
+  }
+
+  &::before {
+    background: #6366f1;
+  }
+
+  &:hover {
+    border-color: rgba(99, 102, 241, 0.2);
+  }
+}
+
 // Responsive Design
 @media (max-width: 768px) {
   .medical-actions-container {
@@ -368,6 +386,7 @@
 .action-card:nth-child(4) { animation-delay: 0.4s; }
 .action-card:nth-child(5) { animation-delay: 0.5s; }
 .action-card:nth-child(6) { animation-delay: 0.6s; }
+.action-card:nth-child(7) { animation-delay: 0.7s; }
 
 @keyframes slideInCard {
   from {

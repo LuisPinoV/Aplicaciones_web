@@ -44,6 +44,11 @@ export const routes: Routes = [
   {
     path: 'editar-perfil',
     loadComponent: () => import('./pages/editar-perfil/editar-perfil.page').then( m => m.EditarPerfilPage)
+  },
+  {
+    path: 'tabs/historial/examenes',
+    loadComponent: () => import('./pages/examenes/examenes.page').then( m => m.ExamenesPage)
   }
+
 
 ];

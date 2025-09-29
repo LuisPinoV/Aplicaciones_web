@@ -1,0 +1,350 @@
+.exam-card {
+  margin: 0 0 20px 0!important;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  border: 1px solid var(--ion-color-step-150);
+  background: #fefefe;
+  padding: 5px 5px 0px 8px;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+
+    .status-bar {
+      width: 5px;
+    }
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+
+// ========================
+// Barra de estado lateral
+// ========================
+.status-bar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  transition: all 0.3s ease;
+
+  &.status-completed {
+    background: var(--ion-color-success);
+  }
+
+  &.status-pending {
+    background: var(--ion-color-warning);
+  }
+}
+
+// ========================
+// Header de la card
+// ========================
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+
+  .exam-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    position: relative;
+
+    ion-icon {
+      font-size: 22px;
+      z-index: 1;
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      opacity: 0.1;
+      z-index: 0;
+    }
+
+    &.status-completed {
+      color: var(--ion-color-success);
+      &::before {
+        background: var(--ion-color-success);
+      }
+    }
+
+    &.status-pending {
+      color: var(--ion-color-warning);
+      &::before {
+        background: var(--ion-color-warning);
+      }
+    }
+  }
+
+  .exam-main-info {
+    flex: 1;
+    min-width: 0;
+
+    .exam-title {
+      margin: 0 0 3px 0;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--ion-color-dark);
+      line-height: 1.3;
+    }
+
+    .exam-date {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 13px;
+      color: var(--ion-color-medium);
+      font-weight: 500;
+
+      ion-icon {
+        font-size: 15px;
+      }
+    }
+  }
+
+  .more-btn {
+    --color: var(--ion-color-medium);
+    margin: -4px -4px 0 0;
+
+    ion-icon {
+      font-size: 20px;
+    }
+
+    &:hover {
+      --color: var(--ion-color-dark);
+    }
+  }
+}
+
+// ========================
+// Contenido de la card
+// ========================
+.card-body {
+  padding: 0 16px 4px 16px;
+}
+
+// Resultado principal
+.exam-result {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 10px;
+
+  ion-icon {
+    font-size: 18px;
+    color: var(--ion-color-primary);
+  }
+
+  .label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ion-color-medium);
+    text-transform: uppercase;
+  }
+
+  .value {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ion-color-dark);
+  }
+}
+
+// Valores medidos
+.exam-values {
+  margin-top: 15px!important;
+  .section-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ion-color-medium);
+    text-transform: uppercase;
+    margin: 6px 0!important;
+  }
+
+  ion-list {
+    padding: 0!important;
+  }
+
+  ion-item {
+    --padding-start: 0;
+    --inner-padding-end: 0;
+    min-height: 42px;
+    --background: #fff;
+
+    ion-label h3 {
+      font-size: 14px;
+      font-weight: 500;
+      margin: 0;
+      color: var(--ion-color-dark);
+    }
+
+    ion-label p.ref {
+      font-size: 12px;
+      color: var(--ion-color-medium);
+      margin: 0;
+    }
+
+    ion-badge {
+      font-size: 12px;
+      font-weight: 600;
+      min-width: 60px;
+      text-align: center;
+    }
+  }
+}
+
+// ========================
+// Footer de la card
+// ========================
+.card-footer {
+  padding: 8px 16px;
+  border-top: 1px solid var(--ion-color-step-150);
+  display: flex;
+  align-items: center;
+
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+
+    &.status-completed {
+      background: var(--ion-color-success);
+    }
+
+    &.status-pending {
+      background: var(--ion-color-warning);
+    }
+  }
+
+  .status-text {
+    margin-left: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ion-color-medium);
+    text-transform: capitalize;
+  }
+}
+
+// ========================
+// Responsive
+// ========================
+@media (max-width: 768px) {
+  .exam-card {
+    margin-bottom: 12px;
+  }
+
+  .card-header {
+    padding: 12px;
+    gap: 10px;
+
+    .exam-icon {
+      width: 36px;
+      height: 36px;
+
+      ion-icon {
+        font-size: 18px;
+      }
+    }
+
+    .exam-main-info {
+      .exam-title {
+        font-size: 15px;
+      }
+      .exam-date {
+        font-size: 12px;
+      }
+    }
+  }
+
+  .exam-result {
+    font-size: 12px;
+    .label { font-size: 12px; }
+    .value { font-size: 13px; }
+  }
+
+  .exam-values {
+    .section-title {
+      font-size: 12px;
+    }
+    ion-item ion-label h3 {
+      font-size: 13px;
+    }
+    ion-item ion-label p.ref {
+      font-size: 11px;
+    }
+    ion-item ion-badge {
+      font-size: 11px;
+      min-width: 50px;
+    }
+  }
+
+  .card-footer {
+    .status-text {
+      font-size: 12px;
+    }
+  }
+}
+
+// ========================
+// Dark mode
+// ========================
+@media (prefers-color-scheme: dark) {
+  .exam-card {
+    background: #202020;
+    border-color: var(--ion-color-step-200) !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+
+    &:hover {
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4) !important;
+    }
+  }
+
+  .exam-title,
+  .exam-result .value,
+  .exam-values ion-label h3 {
+    color: #fff;
+  }
+
+  .card-footer {
+    border-top-color: var(--ion-color-step-200) !important;
+  }
+
+  .more-btn:hover {
+    --color: var(--ion-color-light) !important;
+  }
+
+  .exam-values {
+    ion-item {
+      --background: #202020;
+    }
+  }
+}
+
+// ========================
+// Animación
+// ========================
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

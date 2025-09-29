@@ -3,20 +3,20 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/tabs/historial"></ion-back-button>
     </ion-buttons>
-    <ion-title>Diagnósticos</ion-title>
+    <ion-title>Examenes</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Diagnósticos</ion-title>
+      <ion-title size="large">Examenes</ion-title>
     </ion-toolbar>
   </ion-header>
 
   <div class="health-container" *ngIf="paciente">
     <!-- Estadísticas mejoradas -->
-    <div class="stats-section" *ngIf="diagnosticos.length > 0">
+    <div class="stats-section" *ngIf="examenes.length > 0">
       <div class="section-header">
         <h3>Resumen Médico</h3>
       </div>
@@ -27,7 +27,7 @@
             <div class="stat-icon">
               <ion-icon name="medical"></ion-icon>
             </div>
-            <div class="stat-number">{{ diagnosticos.length }}</div>
+            <div class="stat-number">{{ examenes.length }}</div>
             <div class="stat-label">Total Diagnósticos</div>
           </ion-card-content>
         </ion-card>
@@ -37,25 +37,15 @@
             <div class="stat-icon">
               <ion-icon name="time"></ion-icon>
             </div>
-            <div class="stat-number">{{ getDiagnosticosRecientes() }}</div>
+            <div class="stat-number">{{ getExamenesRecientes() }}</div>
             <div class="stat-label">Recientes (3m)</div>
-          </ion-card-content>
-        </ion-card>
-
-        <ion-card class="stat-card active">
-          <ion-card-content>
-            <div class="stat-icon">
-              <ion-icon name="pulse"></ion-icon>
-            </div>
-            <div class="stat-number">{{ getDiagnosticosActivos() }}</div>
-            <div class="stat-label">Activos</div>
           </ion-card-content>
         </ion-card>
       </div>
     </div>
 
     <!-- Acciones rápidas -->
-    <div class="quick-actions-section" *ngIf="diagnosticos.length > 0">
+    <div class="quick-actions-section" *ngIf="examenes.length > 0">
       <div class="actions-row">
         <ion-button 
           fill="clear" 
@@ -70,7 +60,7 @@
           fill="clear" 
           size="small" 
           class="action-btn sort-btn"
-          (click)="sortDiagnostics()">
+          (click)="sortExamenes()">
           <ion-icon name="swap-vertical" slot="start"></ion-icon>
           Ordenar
         </ion-button>
@@ -79,7 +69,7 @@
           fill="solid" 
           size="small" 
           class="action-btn add-btn"
-          (click)="addDiagnostic()">
+          (click)="addExamen()">
           <ion-icon name="add" slot="start"></ion-icon>
           Nuevo
         </ion-button>
@@ -87,18 +77,18 @@
     </div>
 
     <!-- Lista de diagnósticos -->
-    <div class="diagnostics-section" *ngIf="diagnosticos.length > 0; else noData">
+    <div class="examenes-section" *ngIf="examenes.length > 0; else noData">
       <div class="section-header">
         <h3>Historial Completo</h3>
       </div>
       
-      <div class="diagnostics-list">
-        <app-diagnostico-card 
-          *ngFor="let diag of diagnosticos; trackBy: trackByDiagnostico; let i = index" 
-          [diagnostico]="diag"
+      <div class="examenes-list">
+        <app-examen-card 
+          *ngFor="let e of examenes; trackBy: trackByExamen; let i = index" 
+          [examen]="e"
           [index]="i"
-          class="diagnostic-item">
-        </app-diagnostico-card>
+          class="examen-item">
+        </app-examen-card>
       </div>
     </div>
 
@@ -116,7 +106,7 @@
             expand="block" 
             fill="solid" 
             color="primary"
-            (click)="addDiagnostic()">
+            (click)="addExamen()">
             <ion-icon name="add-circle" slot="start"></ion-icon>
             Agregar primer diagnóstico
           </ion-button>
@@ -125,7 +115,7 @@
             expand="block" 
             fill="outline" 
             color="medium"
-            (click)="importDiagnostics()">
+            (click)="importExamenes()">
             <ion-icon name="cloud-upload" slot="start"></ion-icon>
             Importar historial
           </ion-button>
