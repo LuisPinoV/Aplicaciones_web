@@ -1,8 +1,4 @@
-service: arquitectura-serverless
-
-plugins:
-  - serverless-prune-plugin
-  - serverless-scriptable-plugin
+service: webb
 
 provider:
   name: aws
@@ -30,14 +26,9 @@ provider:
         - dynamodb:*
       Resource:
 
-functions:
-service: arquitectura-serverless
-
-provider:
-  name: aws
-  runtime: nodejs18.x
-  region: us-east-1
-
+plugins:
+  - serverless-offline
+  
 functions:
   api:
     handler: handler.main

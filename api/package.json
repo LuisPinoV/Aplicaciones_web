@@ -16,5 +16,8 @@
     "mysql2": "^3.15.1",
     "serverless-http": "^4.0.0"
   },
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "serverless-offline": "^14.4.0"
+  }
 }
