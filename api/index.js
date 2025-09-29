@@ -7,11 +7,18 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const pool = mysql.createPool({
+/*const pool = mysql.createPool({
   host: 'localhost',
   user: 'ionic',
   password: 'Larsi@123456',
   database: 'bbdd_web'
+});*/
+
+const pool = mysql.createPool({
+  host: process.env.DB_HOST || 'localhost',
+  user: process.env.DB_USER || 'ionic',
+  password: process.env.DB_PASSWORD || 'Larsi@123456',
+  database: process.env.DB_NAME || 'bbdd_web'
 });
 
 
@@ -345,4 +352,4 @@ app.get('/fichas/:id/procedimientos', async (req, res) => {
 });
 
 
-app.listen(3000, () => console.log('API escuchando en http://localhost:3000'));
+export default app;

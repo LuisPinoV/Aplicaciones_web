@@ -1,0 +1,45 @@
+service: arquitectura-serverless
+
+plugins:
+  - serverless-prune-plugin
+  - serverless-scriptable-plugin
+
+provider:
+  name: aws
+  role: arn:aws:iam::992382436111:role/LabRole
+  runtime: nodejs18.x
+  region: us-east-1
+  environment:
+  logs:
+    httpApi: true
+    cors:
+      allowedOrigins:
+        - "*"
+      allowedMethods:
+        - GET
+        - POST
+        - PUT
+        - DELETE
+        - OPTIONS
+      allowedHeaders:
+        - "*"
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - sts:AssumeRole
+        - dynamodb:*
+      Resource:
+
+functions:
+service: arquitectura-serverless
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: us-east-1
+
+functions:
+  api:
+    handler: handler.main
+    events:
+      - httpApi: '*'
