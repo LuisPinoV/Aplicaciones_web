@@ -2,7 +2,7 @@
   "examenes": [
     {
       "id": 1,
-      "idPaciente": 1,
+      "idPaciente": 2,
       "nombre": "Perfil Lipídico",
       "fecha": "2025-09-27",
       "estado": "Completado",

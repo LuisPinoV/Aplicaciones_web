@@ -32,7 +32,7 @@ export class ProcedimientosPage implements OnInit {
     this.paciente = this.pacienteStore.getPaciente();
 
     if (!this.paciente) {
-      this.router.navigate(['/buscar']);
+      this.router.navigate(['/login']);
       return;
     }
 

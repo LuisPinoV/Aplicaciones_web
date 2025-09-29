@@ -84,7 +84,7 @@ export class LoginPage {
         await this.showToast('¡Bienvenido!', 'success');
         
         // Navegar con animación
-        await this.router.navigate(['/tabs/tab1'], {
+        await this.router.navigate(['/tabs/inicio'], {
           replaceUrl: true
         });
 

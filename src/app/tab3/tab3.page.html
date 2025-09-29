@@ -1,4 +1,4 @@
-+<ion-header [translucent]="true">
+<ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>MediNet</ion-title>
   </ion-toolbar>
@@ -26,16 +26,22 @@
       </ion-card-content>
     </ion-card>
 
-
     <!-- Medications Today Section -->
     <div class="section">
       <div class="section-header">
-        <h3>Medicamentos</h3>
+        <h3>Medicamentos de Hoy</h3>
         <ion-button fill="clear" size="small" (click)="viewAllMedications()">
           Ver todos
         </ion-button>
       </div>
 
+      <!-- Mostrar mensaje si no hay medicamentos -->
+      <div *ngIf="!todayMedications || todayMedications.length === 0" class="empty-message">
+        <ion-icon name="medkit-outline"></ion-icon>
+        <p>No tienes medicamentos registrados para hoy</p>
+      </div>
+
+      <!-- Lista de medicamentos -->
       <ion-card 
         *ngFor="let med of todayMedications" 
         class="medication-card">
@@ -66,27 +72,32 @@
       </ion-card>
     </div>
 
-    <!-- Stats Grid -->
-    <div class="stats-grid">
-      <ion-card class="stat-card medications">
-        <ion-card-content>
-          <div class="stat-icon">
-            <ion-icon name="medical"></ion-icon>
-          </div>
-          <div class="stat-number">{{ activeMedications }}</div>
-          <div class="stat-label">Medicamentos activos</div>
-        </ion-card-content>
-      </ion-card>
+    <!-- Stats Section -->
+    <div class="section">
+      <div class="section-header">
+        <h3>Resumen</h3>
+      </div>
+      <div class="stats-grid">
+        <ion-card class="stat-card medications">
+          <ion-card-content>
+            <div class="stat-icon">
+              <ion-icon name="medical"></ion-icon>
+            </div>
+            <div class="stat-number">{{ activeMedications }}</div>
+            <div class="stat-label">Medicamentos activos</div>
+          </ion-card-content>
+        </ion-card>
 
-      <ion-card class="stat-card exams">
-        <ion-card-content>
-          <div class="stat-icon">
-            <ion-icon name="document-text"></ion-icon>
-          </div>
-          <div class="stat-number">{{ monthlyExams }}</div>
-          <div class="stat-label">Exámenes este mes</div>
-        </ion-card-content>
-      </ion-card>
+        <ion-card class="stat-card exams">
+          <ion-card-content>
+            <div class="stat-icon">
+              <ion-icon name="document-text"></ion-icon>
+            </div>
+            <div class="stat-number">{{ monthlyExams }}</div>
+            <div class="stat-label">Exámenes este mes</div>
+          </ion-card-content>
+        </ion-card>
+      </div>
     </div>
 
     <!-- Quick Actions Section -->
@@ -143,7 +154,14 @@
         </ion-button>
       </div>
 
-      <ion-card class="activity-card">
+      <!-- Mostrar mensaje si no hay actividad -->
+      <div *ngIf="!recentActivities || recentActivities.length === 0" class="empty-message">
+        <ion-icon name="time-outline"></ion-icon>
+        <p>No hay actividad reciente</p>
+      </div>
+
+      <!-- Lista de actividades -->
+      <ion-card class="activity-card" *ngIf="recentActivities && recentActivities.length > 0">
         <ion-card-content>
           <ion-item 
             *ngFor="let activity of recentActivities" 

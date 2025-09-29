@@ -6,8 +6,8 @@
 // Header Section
 .header-section {
   text-align: center;
+  margin-top: -4px;
   margin-bottom: 24px;
-  padding-top: 10px;
 
   h1 {
     font-size: 28px;
@@ -59,7 +59,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
+  margin: 0 10px 16px 10px;
 
   h3 {
     font-size: 20px;
@@ -135,7 +135,7 @@
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
+  gap: 0px;
   margin-bottom: 24px;
 
   .stat-card {
@@ -197,7 +197,7 @@
 .quick-actions-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
+  gap: 0px;
 
   .action-card {
     text-align: center;
@@ -369,5 +369,22 @@
 
   .quick-actions-grid {
     gap: 8px;
+  }
+}
+
+.empty-message {
+  text-align: center;
+  padding: 24px 12px;
+  color: var(--ion-color-medium);
+
+  ion-icon {
+    font-size: 32px;
+    margin-bottom: 8px;
+    color: var(--ion-color-medium);
+  }
+
+  p {
+    margin: 0;
+    font-size: 14px;
   }
 }

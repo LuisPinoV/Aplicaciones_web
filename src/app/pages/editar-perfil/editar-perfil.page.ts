@@ -15,7 +15,7 @@ import { Paciente } from 'src/app/core/servicios/pacientes.service';
   imports: [IonicModule, CommonModule, FormsModule]
 })
 export class EditarPerfilPage implements OnInit {
-  
+  paciente?: Paciente;
   formData: Partial<Paciente> = {};
   originalData: Partial<Paciente> = {};
   isLoading = false;
@@ -29,6 +29,13 @@ export class EditarPerfilPage implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.paciente = this.pacienteStore.getPaciente();
+
+    if (!this.paciente) {
+      this.router.navigate(['/login']);
+      return;
+    }
+
     this.cargarDatosPaciente();
   }
 

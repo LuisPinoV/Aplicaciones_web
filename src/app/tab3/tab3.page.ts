@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule, AlertController, ToastController } from '@ionic/angular';
+import { Paciente } from 'src/app/core/servicios/pacientes.service';
+import { PacienteStoreService } from 'src/app/core/servicios/paciente-store.service';
+import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../services/api';
 
@@ -28,6 +31,7 @@ interface Activity {
   imports: [IonicModule, CommonModule, FormsModule]
 })
 export class Tab3Page implements OnInit {
+  paciente?: Paciente;
   fichaNombre: string = '';
   pendingMedications: number = 0;
   activeMedications: number = 0;
@@ -38,11 +42,17 @@ export class Tab3Page implements OnInit {
 
   constructor(
     private api: ApiService,
+    private router: Router,
+    private pacienteStore: PacienteStoreService,
     private toastController: ToastController,
     private alertController: AlertController
   ) {}
 
   async ngOnInit() {
+    this.paciente = this.pacienteStore.getPaciente();
+    if (!this.paciente) {
+      this.router.navigate(['/login']);
+    }
     await this.cargarFicha();
   }
 
@@ -136,7 +146,7 @@ export class Tab3Page implements OnInit {
 
   // ================== Navegación ==================
   viewAllMedications() {
-    console.log('Navegar a la lista completa de medicamentos');
+    this.router.navigate(['/tabs/historial/medicamentos']);
   }
 
   viewHistory() {
