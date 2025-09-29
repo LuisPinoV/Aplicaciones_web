@@ -20,6 +20,11 @@ const pool = mysql.createPool({
   password: process.env.DB_PASSWORD || 'Larsi@123456',
   database: process.env.DB_NAME || 'bbdd_web'
 });
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`API escuchando en http://0.0.0.0:${PORT}`);
+});
+
 
 
 // Endpoint de prueba
