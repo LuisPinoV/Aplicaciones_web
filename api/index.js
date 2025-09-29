@@ -127,4 +127,42 @@ app.get('/fichas/:id', async (req, res) => {
   }
 });
 
+// Endpoint para obtener medicamentos de una ficha
+app.get('/fichas/:id/medicamentos', async (req, res) => {
+  const id = req.params.id;
+  try {
+    const [medicamentos] = await pool.query(
+      `SELECT m.idMedicamento, m.nombre
+       FROM Medicamento m
+       INNER JOIN ConsultaMedicamento cm ON cm.idMedicamento = m.idMedicamento
+       INNER JOIN Consulta c ON c.idConsulta = cm.idConsulta
+       WHERE c.idFichaMedica = ?`, [id]);
+
+    res.json(medicamentos);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// procedimientos de una ficha
+app.get('/fichas/:id/procedimientos', async (req, res) => {
+  const id = req.params.id;
+  try {
+    const [procedimientos] = await pool.query(`
+      SELECT p.idProcedimiento, p.nombre, tp.idTipoProcedimiento, tp.tipoprocedimiento AS tipoProcedimiento
+      FROM Consulta c
+      JOIN ConsultaProcedimiento cp ON c.idConsulta = cp.idConsulta
+      JOIN Procedimiento p ON cp.idProcedimiento = p.idProcedimiento
+      JOIN TipoProcedimiento tp ON p.IdTipoProcedimiento = tp.idTipoProcedimiento
+      WHERE c.idFichaMedica = ?
+    `, [id]);
+
+    res.json(procedimientos);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 app.listen(3000, () => console.log('API escuchando en http://localhost:3000'));

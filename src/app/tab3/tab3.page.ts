@@ -2,16 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule, AlertController, ToastController } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
-import { addIcons } from 'ionicons';
-import { medical, documentText, documentAttach, calendar, warning, checkmark, checkmarkCircle } from 'ionicons/icons';
+import { ApiService } from '../services/api';
 
 interface Medication {
   id: number;
   name: string;
-  dosage: string;
-  time: string;
-  instructions: string;
-  isUrgent: boolean;
   taken?: boolean;
 }
 
@@ -30,86 +25,77 @@ interface Activity {
   templateUrl: './tab3.page.html',
   styleUrls: ['./tab3.page.scss'],
   standalone: true,
-  imports: [ IonicModule, CommonModule, FormsModule ]
+  imports: [IonicModule, CommonModule, FormsModule]
 })
 export class Tab3Page implements OnInit {
+  fichaNombre: string = '';
+  pendingMedications: number = 0;
+  activeMedications: number = 0;
+  monthlyExams: number = 0;
 
-  // Data properties
-  pendingMedications: number = 2;
-  activeMedications: number = 5;
-  monthlyExams: number = 3;
-
-  todayMedications: Medication[] = [
-    {
-      id: 1,
-      name: 'Omeprazol 20mg',
-      dosage: '1 cápsula',
-      time: '08:00',
-      instructions: 'Antes del desayuno',
-      isUrgent: true
-    },
-    {
-      id: 2,
-      name: 'Vitamina D3',
-      dosage: '2 gotas',
-      time: '20:00',
-      instructions: 'Con la cena',
-      isUrgent: false
-    }
-  ];
-
-  recentActivities: Activity[] = [
-    {
-      id: 1,
-      title: 'Omeprazol tomado',
-      time: 'Ayer, 8:00 AM',
-      type: 'medication',
-      icon: 'medical',
-      progress: true
-    },
-    {
-      id: 2,
-      title: 'Examen de sangre subido',
-      time: '3 días atrás',
-      type: 'exam',
-      icon: 'document-text'
-    },
-    {
-      id: 3,
-      title: 'Nueva receta agregada',
-      time: '1 semana atrás',
-      type: 'medication',
-      icon: 'medical',
-      badge: 'Nuevo'
-    }
-  ];
+  todayMedications: Medication[] = [];
+  recentActivities: Activity[] = [];
 
   constructor(
+    private api: ApiService,
     private toastController: ToastController,
     private alertController: AlertController
-  ) {
-    // Add icons to be used in the template
-    addIcons({
-      medical,
-      documentText,
-      documentAttach,
-      calendar,
-      warning,
-      checkmark,
-      checkmarkCircle
-    });
+  ) {}
+
+  async ngOnInit() {
+    await this.cargarFicha();
   }
 
-  ngOnInit() {
-    // Initialize component
-    console.log('Tab3Page initialized');
+  // ================== Carga de datos desde backend ==================
+  async cargarFicha() {
+    try {
+      const fichaCompleta = await this.api.getFichaCompleta(1); // idFichaMedica = 1
+      this.fichaNombre = fichaCompleta.ficha.nombre;
+
+      // Obtener medicamentos
+      const meds = await this.api.getMedicamentosFicha(1);
+      this.todayMedications = meds.map((m: any) => ({
+        id: m.idMedicamento,
+        name: m.nombre
+      }));
+
+      // Contadores
+      this.pendingMedications = this.todayMedications.length;
+      this.activeMedications = this.todayMedications.length;
+
+      // contador examenes 
+      const procedimientos = await this.api.getProcedimientosFicha(1);
+      this.monthlyExams = procedimientos.filter(
+        (p: any) => p.idTipoProcedimiento === 2
+      ).length;
+
+      // Mapear actividad reciente (opcional, puedes personalizar)
+      this.recentActivities = [
+        ...fichaCompleta.diagnosticos.map((d: any) => ({
+          id: d.idDiagnostico,
+          title: `Diagnóstico: ${d.descripcion}`,
+          time: new Date(d.fecha).toLocaleDateString(),
+          type: 'exam',
+          icon: 'document-text'
+        })),
+        ...fichaCompleta.consultas.map((c: any) => ({
+          id: c.idConsulta,
+          title: `Consulta: ${c.descripcion || 'Realizada'}`,
+          time: new Date(c.fecha).toLocaleDateString(),
+          type: 'medication',
+          icon: 'medical'
+        }))
+      ];
+    } catch (error) {
+      console.error('Error al cargar la ficha:', error);
+    }
   }
 
-  // Medication Actions
+  // ================== Medicamentos ==================
   async markAsTaken(medication: Medication) {
     medication.taken = true;
-    this.pendingMedications--;
-    
+    this.pendingMedications = this.todayMedications.filter(m => !m.taken).length;
+
     const toast = await this.toastController.create({
       message: `${medication.name} marcado como tomado`,
       duration: 2000,
@@ -124,14 +110,12 @@ export class Tab3Page implements OnInit {
       header: 'Omitir medicamento',
       message: `¿Estás seguro de que quieres omitir ${medication.name}?`,
       buttons: [
-        {
-          text: 'Cancelar',
-          role: 'cancel'
-        },
+        { text: 'Cancelar', role: 'cancel' },
         {
           text: 'Omitir',
           handler: () => {
-            this.pendingMedications--;
+            medication.taken = true;
+            this.pendingMedications = this.todayMedications.filter(m => !m.taken).length;
             this.showSkipToast(medication);
           }
         }
@@ -150,18 +134,16 @@ export class Tab3Page implements OnInit {
     await toast.present();
   }
 
-  // Navigation Actions
+  // ================== Navegación ==================
   viewAllMedications() {
-    console.log('Navigate to all medications');
-    // Implement navigation to medications list
+    console.log('Navegar a la lista completa de medicamentos');
   }
 
   viewHistory() {
-    console.log('Navigate to activity history');
-    // Implement navigation to history
+    console.log('Navegar al historial de actividad');
   }
 
-  // Quick Actions
+  // ================== Acciones rápidas ==================
   async addMedication() {
     const toast = await this.toastController.create({
       message: 'Abriendo formulario de medicamentos...',
@@ -170,9 +152,7 @@ export class Tab3Page implements OnInit {
       position: 'bottom'
     });
     await toast.present();
-    
-    console.log('Navigate to add medication');
-    // Implement navigation to add medication form
+    console.log('Navegar a agregar medicamento');
   }
 
   async addExam() {
@@ -183,9 +163,7 @@ export class Tab3Page implements OnInit {
       position: 'bottom'
     });
     await toast.present();
-    
-    console.log('Open camera/gallery for exam upload');
-    // Implement camera/gallery functionality
+    console.log('Subir examen');
   }
 
   async scheduleAppointment() {
@@ -196,9 +174,7 @@ export class Tab3Page implements OnInit {
       position: 'bottom'
     });
     await toast.present();
-    
-    console.log('Navigate to appointment scheduler');
-    // Implement appointment scheduling
+    console.log('Agendar cita');
   }
 
   async emergency() {
@@ -206,30 +182,16 @@ export class Tab3Page implements OnInit {
       header: 'Emergencia Médica',
       message: '¿Necesitas contactar servicios de emergencia?',
       buttons: [
-        {
-          text: 'Cancelar',
-          role: 'cancel'
-        },
-        {
-          text: 'Llamar 911',
-          handler: () => {
-            this.callEmergency();
-          }
-        },
-        {
-          text: 'Contactos de emergencia',
-          handler: () => {
-            this.showEmergencyContacts();
-          }
-        }
+        { text: 'Cancelar', role: 'cancel' },
+        { text: 'Llamar 911', handler: () => this.callEmergency() },
+        { text: 'Contactos de emergencia', handler: () => this.showEmergencyContacts() }
       ]
     });
     await alert.present();
   }
 
   private callEmergency() {
-    // In a real app, this would make a phone call
-    console.log('Calling emergency services');
+    console.log('Llamando a emergencias');
     window.open('tel:911', '_system');
   }
 
@@ -241,18 +203,6 @@ export class Tab3Page implements OnInit {
       position: 'bottom'
     });
     await toast.present();
-    
-    console.log('Show emergency contacts');
-    // Implement emergency contacts display
-  }
-
-  // Utility methods
-  updatePendingCount() {
-    this.pendingMedications = this.todayMedications.filter(med => !med.taken).length;
-  }
-
-  refreshData() {
-    // Implement data refresh logic
-    console.log('Refreshing health data...');
+    console.log('Mostrar contactos de emergencia');
   }
 }
