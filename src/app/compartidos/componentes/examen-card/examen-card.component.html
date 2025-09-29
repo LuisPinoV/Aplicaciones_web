@@ -37,7 +37,7 @@
             <h3>{{ v.parametro }}</h3>
             <p class="ref">Referencia: {{ v.referencia }}</p>
           </ion-label>
-          <ion-badge slot="end" color="primary">{{ v.valor }}</ion-badge>
+          <ion-badge slot="end" [color]="verificarValor(v.valor, v.referencia)">{{ v.valor }}</ion-badge>
         </ion-item>
       </ion-list>
     </div>

@@ -41,4 +41,34 @@ export class ExamenCardComponent implements OnInit {
     if (!this.examen) return 'medium';
     return this.examen.estado === 'Completado' ? 'success' : 'warning';
   }
+
+  // 🔹 Verificar si el valor cumple con la referencia
+  verificarValor(valor: string, referencia: string): string {
+    // Convertimos los valores a números para comparar
+    const valorNumerico = parseFloat(valor);
+    
+    // Procesamos la referencia
+    // Casos posibles: "< 5", "> 10", "5-10", "= 7"
+    const ref = referencia.trim();
+    
+    if (ref.includes('-')) {
+      // Caso rango: "5-10"
+      const [min, max] = ref.split('-').map(num => parseFloat(num));
+      return (valorNumerico >= min && valorNumerico <= max) ? 'success' : 'danger';
+    } else if (ref.includes('<')) {
+      // Caso menor que: "< 5"
+      const limite = parseFloat(ref.replace('<', ''));
+      return valorNumerico < limite ? 'success' : 'danger';
+    } else if (ref.includes('>')) {
+      // Caso mayor que: "> 10"
+      const limite = parseFloat(ref.replace('>', ''));
+      return valorNumerico > limite ? 'success' : 'danger';
+    } else if (ref.includes('=')) {
+      // Caso igual a: "= 7"
+      const esperado = parseFloat(ref.replace('=', ''));
+      return valorNumerico === esperado ? 'success' : 'danger';
+    }
+    
+    return 'primary'; // valor por defecto si no coincide ningún patrón
+  }
 }

@@ -204,6 +204,16 @@
       font-weight: 600;
       min-width: 60px;
       text-align: center;
+      
+      &[color="success"] {
+        --background: var(--ion-color-success);
+        --color: var(--ion-color-success-contrast);
+      }
+      
+      &[color="danger"] {
+        --background: var(--ion-color-danger);
+        --color: var(--ion-color-danger-contrast);
+      }
     }
   }
 }
