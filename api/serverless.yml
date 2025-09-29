@@ -1,13 +1,24 @@
-service: webb
+service: mysql-api
 
 provider:
   name: aws
-  role: arn:aws:iam::992382436111:role/LabRole
   runtime: nodejs18.x
   region: us-east-1
+  role: arn:aws:iam::211125730443:role/LabRole
   environment:
-  logs:
-    httpApi: true
+    DB_HOST: 172.31.29.209
+    DB_PORT: 3306
+    DB_USER: IonicUser
+    DB_PASS: 123456
+    DB_NAME: IonicDB
+    
+  vpc:
+    securityGroupIds:
+      - sg-0ff618cbd948515c9
+    subnetIds:
+      - subnet-0b8678179d5be507e
+      
+  httpApi:
     cors:
       allowedOrigins:
         - "*"
@@ -19,18 +30,178 @@ provider:
         - OPTIONS
       allowedHeaders:
         - "*"
-  iamRoleStatements:
-    - Effect: Allow
-      Action:
-        - sts:AssumeRole
-        - dynamodb:*
-      Resource:
+      allowCredentials: false
 
 plugins:
   - serverless-offline
-  
+
+custom:
+  serverless-offline:
+    httpPort: 3000
+    host: localhost
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: us-east-1
+  role: arn:aws:iam::211125730443:role/LabRole
+  environment:
+    DB_HOST: localhost
+    DB_PORT: 3306
+    DB_USER: IonicUser
+    DB_PASS: 123456
+    DB_NAME: IonicDB
+    
+  vpc:
+    securityGroupIds:
+      - sg-0ff618cbd948515c9
+    subnetIds:
+      - subnet-0b8678179d5be507e
 functions:
-  api:
-    handler: handler.main
+  # FichaMedica functions
+  getFichas:
+    handler: src/fichas.getFichas
     events:
-      - httpApi: '*'
+      - httpApi:
+          path: /fichas
+          method: get
+  createFicha:
+    handler: src/fichas.createFicha
+    events:
+      - httpApi:
+          path: /fichas
+          method: post
+  getFichaById:
+    handler: src/fichas.getFichaById
+    events:
+      - httpApi:
+          path: /fichas/{id}
+          method: get
+
+  # Paciente functions
+  getPacientes:
+    handler: src/pacientes.getPacientes
+    events:
+      - httpApi:
+          path: /pacientes
+          method: get
+  
+  # Examenes functions
+  getExamenes:
+    handler: src/examenes.getExamenes
+    events:
+      - httpApi:
+          path: /examenes
+          method: get
+  createExamen:
+    handler: src/examenes.createExamen
+    events:
+      - httpApi:
+          path: /examenes
+          method: post
+  getExamenesByFicha:
+    handler: src/examenes.getExamenesByFicha
+    events:
+      - httpApi:
+          path: /fichas/{id}/examenes
+          method: get
+    
+  # Consulta functions
+  getConsultas:
+    handler: src/consultas.getConsultas
+    events:
+      - httpApi:
+          path: /consultas
+          method: get
+  createConsulta:
+    handler: src/consultas.createConsulta
+    events:
+      - httpApi:
+          path: /consultas
+          method: post
+  getConsultasByFicha:
+    handler: src/consultas.getConsultasByFicha
+    events:
+      - httpApi:
+          path: /fichas/{id}/consultas
+          method: get
+  
+  # Procedimiento functions
+  getProcedimientos:
+    handler: src/procedimientos.getProcedimientos
+    events:
+      - httpApi:
+          path: /procedimientos
+          method: get
+  createProcedimiento:
+    handler: src/procedimientos.createProcedimiento
+    events:
+      - httpApi:
+          path: /procedimientos
+          method: post
+  getProcedimientosByFicha:
+    handler: src/procedimientos.getProcedimientosByFicha
+    events:
+      - httpApi:
+          path: /fichas/{id}/procedimientos
+          method: get
+
+  # Medicamento functions
+  getMedicamentos:
+    handler: src/medicamentos.getMedicamentos
+    events:
+      - httpApi:
+          path: /medicamentos
+          method: get
+  createMedicamento:
+    handler: src/medicamentos.createMedicamento
+    events:
+      - httpApi:
+          path: /medicamentos
+          method: post
+  getMedicamentosByFicha:
+    handler: src/medicamentos.getMedicamentosByFicha
+    events:
+      - httpApi:
+          path: /fichas/{id}/medicamentos
+          method: get
+
+  # Hospitalizacion functions
+  getHospitalizaciones:
+    handler: src/hospitalizaciones.getHospitalizaciones
+    events:
+      - httpApi:
+          path: /hospitalizaciones
+          method: get
+  createHospitalizacion:
+    handler: src/hospitalizaciones.createHospitalizacion
+    events:
+      - httpApi:
+          path: /hospitalizaciones
+          method: post
+  getHospitalizacionesByFicha:
+    handler: src/hospitalizaciones.getHospitalizacionesByFicha
+    events:
+      - httpApi:
+          path: /fichas/{id}/hospitalizaciones
+          method: get
+
+  # Diagnostico functions
+  getDiagnosticos:
+    handler: src/diagnosticos.getDiagnosticos
+    events:
+      - httpApi:
+          path: /diagnosticos
+          method: get
+  createDiagnostico:
+    handler: src/diagnosticos.createDiagnostico
+    events:
+      - httpApi:
+          path: /diagnosticos
+          method: post
+  getDiagnosticosByFicha:
+    handler: src/diagnosticos.getDiagnosticosByFicha
+    events:
+      - httpApi:
+          path: /fichas/{id}/diagnosticos
+          method: get
