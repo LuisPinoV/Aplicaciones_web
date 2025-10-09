@@ -6,8 +6,12 @@ provider:
   runtime: nodejs18.x
   region: us-east-1
   environment:
-  logs:
-    httpApi: true
+    DB_HOST: ${env:DB_HOST, 'localhost'}
+    DB_USER: ${env:DB_USER, 'ionic'}
+    DB_PASSWORD: ${env:DB_PASSWORD, 'Larsi@123456'}
+    DB_NAME: ${env:DB_NAME, 'bbdd_web'}
+    DB_PORT: ${env:DB_PORT, '3306'}
+  httpApi:
     cors:
       allowedOrigins:
         - "*"
@@ -19,18 +23,19 @@ provider:
         - OPTIONS
       allowedHeaders:
         - "*"
-  iamRoleStatements:
-    - Effect: Allow
-      Action:
-        - sts:AssumeRole
-        - dynamodb:*
-      Resource:
+  logs:
+    httpApi: true
 
 plugins:
   - serverless-offline
-  
+
 functions:
   api:
     handler: handler.main
     events:
-      - httpApi: '*'
+      - httpApi:
+          path: /{proxy+}
+          method: any
+      - httpApi:
+          path: /
+          method: any

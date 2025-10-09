@@ -17,15 +17,27 @@ import { ApiService } from '../services/api';
 })
 export class Tab2Page {
   ficha = {
-    Rut: null,
+    Rut: 0,
     nombre: '',
     fechaNacimiento: '',
     sexo: '',
     tipoSangre: '',
-    altura: null,
-    peso: null,
+    altura: undefined,
+    peso: undefined,
     genero: ''
   };
 
   constructor(private api: ApiService) {}
+    async guardarFicha() {
+    try {
+      const res = await this.api.crearFicha(this.ficha);
+      if (res.success) {
+        alert(`Ficha creada con ID: ${res.idFichaMedica}`);
+        this.ficha = { Rut: 0, nombre: '', fechaNacimiento: '', sexo: '', tipoSangre: '', altura: undefined, peso: undefined, genero: '' };
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Error al guardar la ficha');
+    }
+  }
 }

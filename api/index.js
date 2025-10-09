@@ -7,10 +7,11 @@ app.use(cors());
 app.use(express.json());
 
 const pool = mysql.createPool({
-  host: '98.88.78.23',     // IP pública de tu EC2 (o 'localhost' si corre en la misma máquina)
-  user: 'ionic',           // usuario MySQL
-  password: 'Larsi@123456',// contraseña MySQL
-  database: 'bbdd_web'     // base de datos
+  host: process.env.DB_HOST || 'localhost',     // IP pública de tu EC2 (o 'localhost' si corre en la misma máquina)
+  user: process.env.DB_USER || 'ionic',           // usuario MySQL
+  password: process.env.DB_PASSWORD || 'Larsi@123456',// contraseña MySQL
+  database: process.env.DB_NAME || 'bbdd_web',     // base de datos
+  port: process.env.DB_PORT || 3306
 });
 
 // ================== ENDPOINTS ==================
@@ -204,8 +205,11 @@ app.get('/fichas/:id/diagnosticos', async (req, res) => {
   }
 });
 
-// =============== START SERVER ===============
-const PORT = 3000;
-app.listen(PORT, () => console.log(`API corriendo en puerto ${PORT}`));
+// =============== EXPORT FOR SERVERLESS ===============
+// Solo ejecutar listen() si no está en ambiente serverless
+if (process.env.NODE_ENV !== 'production' && !process.env.LAMBDA_RUNTIME_DIR) {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => console.log(`API corriendo en puerto ${PORT}`));
+}
 
 export default app;
