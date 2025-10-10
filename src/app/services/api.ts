@@ -92,7 +92,7 @@ export interface Procedimiento {
   providedIn: 'root'
 })
 export class ApiService {
-  private baseUrl = 'http://localhost:3000';
+  private baseUrl = 'https://zmemy6qrul.execute-api.us-east-1.amazonaws.com';
 
   constructor() {}
 

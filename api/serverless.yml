@@ -2,15 +2,22 @@ service: webb
 
 provider:
   name: aws
-  role: arn:aws:iam::992382436111:role/LabRole
+  role: arn:aws:iam::851725349092:role/LabRole
   runtime: nodejs18.x
   region: us-east-1
   environment:
-    DB_HOST: ${env:DB_HOST, 'localhost'}
-    DB_USER: ${env:DB_USER, 'ionic'}
-    DB_PASSWORD: ${env:DB_PASSWORD, 'Larsi@123456'}
+    DB_HOST: ${env:DB_HOST, 'bdd-ionic.c72qu2gsuzd0.us-east-1.rds.amazonaws.com'}
+    DB_USER: ${env:DB_USER, 'admin'}
+    DB_PASSWORD: ${env:DB_PASSWORD, 'admin123!'}
     DB_NAME: ${env:DB_NAME, 'bbdd_web'}
     DB_PORT: ${env:DB_PORT, '3306'}
+  vpc:
+    securityGroupIds:
+      - sg-0ae816f51db81e49c
+    subnetIds:
+      - subnet-09112f04403ac44d4
+      - subnet-07e5191e4a6f0688a
+      - subnet-04f221a052ca3b5ac
   httpApi:
     cors:
       allowedOrigins:

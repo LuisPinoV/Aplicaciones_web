@@ -7,9 +7,9 @@ app.use(cors());
 app.use(express.json());
 
 const pool = mysql.createPool({
-  host: process.env.DB_HOST || 'localhost',     // IP pública de tu EC2 (o 'localhost' si corre en la misma máquina)
-  user: process.env.DB_USER || 'ionic',           // usuario MySQL
-  password: process.env.DB_PASSWORD || 'Larsi@123456',// contraseña MySQL
+  host: process.env.DB_HOST || 'bdd-ionic.c72qu2gsuzd0.us-east-1.rds.amazonaws.com',     // IP pública de tu EC2 (o 'localhost' si corre en la misma máquina)
+  user: process.env.DB_USER || 'admin',           // usuario MySQL
+  password: process.env.DB_PASSWORD || 'admin123!',// contraseña MySQL
   database: process.env.DB_NAME || 'bbdd_web',     // base de datos
   port: process.env.DB_PORT || 3306
 });
@@ -211,5 +211,52 @@ if (process.env.NODE_ENV !== 'production' && !process.env.LAMBDA_RUNTIME_DIR) {
   const PORT = process.env.PORT || 3000;
   app.listen(PORT, () => console.log(`API corriendo en puerto ${PORT}`));
 }
+
+// ================== ENDPOINT DE SALUD ==================
+
+// Prueba la conexión general a la base de datos
+app.get('/health', async (req, res) => {
+  const status = {
+    dbConnected: false,
+    dbName: process.env.DB_NAME,
+    tables: [],
+    error: null
+  };
+
+  try {
+    // 1️⃣ Intentar conexión
+    const [dbInfo] = await pool.query('SELECT DATABASE() AS currentDB, VERSION() AS version');
+    status.dbConnected = true;
+    status.dbVersion = dbInfo[0].version;
+    status.currentDB = dbInfo[0].currentDB;
+
+    // 2️⃣ Intentar listar las tablas
+    const [tables] = await pool.query('SHOW TABLES');
+    status.tables = tables.map(t => Object.values(t)[0]);
+
+    // 3️⃣ Resultado OK
+    res.status(200).json({
+      ok: true,
+      message: 'Conexión a base de datos exitosa',
+      ...status
+    });
+
+  } catch (error) {
+    // Si falla, devolvemos el detalle exacto
+    console.error('Healthcheck error:', error);
+    status.error = {
+      code: error.code,
+      errno: error.errno,
+      sqlMessage: error.sqlMessage,
+      stack: error.stack
+    };
+    res.status(500).json({
+      ok: false,
+      message: 'Error al conectar a la base de datos',
+      ...status
+    });
+  }
+});
+
 
 export default app;
