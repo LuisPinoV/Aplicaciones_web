@@ -1,0 +1,72 @@
+/* Fondo general */
+ion-content {
+  --background: #f5f9fb; /* azul muy claro pastel */
+  padding: 1rem;
+}
+
+/* Encabezado */
+ion-toolbar {
+  --background: #a3c9e2; /* azul pastel */
+  --color: #ffffff;
+  text-align: center;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Contenedor principal */
+.contenido {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Componentes internos (ej: app-ficha-paciente-acciones) */
+app-ficha-paciente-acciones {
+  ion-card {
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease;
+
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+    }
+
+    ion-card-header {
+      background: #e7f3fa;
+      border-top-left-radius: 16px;
+      border-top-right-radius: 16px;
+      padding: 1rem;
+
+      ion-card-title {
+        color: #274c63;
+        font-weight: 700;
+        font-size: 1.1rem;
+      }
+    }
+
+    ion-card-content {
+      color: #416b85;
+      font-size: 0.95rem;
+      line-height: 1.4;
+
+      p {
+        margin: 0.4rem 0;
+      }
+
+      strong {
+        color: #274c63;
+        font-weight: 600;
+      }
+    }
+  }
+}
+
+/* Spinner de carga (si aplica) */
+ion-spinner {
+  display: block;
+  margin: 3rem auto;
+  --color: #8ecae6;
+}

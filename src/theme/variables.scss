@@ -1,2 +1,33 @@
 // For information on how to create your own theme, please see:
 // http://ionicframework.com/docs/theming/
+
+/* variables.scss */
+
+/* Colores principales */
+:root {
+  /* Colores de la app */
+  --ion-color-header: #36a6f7
+  --ion-color-primary: #a3c9e2; /* azul pastel */
+  --ion-color-primary-rgb: 163,201,226;
+  --ion-color-secondary: #bde5d2; /* verde pastel */
+  --ion-color-secondary-rgb: 189,229,210;
+  --ion-color-tertiary: #e7f3fa; /* azul muy claro */
+  --ion-color-light: #f5f9fb; /* fondo general */
+  --ion-color-medium: #6aa9d8; /* azul suave para iconos y botones */
+  --ion-color-dark: #274c63; /* azul grisáceo para textos */
+  --ion-color-success: #bcead5; /* verde pastel para acciones correctas */
+  --ion-color-danger: #ffeaea; /* rojo pastel para alertas */
+
+  /* Tipografía */
+  --ion-font-family: 'Helvetica', 'Arial', sans-serif;
+  --ion-text-color: var(--ion-color-dark);
+}
+
+/* Variables globales para sombras y bordes */
+:root {
+  --card-border-radius: 16px;
+  --card-box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+  --card-hover-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+  --button-border-radius: 12px;
+  --button-padding: 0.6rem 1rem;
+}

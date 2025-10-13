@@ -1,96 +1,117 @@
-ion-header ion-button {
-  margin-right: 10px;
+/* Fondo general */
+ion-content {
+  --background: #f5f9fb; /* azul pastel muy claro */
 }
 
-.contenido {
-  padding: 0 1.5rem;
+/* Encabezado */
+ion-toolbar {
+  --background: #a3c9e2; /* azul pastel */
+  --color: #ffffff;
+  text-align: center;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-ion-avatar {
-    width: 35px;
-    height: 35px;
-    object-fit: contain;
-    margin-right: 10px;
+/* Spinner de carga */
+ion-spinner {
+  display: block;
+  margin: 3rem auto;
+  --color: #8ecae6;
 }
 
-h1 {
-    font-size: 1.5rem;
-    font-weight: bold;
-    margin-top: 2rem;
-    margin-bottom: 0.5rem;
+/* Tarjetas generales */
+ion-card {
+  background: #ffffff;
+  border-radius: 16px;
+  margin-bottom: 1.2rem;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  }
 }
 
-h2 {
-    font-size: 1.2rem;
-    font-weight: bold;
-    margin-bottom: 1rem;
+/* Encabezado de tarjeta */
+ion-card-header {
+  background: #e7f3fa;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+  padding: 1rem;
+
+  ion-card-title {
+    color: #274c63;
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
 }
 
-p {
-    font-size: 1rem;
-    color: var(--ion-color-medium);
+/* Contenido principal */
+ion-card-content {
+  color: #416b85;
+  font-size: 0.95rem;
+  line-height: 1.4;
+
+  p {
+    margin: 0.4rem 0;
+  }
+
+  strong {
+    color: #274c63;
+    font-weight: 600;
+  }
 }
 
-.cuadro {
-    border: 2px solid #888;
-    border-radius: 10px;
-    padding: 1.5rem;
-    margin: 2rem auto;
-    max-width: 400px;
-}
-
-.cuadro ion-button {
-    margin-bottom: 1rem;
-}
-
-.cuadro ion-button ion-icon {
-    margin-right: 5px;
-}
-
-.list-container {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 2rem;
-  padding: 0;
-}
-
+/* Listas de diagnósticos, hospitalizaciones y consultas */
 ion-list {
-    max-width: 400px;
-    width: 100%;
-    padding: 0;
-}
-
-.avatar-fallback {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: #888;
-  color: #fff;
-  display: grid;
-  place-items: center;
-  font-weight: 600;
-  font-size: 0.9rem;
-}
-
-ion-item h3 {
+  background: transparent;
   margin: 0;
-  font-weight: 600;
+
+  ion-item {
+    --background: #ffffff;
+    border-radius: 12px;
+    margin: 0.4rem 0;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+
+    ion-label {
+      color: #416b85;
+
+      h2 {
+        font-weight: 600;
+        color: #2c5a76;
+        margin-bottom: 0.2rem;
+      }
+
+      p {
+        font-size: 0.9rem;
+        color: #5a7d94;
+      }
+    }
+  }
+
+  ion-item:last-child {
+    margin-bottom: 0;
+  }
 }
 
-ion-item p {
-  margin: 2px 0 0;
-  color: var(--ion-color-medium);
-  font-size: 0.9rem;
+/* Mensajes de lista vacía */
+ion-item ion-label {
+  text-align: center;
+  color: #9bb4c7;
+  font-style: italic;
 }
 
+/* Efecto general */
+ion-card,
 ion-item {
-  --border-color: transparent;
-  --inner-border-width: 0;
-  border-bottom: none;
-  border-bottom: 1px solid #ccc;
-  padding: 6px 0;
+  transition: all 0.2s ease-in-out;
 }
 
-ion-item:last-child {
-  border-bottom: none;
+/* Título principal */
+ion-title {
+  font-weight: 700;
+  font-size: 1.3rem;
+  letter-spacing: 0.5px;
 }

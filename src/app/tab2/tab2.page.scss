@@ -1,0 +1,81 @@
+/* Fondo general */
+ion-content {
+  --background: #f5f9fb; /* fondo azul pastel muy suave */
+}
+
+/* Encabezado */
+ion-toolbar {
+  --background: #36a6f7; /* azul pastel */
+  --color: #ffffff;
+  text-align: center;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Contenedor del formulario */
+form {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Campos del formulario */
+ion-item {
+  --background: #ffffff;
+  --border-color: #d7e3eb;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  margin-bottom: 0.8rem;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  }
+
+  ion-label {
+    color: #5a7d94; /* azul grisáceo suave */
+    font-weight: 500;
+  }
+
+  ion-input,
+  ion-datetime {
+    color: #274c63;
+  }
+}
+
+/* Botón de guardar */
+ion-button {
+  margin-top: 1.2rem;
+  --background: linear-gradient(135deg, #a3c9e2, #bde5d2); /* azul y verde pastel */
+  --color: #ffffff;
+  font-weight: 600;
+  border-radius: 12px;
+  box-shadow: 0 3px 8px rgba(163, 201, 226, 0.4);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(163, 201, 226, 0.6);
+  }
+}
+
+/* Mejora general de inputs */
+ion-item::part(native) {
+  border-radius: 12px;
+}
+
+/* Efecto de enfoque */
+ion-input:focus-within,
+ion-datetime:focus-within {
+  --highlight-color-focused: #8ecae6;
+}
+
+/* Títulos */
+ion-title {
+  font-weight: 700;
+  font-size: 1.3rem;
+  letter-spacing: 0.5px;
+}

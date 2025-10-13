@@ -1,12 +1,12 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-title>MediNet</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" class="medinet-page">
   <ion-header collapse="condense">
-    <ion-toolbar>
+    <ion-toolbar color="primary">
       <ion-title size="large">MediNet</ion-title>
     </ion-toolbar>
   </ion-header>
@@ -30,41 +30,27 @@
     <div class="section">
       <div class="section-header">
         <h3>Medicamentos de Hoy</h3>
-        <ion-button fill="clear" size="small" (click)="viewAllMedications()">
+        <ion-button fill="clear" size="small" color="primary" (click)="viewAllMedications()">
           Ver todos
         </ion-button>
       </div>
 
-      <!-- Mostrar mensaje si no hay medicamentos -->
       <div *ngIf="!todayMedications || todayMedications.length === 0" class="empty-message">
         <ion-icon name="medkit-outline"></ion-icon>
         <p>No tienes medicamentos registrados para hoy</p>
       </div>
 
-      <!-- Lista de medicamentos -->
-      <ion-card 
-        *ngFor="let med of todayMedications" 
-        class="medication-card">
+      <ion-card *ngFor="let med of todayMedications" class="medication-card">
         <ion-card-content>
           <div class="medication-header">
-            <div class="medication-info">
-              <h4>{{ med.name }}</h4>
-            </div>
+            <h4>{{ med.name }}</h4>
           </div>
           <div class="medication-actions">
-            <ion-button 
-              size="small" 
-              color="success" 
-              fill="solid"
-              (click)="markAsTaken(med)">
+            <ion-button size="small" color="success" (click)="markAsTaken(med)">
               <ion-icon name="checkmark"></ion-icon>
               Tomado
             </ion-button>
-            <ion-button 
-              size="small" 
-              color="danger" 
-              fill="outline"
-              (click)="skipMedication(med)">
+            <ion-button size="small" color="medium" fill="outline" (click)="skipMedication(med)">
               Omitir
             </ion-button>
           </div>
@@ -78,21 +64,17 @@
         <h3>Resumen</h3>
       </div>
       <div class="stats-grid">
-        <ion-card class="stat-card medications">
+        <ion-card class="stat-card">
           <ion-card-content>
-            <div class="stat-icon">
-              <ion-icon name="medical"></ion-icon>
-            </div>
+            <ion-icon name="medical" class="stat-icon"></ion-icon>
             <div class="stat-number">{{ activeMedications }}</div>
             <div class="stat-label">Medicamentos activos</div>
           </ion-card-content>
         </ion-card>
 
-        <ion-card class="stat-card exams">
+        <ion-card class="stat-card">
           <ion-card-content>
-            <div class="stat-icon">
-              <ion-icon name="document-text"></ion-icon>
-            </div>
+            <ion-icon name="document-text" class="stat-icon"></ion-icon>
             <div class="stat-number">{{ monthlyExams }}</div>
             <div class="stat-label">Exámenes este mes</div>
           </ion-card-content>
@@ -107,38 +89,30 @@
       </div>
 
       <div class="quick-actions-grid">
-        <ion-card class="action-card add-medication" (click)="addMedication()">
+        <ion-card class="action-card" (click)="addMedication()">
           <ion-card-content>
-            <div class="action-icon">
-              <ion-icon name="medical"></ion-icon>
-            </div>
+            <ion-icon name="medical" class="action-icon"></ion-icon>
             <p>Agregar Medicamento</p>
           </ion-card-content>
         </ion-card>
 
-        <ion-card class="action-card add-exam" (click)="addExam()">
+        <ion-card class="action-card" (click)="addExam()">
           <ion-card-content>
-            <div class="action-icon">
-              <ion-icon name="document-attach"></ion-icon>
-            </div>
+            <ion-icon name="document-attach" class="action-icon"></ion-icon>
             <p>Subir Examen</p>
           </ion-card-content>
         </ion-card>
 
-        <ion-card class="action-card schedule-appointment" (click)="scheduleAppointment()">
+        <ion-card class="action-card" (click)="scheduleAppointment()">
           <ion-card-content>
-            <div class="action-icon">
-              <ion-icon name="calendar"></ion-icon>
-            </div>
+            <ion-icon name="calendar" class="action-icon"></ion-icon>
             <p>Agendar Cita</p>
           </ion-card-content>
         </ion-card>
 
         <ion-card class="action-card emergency" (click)="emergency()">
           <ion-card-content>
-            <div class="action-icon">
-              <ion-icon name="warning"></ion-icon>
-            </div>
+            <ion-icon name="warning" class="action-icon"></ion-icon>
             <p>Emergencia</p>
           </ion-card-content>
         </ion-card>
@@ -149,43 +123,25 @@
     <div class="section">
       <div class="section-header">
         <h3>Actividad Reciente</h3>
-        <ion-button fill="clear" size="small" (click)="viewHistory()">
+        <ion-button fill="clear" size="small" color="primary" (click)="viewHistory()">
           Ver historial
         </ion-button>
       </div>
 
-      <!-- Mostrar mensaje si no hay actividad -->
       <div *ngIf="!recentActivities || recentActivities.length === 0" class="empty-message">
         <ion-icon name="time-outline"></ion-icon>
         <p>No hay actividad reciente</p>
       </div>
 
-      <!-- Lista de actividades -->
       <ion-card class="activity-card" *ngIf="recentActivities && recentActivities.length > 0">
         <ion-card-content>
-          <ion-item 
-            *ngFor="let activity of recentActivities" 
-            lines="none"
-            class="activity-item">
-            <div class="activity-icon" [ngClass]="activity.type">
-              <ion-icon [name]="activity.icon"></ion-icon>
-            </div>
+          <ion-item *ngFor="let activity of recentActivities" lines="none" class="activity-item">
+            <ion-icon [name]="activity.icon" class="activity-icon"></ion-icon>
             <ion-label>
               <h4>{{ activity.title }}</h4>
               <p>{{ activity.time }}</p>
             </ion-label>
-            <ion-badge 
-              *ngIf="activity.badge" 
-              color="danger" 
-              slot="end">
-              {{ activity.badge }}
-            </ion-badge>
-            <div 
-              *ngIf="activity.progress" 
-              class="progress-indicator" 
-              slot="end">
-              <ion-icon name="checkmark-circle" color="success"></ion-icon>
-            </div>
+            <ion-badge *ngIf="activity.badge" color="danger" slot="end">{{ activity.badge }}</ion-badge>
           </ion-item>
         </ion-card-content>
       </ion-card>
