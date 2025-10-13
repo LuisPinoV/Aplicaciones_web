@@ -48,7 +48,11 @@ export const routes: Routes = [
   {
     path: 'tabs/historial/examenes',
     loadComponent: () => import('./pages/examenes/examenes.page').then( m => m.ExamenesPage)
+  },  {
+    path: 'fichas-medicas',
+    loadComponent: () => import('./pages/fichas-medicas/fichas-medicas.page').then( m => m.FichasMedicasPage)
   }
+
 
 
 ];
