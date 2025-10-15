@@ -18,10 +18,10 @@
   </div>
 
   <!-- Lista de fichas médicas -->
-  <ion-list *ngIf="!isLoading && fichasmedicas.length > 0">
-    <ion-item *ngFor="let ficha of fichasmedicas">
+  <ion-list *ngIf="!isLoading && (fichasmedicas?.length ?? 0) > 0">
+    <ion-item *ngFor="let ficha of fichasmedicas; trackBy: trackById">
       <ion-label>
-        <p> {{ ficha.idFichaMedica}} </p>
+        <p>{{ ficha.idFichaMedica }}</p>
         <h2>{{ ficha.nombre }}</h2>
         <p>RUT: {{ ficha.Rut }}</p>
         <p>Fecha de Nacimiento: {{ ficha.fechaNacimiento | date:'dd/MM/yyyy' }}</p>
@@ -29,16 +29,19 @@
     </ion-item>
   </ion-list>
 
-  <!-- Componente de Scroll Infinito -->
-  <ion-infinite-scroll (ionInfinite)="loadFichasMedicas($event)" [disabled]="allDataLoaded">
+  <!-- Scroll infinito: carga más fichas al llegar al final -->
+  <ion-infinite-scroll
+    threshold="100px"
+    (ionInfinite)="loadFichasMedicas($event)"
+    [disabled]="allDataLoaded"
+  >
     <ion-infinite-scroll-content
       loadingSpinner="bubbles"
-      loadingText="Cargando más fichas...">
-    </ion-infinite-scroll-content>
+      loadingText="Cargando más fichas..."
+    ></ion-infinite-scroll-content>
   </ion-infinite-scroll>
 
-  <!-- Mensaje cuando no hay datos -->
-  <div *ngIf="!isLoading && fichasmedicas.length === 0" class="ion-text-center ion-padding">
+  <div *ngIf="!isLoading && fichasmedicas?.length === 0" class="ion-text-center ion-padding">
     <p>No se encontraron fichas médicas.</p>
   </div>
 

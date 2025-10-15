@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import axios from 'axios';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 export interface Paciente {
   id: number;
@@ -94,6 +95,9 @@ export interface Procedimiento {
 export class ApiService {
   private baseUrl = 'https://zmemy6qrul.execute-api.us-east-1.amazonaws.com';
 
+  private fichasSubject = new BehaviorSubject<FichaMedica[]>([]);
+  fichas$: Observable<FichaMedica[]> = this.fichasSubject.asObservable();
+
   constructor() {}
 
   // === Fichas médicas ===
@@ -102,9 +106,53 @@ export class ApiService {
     return res.data;
   }
 
+  async getFichasPaginadas(limit: number, offset: number): Promise<{
+    data: FichaMedica[];
+    pagination: {
+      limit: number;
+      offset: number;
+      total: number;
+      nextOffset: number | null;
+      hasMore: boolean;
+    };
+  }> {
+    const res = await axios.get(`${this.baseUrl}/fichas?limit=${limit}&offset=${offset}`);
+    
+    // Emitir al observable el nuevo conjunto de fichas
+    const data = res.data.data || [];
+    if (offset === 0) {
+      this.fichasSubject.next(data);
+    } else {
+      // Si es un scroll, concatenar con las ya existentes
+      const prev = this.fichasSubject.getValue();
+      this.fichasSubject.next([...prev, ...data]);
+    }
+
+    return res.data;
+  }
+
+  async actualizarFicha(id: number, ficha: Partial<FichaMedica>) {
+    const res = await axios.put(`${this.baseUrl}/fichas/${id}`, ficha);
+    const fichaActualizada = res.data;
+
+    const prev = this.fichasSubject.getValue();
+    const index = prev.findIndex(f => f.idFichaMedica === id);
+    if (index !== -1) {
+      prev[index] = fichaActualizada;
+      this.fichasSubject.next([...prev]); // dispara actualización
+    }
+
+    return fichaActualizada;
+  }
+
   async crearFicha(ficha: Partial<FichaMedica>) {
     const res = await axios.post(`${this.baseUrl}/fichas`, ficha);
-    return res.data;
+    const nuevaFicha = res.data;
+
+    const prev = this.fichasSubject.getValue();
+    this.fichasSubject.next([nuevaFicha, ...prev]);
+
+    return nuevaFicha;
   }
 
   // === Pacientes ===

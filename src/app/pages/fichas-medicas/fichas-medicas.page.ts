@@ -1,9 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
-import { IonInfiniteScroll } from '@ionic/angular/standalone';
 import { ApiService, FichaMedica } from 'src/app/services/api';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-fichas-medicas',
@@ -12,75 +12,55 @@ import { ApiService, FichaMedica } from 'src/app/services/api';
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule]
 })
-export class FichasMedicasPage implements OnInit {
-  private allFichas: FichaMedica[] = []; // Almacena TODAS las fichas
-  fichasmedicas: FichaMedica[] = [];     // Fichas que se muestran en la UI
-  isLoading = false;
-  private currentPage = 0;
-  private readonly pageSize = 20;
+export class FichasMedicasPage implements OnInit, OnDestroy {
+  fichasmedicas: FichaMedica[] = [];
+  fichasSub!: Subscription;
+  limit = 20;
+  offset = 0;
   allDataLoaded = false;
-
-  @ViewChild(IonInfiniteScroll) infiniteScroll!: IonInfiniteScroll;
+  isLoading = false;
 
   constructor(
     private apiService: ApiService,
-  ) { }
+    private cdRef: ChangeDetectorRef
+  ) {}
 
-  ngOnInit() {
-    this.cargarDatosIniciales();
+  async ngOnInit() {
+    this.fichasSub = this.apiService.fichas$.subscribe(data => {
+      this.fichasmedicas = data;
+    });
+
+    await this.loadInitialFichas();
   }
 
-  async cargarDatosIniciales() {
+  ngOnDestroy() {
+    this.fichasSub?.unsubscribe();
+  }
+
+  async loadInitialFichas() {
     this.isLoading = true;
-    this.allDataLoaded = false;
-    this.fichasmedicas = [];
-    this.currentPage = 0;
-
     try {
-      // 1. Obtenemos TODAS las fichas del backend de una sola vez
-      this.allFichas = await this.apiService.getAllFichas();
-      
-      // 2. Cargamos la primera "página" de datos localmente
-      this.cargarSiguientePaginaLocal();
-
-    } catch (err) {
-      console.error('Error cargando la lista completa de fichas:', err);
+      await this.apiService.getFichasPaginadas(this.limit, this.offset);
     } finally {
       this.isLoading = false;
+      this.cdRef.detectChanges();
     }
   }
 
-  loadFichasMedicas(event?: any) {
-    // Este método ahora solo opera sobre los datos locales
-    this.cargarSiguientePaginaLocal();
+  async loadFichasMedicas(event: any) {
+    const res = await this.apiService.getFichasPaginadas(this.limit, this.offset);
+    this.offset = res.pagination?.nextOffset || this.offset;
+    this.allDataLoaded = !res.pagination?.hasMore;
+    event.target.complete();
 
-    if (event) {
-      event.target.complete();
-    }
-  }
-
-  private cargarSiguientePaginaLocal() {
     if (this.allDataLoaded) {
-      return;
+      event.target.disabled = true;
     }
 
-    const startIndex = this.currentPage * this.pageSize;
-    const endIndex = startIndex + this.pageSize;
+    this.cdRef.detectChanges();
+  }
 
-    // Sacamos el siguiente trozo del array completo
-    const nuevasFichas = this.allFichas.slice(startIndex, endIndex);
-
-    if (nuevasFichas.length > 0) {
-      this.fichasmedicas.push(...nuevasFichas);
-      this.currentPage++;
-    }
-
-    // Si ya no hay más fichas que mostrar, desactivamos el scroll
-    if (this.fichasmedicas.length >= this.allFichas.length) {
-      this.allDataLoaded = true;
-      if (this.infiniteScroll) {
-        this.infiniteScroll.disabled = true;
-      }
-    }
+  trackById(index: number, ficha: FichaMedica) {
+    return ficha.idFichaMedica;
   }
 }

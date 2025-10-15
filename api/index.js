@@ -19,10 +19,86 @@ const pool = mysql.createPool({
 // Todas las fichas médicas
 app.get('/fichas', async (req, res) => {
   try {
-    const [rows] = await pool.query('SELECT * FROM FichaMedica');
-    res.json(rows);
+    // Convertir los parámetros a número
+    const limitParam = req.query?.limit ? Number(req.query.limit) : null;
+    const offsetParam = req.query?.offset ? Number(req.query.offset) : 0;
+
+    console.log('Query params:', req.query);
+    console.log('limit:', limitParam, 'offset:', offsetParam);
+
+    let rows;
+    let pagination = null;
+
+    if (limitParam && !isNaN(limitParam) && limitParam > 0) {
+      // Consulta paginada
+      const [data] = await pool.query(
+        'SELECT * FROM FichaMedica ORDER BY idFichaMedica DESC LIMIT ? OFFSET ?',
+        [limitParam, offsetParam]
+      );
+
+      const [[{ total }]] = await pool.query('SELECT COUNT(*) AS total FROM FichaMedica');
+
+      rows = data;
+      pagination = {
+        limit: limitParam,
+        offset: offsetParam,
+        total,
+        nextOffset: offsetParam + limitParam < total ? offsetParam + limitParam : null,
+        hasMore: offsetParam + limitParam < total
+      };
+    } else {
+      // Consulta completa
+      const [data] = await pool.query('SELECT * FROM FichaMedica ORDER BY idFichaMedica ASC');
+      rows = data;
+    }
+
+    res.json({ data: rows, pagination });
+
   } catch (err) {
-    console.error(err);
+    console.error('Error al obtener fichas médicas:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Actualizar una ficha médica existente
+app.put('/fichas/:id', async (req, res) => {
+  const id = req.params.id;
+  const {
+    nombre,
+    Rut,
+    fechaNacimiento,
+    sexo,
+    tipoSangre,
+  } = req.body;
+
+  try {
+    // Verificar si existe la ficha
+    const [existe] = await pool.query(
+      'SELECT * FROM FichaMedica WHERE idFichaMedica = ?',
+      [id]
+    );
+
+    if (existe.length === 0) {
+      return res.status(404).json({ error: 'Ficha no encontrada' });
+    }
+
+    // Actualizar los campos permitidos
+    await pool.query(
+      `UPDATE FichaMedica
+       SET nombre = ?, Rut = ?, fechaNacimiento = ?, sexo = ?, tipoSangre = ?
+       WHERE idFichaMedica = ?`,
+      [nombre, Rut, fechaNacimiento, sexo, tipoSangre, id]
+    );
+
+    // Devolver la ficha actualizada
+    const [actualizada] = await pool.query(
+      'SELECT * FROM FichaMedica WHERE idFichaMedica = ?',
+      [id]
+    );
+
+    res.status(200).json(actualizada[0]);
+  } catch (err) {
+    console.error('Error al actualizar ficha médica:', err);
     res.status(500).json({ error: err.message });
   }
 });
