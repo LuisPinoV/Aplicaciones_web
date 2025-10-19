@@ -7,37 +7,32 @@ app.use(cors());
 app.use(express.json());
 
 const pool = mysql.createPool({
-  host: process.env.DB_HOST || 'bdd-ionic.c72qu2gsuzd0.us-east-1.rds.amazonaws.com',     // IP pública de tu EC2 (o 'localhost' si corre en la misma máquina)
-  user: process.env.DB_USER || 'admin',           // usuario MySQL
-  password: process.env.DB_PASSWORD || 'admin123!',// contraseña MySQL
-  database: process.env.DB_NAME || 'bbdd_web',     // base de datos
+  host: process.env.DB_HOST || 'bdd-ionic.c72qu2gsuzd0.us-east-1.rds.amazonaws.com',
+  user: process.env.DB_USER || 'admin',
+  password: process.env.DB_PASSWORD || 'admin123!',
+  database: process.env.DB_NAME || 'bbdd_web',
   port: process.env.DB_PORT || 3306
 });
 
-// ================== ENDPOINTS ==================
-
-// Todas las fichas médicas
 app.get('/fichas', async (req, res) => {
   try {
-    // Convertir los parámetros a número
     const limitParam = req.query?.limit ? Number(req.query.limit) : null;
     const offsetParam = req.query?.offset ? Number(req.query.offset) : 0;
-
-    console.log('Query params:', req.query);
-    console.log('limit:', limitParam, 'offset:', offsetParam);
 
     let rows;
     let pagination = null;
 
     if (limitParam && !isNaN(limitParam) && limitParam > 0) {
-      // Consulta paginada
       const [data] = await pool.query(
-        'SELECT * FROM FichaMedica ORDER BY idFichaMedica DESC LIMIT ? OFFSET ?',
+        `SELECT f.idFichaMedica, u.Rut, u.nombre, u.fechaNacimiento, u.sexo, u.tipoSangre, f.altura, f.peso, f.genero
+         FROM FichaMedica f
+         JOIN Usuario u ON f.idUsuario = u.idUsuario
+         ORDER BY f.idFichaMedica DESC
+         LIMIT ? OFFSET ?`,
         [limitParam, offsetParam]
       );
 
       const [[{ total }]] = await pool.query('SELECT COUNT(*) AS total FROM FichaMedica');
-
       rows = data;
       pagination = {
         limit: limitParam,
@@ -47,32 +42,26 @@ app.get('/fichas', async (req, res) => {
         hasMore: offsetParam + limitParam < total
       };
     } else {
-      // Consulta completa
-      const [data] = await pool.query('SELECT * FROM FichaMedica ORDER BY idFichaMedica ASC');
+      const [data] = await pool.query(
+        `SELECT f.idFichaMedica, u.Rut, u.nombre, u.fechaNacimiento, u.sexo, u.tipoSangre, f.altura, f.peso, f.genero
+         FROM FichaMedica f
+         JOIN Usuario u ON f.idUsuario = u.idUsuario
+         ORDER BY f.idFichaMedica ASC`
+      );
       rows = data;
     }
 
     res.json({ data: rows, pagination });
-
   } catch (err) {
-    console.error('Error al obtener fichas médicas:', err);
     res.status(500).json({ error: err.message });
   }
 });
 
-// Actualizar una ficha médica existente
 app.put('/fichas/:id', async (req, res) => {
   const id = req.params.id;
-  const {
-    nombre,
-    Rut,
-    fechaNacimiento,
-    sexo,
-    tipoSangre,
-  } = req.body;
+  const { nombre, Rut, fechaNacimiento, sexo, tipoSangre, altura, peso, genero } = req.body;
 
   try {
-    // Verificar si existe la ficha
     const [existe] = await pool.query(
       'SELECT * FROM FichaMedica WHERE idFichaMedica = ?',
       [id]
@@ -82,72 +71,89 @@ app.put('/fichas/:id', async (req, res) => {
       return res.status(404).json({ error: 'Ficha no encontrada' });
     }
 
-    // Actualizar los campos permitidos
+    const idUsuario = existe[0].idUsuario;
+
     await pool.query(
-      `UPDATE FichaMedica
-       SET nombre = ?, Rut = ?, fechaNacimiento = ?, sexo = ?, tipoSangre = ?
-       WHERE idFichaMedica = ?`,
-      [nombre, Rut, fechaNacimiento, sexo, tipoSangre, id]
+      `UPDATE Usuario SET nombre = ?, Rut = ?, fechaNacimiento = ?, sexo = ?, tipoSangre = ? WHERE idUsuario = ?`,
+      [nombre, Rut, fechaNacimiento, sexo, tipoSangre, idUsuario]
     );
 
-    // Devolver la ficha actualizada
+    await pool.query(
+      `UPDATE FichaMedica SET altura = ?, peso = ?, genero = ? WHERE idFichaMedica = ?`,
+      [altura, peso, genero, id]
+    );
+
     const [actualizada] = await pool.query(
-      'SELECT * FROM FichaMedica WHERE idFichaMedica = ?',
+      `SELECT f.idFichaMedica, u.Rut, u.nombre, u.fechaNacimiento, u.sexo, u.tipoSangre, f.altura, f.peso, f.genero
+       FROM FichaMedica f
+       JOIN Usuario u ON f.idUsuario = u.idUsuario
+       WHERE f.idFichaMedica = ?`,
       [id]
     );
 
     res.status(200).json(actualizada[0]);
   } catch (err) {
-    console.error('Error al actualizar ficha médica:', err);
     res.status(500).json({ error: err.message });
   }
 });
 
-// Insertar una ficha médica
 app.post('/fichas', async (req, res) => {
   try {
-    const { Rut, nombre, fechaNacimiento, sexo, tipoSangre, altura, peso, genero } = req.body;
-    const [result] = await pool.query(
-      `INSERT INTO FichaMedica
-       (Rut, nombre, fechaNacimiento, sexo, tipoSangre, altura, peso, genero)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-      [Rut, nombre, fechaNacimiento, sexo, tipoSangre, altura, peso, genero]
+    const { Rut, nombre, fechaNacimiento, sexo, tipoSangre, altura, peso, genero, contraseña } = req.body;
+
+    const [usuario] = await pool.query(
+      `INSERT INTO Usuario (Rut, contraseña, nombre, fechaNacimiento, sexo, tipoSangre)
+       VALUES (?, ?, ?, ?, ?, ?)`,
+      [Rut, contraseña || '1234', nombre, fechaNacimiento, sexo, tipoSangre]
     );
-    res.json({ success: true, idFichaMedica: result.insertId });
+
+    const idUsuario = usuario.insertId;
+
+    const [ficha] = await pool.query(
+      `INSERT INTO FichaMedica (idUsuario, altura, peso, genero)
+       VALUES (?, ?, ?, ?)`,
+      [idUsuario, altura, peso, genero]
+    );
+
+    res.json({ success: true, idFichaMedica: ficha.insertId });
   } catch (err) {
-    console.error(err);
     res.status(500).json({ error: err.message });
   }
 });
 
-// Lista de pacientes en formato reducido
 app.get('/pacientes', async (req, res) => {
   try {
-    const [rows] = await pool.query('SELECT * FROM FichaMedica');
+    const [rows] = await pool.query(
+      `SELECT f.idFichaMedica, u.Rut, u.nombre, u.sexo, u.tipoSangre
+       FROM FichaMedica f
+       JOIN Usuario u ON f.idUsuario = u.idUsuario`
+    );
     const pacientes = rows.map(r => ({
       id: r.idFichaMedica,
       rut: r.Rut,
       nombre: r.nombre,
-      edad: r.edad || 0,
+      edad: 0,
       sexo: r.sexo,
       grupo_sanguineo: r.tipoSangre,
-      telefono: r.telefono || '',
-      mail: r.mail || ''
+      telefono: '',
+      mail: ''
     }));
     res.json(pacientes);
   } catch (err) {
-    console.error(err);
     res.status(500).json({ error: err.message });
   }
 });
 
-// ======== Endpoints relacionados a una ficha ========
-
-// Ficha completa con relaciones
 app.get('/fichas/:id', async (req, res) => {
   const id = req.params.id;
   try {
-    const [ficha] = await pool.query('SELECT * FROM FichaMedica WHERE idFichaMedica = ?', [id]);
+    const [ficha] = await pool.query(
+      `SELECT f.idFichaMedica, u.Rut, u.nombre, u.fechaNacimiento, u.sexo, u.tipoSangre, f.altura, f.peso, f.genero
+       FROM FichaMedica f
+       JOIN Usuario u ON f.idUsuario = u.idUsuario
+       WHERE f.idFichaMedica = ?`,
+      [id]
+    );
     if (!ficha.length) return res.status(404).json({ error: 'Ficha no encontrada' });
 
     const [diagnosticos] = await pool.query('SELECT * FROM Diagnostico WHERE idFichaMedica = ?', [id]);
@@ -157,21 +163,21 @@ app.get('/fichas/:id', async (req, res) => {
        FROM Consulta c
        LEFT JOIN Medico m ON c.idMedico = m.idMedico
        LEFT JOIN TipoMedico tm ON m.idTipoMedico = tm.idTipoMedico
-       WHERE c.idFichaMedica = ?`, [id]);
+       WHERE c.idFichaMedica = ?`,
+      [id]
+    );
 
     res.json({ ficha: ficha[0], diagnosticos, hospitalizaciones, consultas });
   } catch (err) {
-    console.error(err);
     res.status(500).json({ error: err.message });
   }
 });
 
-// Medicamentos de una ficha
 app.get('/fichas/:id/medicamentos', async (req, res) => {
   const id = req.params.id;
   try {
-    const [medicamentos] = await pool.query(`
-      SELECT 
+    const [medicamentos] = await pool.query(
+      `SELECT 
         m.nombre,
         m.descripcion,
         cm.cantidad,
@@ -181,116 +187,104 @@ app.get('/fichas/:id/medicamentos', async (req, res) => {
       FROM ConsultaMedicamento cm
       JOIN Medicamento m ON cm.idMedicamento = m.idMedicamento
       JOIN Consulta c ON cm.idConsulta = c.idConsulta
-      WHERE c.idFichaMedica = ?;
-    `, [id]);
+      WHERE c.idFichaMedica = ?`,
+      [id]
+    );
     res.json(medicamentos);
   } catch (err) {
-    console.error(err);
     res.status(500).json({ error: err.message });
   }
 });
 
-// Procedimientos (tipo 1)
 app.get('/fichas/:id/procedimientos', async (req, res) => {
   const id = req.params.id;
   try {
-    const [procedimientos] = await pool.query(`
-      SELECT p.idProcedimiento, p.nombre, p.descripcion, tp.idTipoProcedimiento, tp.tipoprocedimiento AS tipoProcedimiento
-      FROM Consulta c
-      JOIN ConsultaProcedimiento cp ON c.idConsulta = cp.idConsulta
-      JOIN Procedimiento p ON cp.idProcedimiento = p.idProcedimiento
-      JOIN TipoProcedimiento tp ON p.idTipoProcedimiento = tp.idTipoProcedimiento
-      WHERE c.idFichaMedica = ? AND tp.idTipoProcedimiento = 1
-    `, [id]);
+    const [procedimientos] = await pool.query(
+      `SELECT p.idProcedimiento, p.nombre, p.descripcion, tp.idTipoProcedimiento, tp.tipoprocedimiento AS tipoProcedimiento
+       FROM Consulta c
+       JOIN ConsultaProcedimiento cp ON c.idConsulta = cp.idConsulta
+       JOIN Procedimiento p ON cp.idProcedimiento = p.idProcedimiento
+       JOIN TipoProcedimiento tp ON p.idTipoProcedimiento = tp.idTipoProcedimiento
+       WHERE c.idFichaMedica = ? AND tp.idTipoProcedimiento = 1`,
+      [id]
+    );
     res.json(procedimientos);
   } catch (err) {
-    console.error(err);
     res.status(500).json({ error: err.message });
   }
 });
 
-// Exámenes (tipo 2)
 app.get('/fichas/:id/examenes', async (req, res) => {
   const id = req.params.id;
   try {
-    const [examenes] = await pool.query(`
-      SELECT p.idProcedimiento,
-             p.nombre      AS nombreExamen,
-             p.descripcion AS descripcionExamen,
-             tp.idTipoProcedimiento,
-             tp.tipoprocedimiento AS tipoProcedimiento
-      FROM Consulta c
-      JOIN ConsultaProcedimiento cp ON c.idConsulta = cp.idConsulta
-      JOIN Procedimiento p ON cp.idProcedimiento = p.idProcedimiento
-      JOIN TipoProcedimiento tp ON p.idTipoProcedimiento = tp.idTipoProcedimiento
-      WHERE c.idFichaMedica = ? AND p.idTipoProcedimiento = 2
-    `, [id]);
+    const [examenes] = await pool.query(
+      `SELECT p.idProcedimiento,
+              p.nombre AS nombreExamen,
+              p.descripcion AS descripcionExamen,
+              tp.idTipoProcedimiento,
+              tp.tipoprocedimiento AS tipoProcedimiento
+       FROM Consulta c
+       JOIN ConsultaProcedimiento cp ON c.idConsulta = cp.idConsulta
+       JOIN Procedimiento p ON cp.idProcedimiento = p.idProcedimiento
+       JOIN TipoProcedimiento tp ON p.idTipoProcedimiento = tp.idTipoProcedimiento
+       WHERE c.idFichaMedica = ? AND p.idTipoProcedimiento = 2`,
+      [id]
+    );
     res.json(examenes);
   } catch (err) {
-    console.error(err);
     res.status(500).json({ error: err.message });
   }
 });
 
-// Hospitalizaciones
 app.get('/fichas/:id/hospitalizaciones', async (req, res) => {
   const id = req.params.id;
   try {
-    const [hospitalizaciones] = await pool.query(`
-      SELECT h.idHospitalizacion, h.fecha, h.duracion, h.institucionMedica
-      FROM Hospitalizacion h
-      WHERE h.idFichaMedica = ?;
-    `, [id]);
+    const [hospitalizaciones] = await pool.query(
+      `SELECT h.idHospitalizacion, h.fecha, h.duracion, h.institucionMedica
+       FROM Hospitalizacion h
+       WHERE h.idFichaMedica = ?`,
+      [id]
+    );
     res.json(hospitalizaciones);
   } catch (err) {
-    console.error(err);
     res.status(500).json({ error: err.message });
   }
 });
 
-// Consultas
 app.get('/fichas/:id/consultas', async (req, res) => {
   const id = req.params.id;
   try {
-    const [consultas] = await pool.query(`
-      SELECT c.fecha, m.nombre AS medicoNombre, c.institucionMedica, c.descripcion
-      FROM Consulta c
-      JOIN Medico m ON m.idMedico = c.idMedico
-      WHERE c.idFichaMedica = ?;
-    `, [id]);
+    const [consultas] = await pool.query(
+      `SELECT c.fecha, m.nombre AS medicoNombre, c.institucionMedica, c.descripcion
+       FROM Consulta c
+       JOIN Medico m ON m.idMedico = c.idMedico
+       WHERE c.idFichaMedica = ?`,
+      [id]
+    );
     res.json(consultas);
   } catch (err) {
-    console.error(err);
     res.status(500).json({ error: err.message });
   }
 });
 
-// Diagnósticos
 app.get('/fichas/:id/diagnosticos', async (req, res) => {
   const id = req.params.id;
   try {
-    const [diagnosticos] = await pool.query(`
-      SELECT fecha, descripcion
-      FROM Diagnostico
-      WHERE idFichaMedica = ?;
-    `, [id]);
+    const [diagnosticos] = await pool.query(
+      `SELECT fecha, descripcion FROM Diagnostico WHERE idFichaMedica = ?`,
+      [id]
+    );
     res.json(diagnosticos);
   } catch (err) {
-    console.error(err);
     res.status(500).json({ error: err.message });
   }
 });
 
-// =============== EXPORT FOR SERVERLESS ===============
-// Solo ejecutar listen() si no está en ambiente serverless
 if (process.env.NODE_ENV !== 'production' && !process.env.LAMBDA_RUNTIME_DIR) {
   const PORT = process.env.PORT || 3000;
   app.listen(PORT, () => console.log(`API corriendo en puerto ${PORT}`));
 }
 
-// ================== ENDPOINT DE SALUD ==================
-
-// Prueba la conexión general a la base de datos
 app.get('/health', async (req, res) => {
   const status = {
     dbConnected: false,
@@ -300,26 +294,20 @@ app.get('/health', async (req, res) => {
   };
 
   try {
-    // 1️⃣ Intentar conexión
     const [dbInfo] = await pool.query('SELECT DATABASE() AS currentDB, VERSION() AS version');
     status.dbConnected = true;
     status.dbVersion = dbInfo[0].version;
     status.currentDB = dbInfo[0].currentDB;
 
-    // 2️⃣ Intentar listar las tablas
     const [tables] = await pool.query('SHOW TABLES');
     status.tables = tables.map(t => Object.values(t)[0]);
 
-    // 3️⃣ Resultado OK
     res.status(200).json({
       ok: true,
       message: 'Conexión a base de datos exitosa',
       ...status
     });
-
   } catch (error) {
-    // Si falla, devolvemos el detalle exacto
-    console.error('Healthcheck error:', error);
     status.error = {
       code: error.code,
       errno: error.errno,
@@ -333,6 +321,5 @@ app.get('/health', async (req, res) => {
     });
   }
 });
-
 
 export default app;
