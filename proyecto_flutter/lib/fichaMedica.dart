@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'services/servicesFichaMedica.dart';
 import 'busqueda_rut.dart';
-import 'datos_personales.dart';
-import 'consulta_inicial.dart';
+import 'buscar_medicamento.dart';
 
 /// 🔹 Punto de entrada del programa
 void main() {
@@ -71,12 +70,6 @@ class _FichasPageState extends State<FichasPage> {
               title: const Text('Datos Personales'),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const DatosPersonalesPage(),
-                  ),
-                );
               },
             ),
             ListTile(
@@ -97,10 +90,17 @@ class _FichasPageState extends State<FichasPage> {
               title: const Text('Consulta Inicial'),
               onTap: () {
                 Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.medication, color: Color(0xFF1565C0)),
+              title: const Text('Buscar Medicamento (FDA)'),
+              onTap: () {
+                Navigator.pop(context);
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const ConsultaInicialPage(),
+                    builder: (context) => const BuscarMedicamentoPage(),
                   ),
                 );
               },
