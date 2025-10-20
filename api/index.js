@@ -214,24 +214,130 @@ app.get('/fichas/:id/procedimientos', async (req, res) => {
   }
 });
 
+// Exámenes con paginación
 app.get('/fichas/:id/examenes', async (req, res) => {
   const id = req.params.id;
+
   try {
-    const [examenes] = await pool.query(
-      `SELECT p.idProcedimiento,
-              p.nombre AS nombreExamen,
-              p.descripcion AS descripcionExamen,
-              tp.idTipoProcedimiento,
-              tp.tipoprocedimiento AS tipoProcedimiento
-       FROM Consulta c
-       JOIN ConsultaProcedimiento cp ON c.idConsulta = cp.idConsulta
-       JOIN Procedimiento p ON cp.idProcedimiento = p.idProcedimiento
-       JOIN TipoProcedimiento tp ON p.idTipoProcedimiento = tp.idTipoProcedimiento
-       WHERE c.idFichaMedica = ? AND p.idTipoProcedimiento = 2`,
+    const limitParam = req.query?.limit ? Number(req.query.limit) : null;
+    const offsetParam = req.query?.offset ? Number(req.query.offset) : 0;
+
+    let rows;
+    let pagination = null;
+
+    if (limitParam && !isNaN(limitParam) && limitParam > 0) {
+      const [data] = await pool.query(
+        `
+        SELECT 
+          e.idExamen,
+          e.nombre AS nombreExamen,
+          e.descripcion AS descripcionExamen,
+          te.idTipoExamen,
+          te.tipoExamen AS tipoExamen,
+          fme.fecha AS fechaExamen,
+          fme.descripcion AS descripcionFicha
+        FROM FichaMedicaExamen fme
+        JOIN Examen e ON fme.idExamen = e.idExamen
+        JOIN TipoExamen te ON e.idTipoExamen = te.idTipoExamen
+        WHERE fme.idFichaMedica = ?
+        ORDER BY fme.fecha DESC
+        LIMIT ? OFFSET ?
+        `,
+        [id, limitParam, offsetParam]
+      );
+
+      const [[{ total }]] = await pool.query(
+        `
+        SELECT COUNT(*) AS total
+        FROM FichaMedicaExamen
+        WHERE idFichaMedica = ?
+        `,
+        [id]
+      );
+
+      rows = data;
+      pagination = {
+        limit: limitParam,
+        offset: offsetParam,
+        total,
+        nextOffset: offsetParam + limitParam < total ? offsetParam + limitParam : null,
+        hasMore: offsetParam + limitParam < total,
+      };
+    } else {
+      const [data] = await pool.query(
+        `
+        SELECT 
+          e.idExamen,
+          e.nombre AS nombreExamen,
+          e.descripcion AS descripcionExamen,
+          te.idTipoExamen,
+          te.tipoExamen AS tipoExamen,
+          fme.fecha AS fechaExamen,
+          fme.descripcion AS descripcionFicha
+        FROM FichaMedicaExamen fme
+        JOIN Examen e ON fme.idExamen = e.idExamen
+        JOIN TipoExamen te ON e.idTipoExamen = te.idTipoExamen
+        WHERE fme.idFichaMedica = ?
+        ORDER BY fme.fecha DESC
+        `,
+        [id]
+      );
+      rows = data;
+    }
+
+    res.json({ data: rows, pagination });
+
+  } catch (err) {
+    console.error('Error al obtener exámenes:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Estadísticas de exámenes
+app.get('/fichas/:id/examenes/estadisticas', async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    // Total de exámenes asociados a la ficha médica
+    const [[{ total }]] = await pool.query(
+      `
+      SELECT COUNT(fme.idExamen) AS total
+      FROM FichaMedicaExamen fme
+      WHERE fme.idFichaMedica = ?
+      `,
       [id]
     );
-    res.json(examenes);
+
+    // Fecha límite: últimos 3 meses
+    const tresMesesAtras = new Date();
+    tresMesesAtras.setMonth(tresMesesAtras.getMonth() - 3);
+
+    const [[{ recientes }]] = await pool.query(
+      `
+      SELECT COUNT(fme.idExamen) AS recientes
+      FROM FichaMedicaExamen fme
+      WHERE fme.idFichaMedica = ? AND fme.fecha >= ?
+      `,
+      [id, tresMesesAtras]
+    );
+
+    // Fecha límite: último año
+    const unAnoAtras = new Date();
+    unAnoAtras.setFullYear(unAnoAtras.getFullYear() - 1);
+
+    const [[{ activos }]] = await pool.query(
+      `
+      SELECT COUNT(fme.idExamen) AS activos
+      FROM FichaMedicaExamen fme
+      WHERE fme.idFichaMedica = ? AND fme.fecha >= ?
+      `,
+      [id, unAnoAtras]
+    );
+
+    res.json({ total, recientes, activos });
+
   } catch (err) {
+    console.error('Error al obtener estadísticas de exámenes:', err);
     res.status(500).json({ error: err.message });
   }
 });
@@ -269,13 +375,90 @@ app.get('/fichas/:id/consultas', async (req, res) => {
 
 app.get('/fichas/:id/diagnosticos', async (req, res) => {
   const id = req.params.id;
+
   try {
-    const [diagnosticos] = await pool.query(
-      `SELECT fecha, descripcion FROM Diagnostico WHERE idFichaMedica = ?`,
+    const limitParam = req.query?.limit ? Number(req.query.limit) : null;
+    const offsetParam = req.query?.offset ? Number(req.query.offset) : 0;
+
+    let rows;
+    let pagination = null;
+
+    if (limitParam && !isNaN(limitParam) && limitParam > 0) {
+      // Consulta paginada
+      const [data] = await pool.query(
+        `
+        SELECT idDiagnostico, fecha, descripcion
+        FROM Diagnostico
+        WHERE idFichaMedica = ?
+        ORDER BY fecha DESC
+        LIMIT ? OFFSET ?
+        `,
+        [id, limitParam, offsetParam]
+      );
+
+      // Contar total
+      const [[{ total }]] = await pool.query(
+        'SELECT COUNT(*) AS total FROM Diagnostico WHERE idFichaMedica = ?',
+        [id]
+      );
+
+      rows = data;
+      pagination = {
+        limit: limitParam,
+        offset: offsetParam,
+        total,
+        nextOffset: offsetParam + limitParam < total ? offsetParam + limitParam : null,
+        hasMore: offsetParam + limitParam < total,
+      };
+    } else {
+      // Si no se especifica límite, devolver todo
+      const [data] = await pool.query(
+        `
+        SELECT idDiagnostico, fecha, descripcion
+        FROM Diagnostico
+        WHERE idFichaMedica = ?
+        ORDER BY fecha DESC
+        `,
+        [id]
+      );
+      rows = data;
+    }
+
+    res.json({ data: rows, pagination });
+
+  } catch (err) {
+    console.error('Error al obtener diagnósticos:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Estadísticas de diagnósticos
+app.get('/fichas/:id/diagnosticos/estadisticas', async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    const [[{ total }]] = await pool.query(
+      'SELECT COUNT(*) AS total FROM Diagnostico WHERE idFichaMedica = ?',
       [id]
     );
-    res.json(diagnosticos);
+
+    const tresMesesAtras = new Date();
+    tresMesesAtras.setMonth(tresMesesAtras.getMonth() - 3);
+    const [[{ recientes }]] = await pool.query(
+      'SELECT COUNT(*) AS recientes FROM Diagnostico WHERE idFichaMedica = ? AND fecha >= ?',
+      [id, tresMesesAtras]
+    );
+
+    const unAnoAtras = new Date();
+    unAnoAtras.setFullYear(unAnoAtras.getFullYear() - 1);
+    const [[{ activos }]] = await pool.query(
+      'SELECT COUNT(*) AS activos FROM Diagnostico WHERE idFichaMedica = ? AND fecha >= ?',
+      [id, unAnoAtras]
+    );
+
+    res.json({ total, recientes, activos });
   } catch (err) {
+    console.error('Error al obtener estadísticas:', err);
     res.status(500).json({ error: err.message });
   }
 });

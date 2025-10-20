@@ -7,7 +7,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content #pageContent [fullscreen]="true" scrollEvents="true" (ionScroll)="onScroll($event)">
   <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title size="large">Diagnósticos</ion-title>
@@ -16,9 +16,9 @@
 
   <div class="health-container" *ngIf="paciente">
     <!-- Estadísticas mejoradas -->
-    <div class="stats-section" *ngIf="diagnosticos.length > 0">
+    <div class="stats-section" *ngIf="totalDiagnosticos > 0">
       <div class="section-header">
-        <h3>Resumen Médico</h3>
+        <h3>Resumen Médicos</h3>
       </div>
       
       <div class="enhanced-stats-grid">
@@ -27,7 +27,7 @@
             <div class="stat-icon">
               <ion-icon name="medical"></ion-icon>
             </div>
-            <div class="stat-number">{{ diagnosticos.length }}</div>
+            <div class="stat-number">{{ totalDiagnosticos }}</div>
             <div class="stat-label">Total Diagnósticos</div>
           </ion-card-content>
         </ion-card>
@@ -37,25 +37,15 @@
             <div class="stat-icon">
               <ion-icon name="time"></ion-icon>
             </div>
-            <div class="stat-number">{{ getDiagnosticosRecientes() }}</div>
+            <div class="stat-number">{{ diagnosticosRecientes }}</div>
             <div class="stat-label">Recientes (3m)</div>
-          </ion-card-content>
-        </ion-card>
-
-        <ion-card class="stat-card active">
-          <ion-card-content>
-            <div class="stat-icon">
-              <ion-icon name="pulse"></ion-icon>
-            </div>
-            <div class="stat-number">{{ getDiagnosticosActivos() }}</div>
-            <div class="stat-label">Activos</div>
           </ion-card-content>
         </ion-card>
       </div>
     </div>
 
     <!-- Acciones rápidas -->
-    <div class="quick-actions-section" *ngIf="diagnosticos.length > 0">
+    <div class="quick-actions-section" *ngIf="totalDiagnosticos > 0">
       <div class="actions-row">       
         <ion-button 
           fill="clear" 
@@ -79,23 +69,54 @@
 
     <!-- Lista de diagnósticos -->
     <div class="diagnostics-section">
-      <div class="section-header">
-        <h3>Historial Completo</h3>
+      <!-- spinner inicial opcional (overlay) -->
+      <div class="initial-loader" *ngIf="initialLoading">
+        <ion-spinner name="crescent"></ion-spinner>
       </div>
 
-      <ng-container *ngIf="!isLoading; else loading">
-        <div class="diagnostics-list">
-          <app-diagnostico-card
-            *ngFor="let diag of diagnosticos; trackBy: trackByDiagnostico; let i = index"
-            [diagnostico]="diag"
-            [index]="i"
-            class="diagnostic-item">
-          </app-diagnostico-card>
+      <!-- Estado vacío -->
+      <div class="empty-state" *ngIf="!initialLoading && totalDiagnosticos === 0">
+        <div class="empty-icon">
+          <ion-icon name="flask-outline"></ion-icon>
         </div>
-      </ng-container>
+        <h3>No hay diagnósticos registrados</h3>
+        <p>Aún no se han registrado diagnósticos médicos para este paciente.</p>
+        <ion-button fill="solid" (click)="addDiagnostic()">
+          <ion-icon name="add" slot="start"></ion-icon>
+          Registrar primer diagnostico
+        </ion-button>
+      </div>
 
-      <ng-template #loading>
-        <ion-spinner name="crescent" class="loading-spinner"></ion-spinner>
-      </ng-template>
+      <div class="diagnostics-list">
+        <app-diagnostico-card
+          *ngFor="let diag of diagnosticos; trackBy: trackByDiagnostico; let i = index"
+          [diagnostico]="diag"
+          [index]="i"
+          class="diagnostic-item">
+        </app-diagnostico-card>
+      </div>
+
+      <!-- Infinite scroll -->
+      <ion-infinite-scroll
+        threshold="100px"
+        (ionInfinite)="loadMore($event)"
+        [disabled]="!hasMore">
+        <ion-infinite-scroll-content
+          loadingSpinner="crescent"
+          loadingText="Cargando más diagnósticos...">
+        </ion-infinite-scroll-content>
+      </ion-infinite-scroll>
     </div>
   </div>
+  
+  <ion-fab
+    vertical="bottom"
+    horizontal="end"
+    slot="fixed"
+    [class.visible]="showScrollTop">
+    <ion-fab-button class="scroll-top-btn" (click)="scrollToTop()">
+      <ion-icon name="arrow-up-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+</ion-content>

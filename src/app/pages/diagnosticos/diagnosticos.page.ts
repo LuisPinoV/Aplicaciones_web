@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonicModule, ToastController, ActionSheetController } from '@ionic/angular';
+import { IonicModule, IonContent, ToastController, ActionSheetController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { Paciente } from 'src/app/core/servicios/pacientes.service';
 import { PacienteStoreService } from 'src/app/core/servicios/paciente-store.service';
@@ -14,11 +14,22 @@ import { ApiService, Diagnostico } from 'src/app/services/api';
   standalone: true,
   imports: [IonicModule, CommonModule, DiagnosticoCardComponent]
 })
-export class DiagnosticosPage implements OnInit {
+export class DiagnosticosPage {
+  @ViewChild('pageContent', { read: IonContent }) content!: IonContent;
+  showScrollTop = false;
+
   paciente?: Paciente;
   diagnosticos: Diagnostico[] = [];
-  isLoading = false;
-  sortOrder: 'asc' | 'desc' = 'desc';
+  
+  initialLoading = true;
+  isLoadingMore = false;
+  limit = 10;
+  offset = 0;
+  hasMore = true;
+
+  totalDiagnosticos = 0;
+  diagnosticosRecientes = 0;
+  diagnosticosActivos = 0;
 
   constructor(
     private pacienteStore: PacienteStoreService,
@@ -28,53 +39,89 @@ export class DiagnosticosPage implements OnInit {
     private actionSheetController: ActionSheetController
   ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     this.paciente = this.pacienteStore.getPaciente();
-
+    
     if (!this.paciente) {
-      this.router.navigate(['/buscar']);
+      await new Promise(resolve => setTimeout(resolve, 100));
+      this.paciente = this.pacienteStore.getPaciente();
+    }
+    
+    if (!this.paciente) {
+      this.router.navigate(['/login']);
       return;
     }
-    this.loadDiagnosticos();
+    
+    await this.loadFirstPage();
   }
 
-  private async loadDiagnosticos() {
-    this.isLoading = true;
+  private async loadFirstPage() {
     try {
       const idFicha = (this.paciente as any).idFichaMedica || (this.paciente as any).id || (this.paciente as any).Rut;
-      this.diagnosticos = await this.apiService.getDiagnosticosPorFicha(idFicha);
-    } catch (err) {
-      console.error('Error cargando diagnósticos:', err);
+      
+      const [res, stats] = await Promise.all([
+        this.apiService.getDiagnosticosPaginados(idFicha, this.limit, 0),
+        this.apiService.getEstadisticasDiagnosticos(idFicha)
+      ]);
+
+      this.diagnosticos = res.data ?? [];
+      this.hasMore = res.pagination?.hasMore ?? false;
+      this.offset = res.pagination?.nextOffset ?? this.limit;
+
+      this.totalDiagnosticos = stats.total ?? 0;
+      this.diagnosticosRecientes = stats.recientes ?? 0;
+      this.diagnosticosActivos = stats.activos ?? 0;
+    } catch (e) {
+      console.error(e);
+      this.showErrorToast('Error al cargar diagnósticos');
     } finally {
-      this.isLoading = false;
+      this.initialLoading = false;
     }
   }
 
-  // Funciones para las estadísticas
-  getDiagnosticosRecientes(): number {
-    const tresMesesAtras = new Date();
-    tresMesesAtras.setMonth(tresMesesAtras.getMonth() - 3);
-    return this.diagnosticos.filter(d => new Date(d.fecha) >= tresMesesAtras).length;
+  async loadMore(event: any) {
+    if (this.isLoadingMore || !this.hasMore) {
+      event?.target?.complete();
+      return;
+    }
+    
+    this.isLoadingMore = true;
+
+    try {
+      const idFicha = (this.paciente as any).idFichaMedica || (this.paciente as any).id || (this.paciente as any).Rut;
+      const res = await this.apiService.getDiagnosticosPaginados(idFicha, this.limit, this.offset);
+
+      console.log('Respuesta del servidor:', res);
+      console.log('Pagination:', res.pagination);
+
+      const nuevos = res.data ?? [];
+      this.diagnosticos.push(...nuevos);
+
+      this.hasMore = res.pagination?.hasMore ?? false;
+      this.offset = res.pagination?.nextOffset ?? (this.offset + nuevos.length);
+
+      console.log('Después de actualizar:', { 
+        nuevosLength: nuevos.length,
+        totalDiagnosticos: this.diagnosticos.length,
+        hasMore: this.hasMore, 
+        nextOffset: this.offset 
+      });
+    } catch (e) {
+      console.error(e);
+      this.showErrorToast('Error al cargar más diagnósticos');
+    } finally {
+      this.isLoadingMore = false;
+      
+      if (event?.target) {
+        event.target.complete();
+        
+        if (!this.hasMore) {
+          event.target.disabled = true;
+        }
+      }
+    }
   }
 
-  getDiagnosticosActivos(): number {
-    const unAnoAtras = new Date();
-    unAnoAtras.setFullYear(unAnoAtras.getFullYear() - 1);
-    return this.diagnosticos.filter(d => new Date(d.fecha) >= unAnoAtras).length;
-  }
-
-  // Función para generar iniciales del paciente
-  getInitials(nombre: string): string {
-    if (!nombre) return '';
-    return nombre
-      .split(' ')
-      .map(n => n[0])
-      .join('')
-      .toUpperCase()
-      .substring(0, 2);
-  }
-
-  // Función para optimizar el renderizado de la lista
   trackByDiagnostico(index: number, diagnostico: Diagnostico) {
     return diagnostico.idDiagnostico || index;
   }
@@ -86,16 +133,12 @@ export class DiagnosticosPage implements OnInit {
         {
           text: 'Fecha (más reciente primero)',
           icon: 'arrow-down',
-          handler: () => {
-            this.sortByDate('desc');
-          }
+          handler: () => this.sortByDate('desc')
         },
         {
           text: 'Fecha (más antiguo primero)',
           icon: 'arrow-up',
-          handler: () => {
-            this.sortByDate('asc');
-          }
+          handler: () => this.sortByDate('asc')
         },
         {
           text: 'Cancelar',
@@ -115,24 +158,8 @@ export class DiagnosticosPage implements OnInit {
       position: 'bottom'
     });
     await toast.present();
-    
-    // Aquí implementarías la navegación al formulario de nuevo diagnóstico
-    console.log('Navigate to add diagnostic form');
   }
 
-  async importDiagnostics() {
-    const toast = await this.toastController.create({
-      message: 'Función de importación en desarrollo...',
-      duration: 2000,
-      color: 'warning',
-      position: 'bottom'
-    });
-    await toast.present();
-    
-    console.log('Import diagnostics functionality');
-  }
-
-  // Métodos de ordenamiento
   private sortByDate(order: 'asc' | 'desc') {
     this.diagnosticos.sort((a, b) => {
       const dateA = new Date(a.fecha).getTime();
@@ -140,11 +167,9 @@ export class DiagnosticosPage implements OnInit {
       return order === 'desc' ? dateB - dateA : dateA - dateB;
     });
     
-    this.sortOrder = order;
     this.showSuccessToast(`Ordenado por fecha ${order === 'desc' ? 'descendente' : 'ascendente'}`);
   }
 
-  // Métodos de utilidad para toasts
   private async showSuccessToast(message: string) {
     const toast = await this.toastController.create({
       message,
@@ -165,11 +190,11 @@ export class DiagnosticosPage implements OnInit {
     await toast.present();
   }
 
-  // Método para refrescar datos
-  doRefresh(event: any) {
-    this.loadDiagnosticos();
-    setTimeout(() => {
-      event.target.complete();
-    }, 1000);
+  onScroll(event: any) {
+    this.showScrollTop = event.detail.scrollTop > 1200;
+  }
+
+  scrollToTop() {
+    this.content.scrollToTop(400);
   }
 }

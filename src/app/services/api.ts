@@ -86,6 +86,16 @@ export interface Procedimiento {
   tipoProcedimiento: string;
 }
 
+export interface ExamenListado {
+  idExamen: number;
+  nombreExamen: string;
+  descripcionExamen: string;
+  idTipoExamen: number;
+  tipoExamen: string;
+  fechaExamen: string;
+  descripcionFicha: string;
+}
+
 
 
 @Injectable({
@@ -180,11 +190,48 @@ export class ApiService {
     return res.data;
   }
 
-  async getExamenesPorFicha(idFicha: number) {
-    const res = await axios.get(`${this.baseUrl}/fichas/${idFicha}/examenes`);
+  // Exámenes por ficha
+  async getExamenesPorFicha(idFicha: number): Promise<ExamenListado[]> {
+    const res = await axios.get<{ data: ExamenListado[] }>(
+      `${this.baseUrl}/fichas/${idFicha}/examenes`
+    );
+    return res.data.data;
+  }
+
+  // 2️⃣ Obtener exámenes paginados
+  async getExamenesPaginados(
+    idFicha: number,
+    limit: number,
+    offset: number
+  ): Promise<{
+    data: ExamenListado[];
+    pagination: {
+      limit: number;
+      offset: number;
+      total: number;
+      nextOffset: number | null;
+      hasMore: boolean;
+    };
+  }> {
+    const res = await axios.get(
+      `${this.baseUrl}/fichas/${idFicha}/examenes?limit=${limit}&offset=${offset}`
+    );
     return res.data;
   }
 
+  // 3️⃣ Obtener estadísticas de exámenes
+  async getEstadisticasExamenes(idFicha: number): Promise<{
+    total: number;
+    recientes: number;
+    activos: number;
+  }> {
+    const res = await axios.get(
+      `${this.baseUrl}/fichas/${idFicha}/examenes/estadisticas`
+    );
+    return res.data;
+  }
+
+  // Hospitalizaciones por ficha
   async getHospitalizacionesPorFicha(idFicha: number) {
     const res = await axios.get(`${this.baseUrl}/fichas/${idFicha}/hospitalizaciones`);
     return res.data;

@@ -1,45 +1,44 @@
-<ion-card *ngIf="examen" class="exam-card" [class]="getEstadoClass()">
-  <!-- Barra lateral -->
-  <div class="status-bar" [class]="getEstadoClass()"></div>
-
-  <!-- Header -->
+<ion-card *ngIf="examen" class="examen-card">
   <div class="card-header">
-    <div class="exam-icon" [class]="getEstadoClass()">
-      <ion-icon [name]="getExamenIcon()"></ion-icon>
-    </div>
-    <div class="exam-main-info">
-      <h3 class="exam-title">{{ examen.nombre }}</h3>
-      <div class="exam-date">
+    <div class="examen-meta">
+      <div class="examen-date">
         <ion-icon name="calendar-outline"></ion-icon>
-        <span>{{ examen.fecha | date:'MMM d, y' }}</span>
+        <span>{{ examen.fechaExamen | date:'MMM d, y' }}</span>
       </div>
     </div>
-    <ion-button fill="clear" size="small" class="more-btn">
-      <ion-icon name="ellipsis-vertical" slot="icon-only"></ion-icon>
-    </ion-button>
+
+    <div class="card-actions">
+      <ion-button fill="clear" size="small" class="more-btn" (click)="onMoreOptions()">
+        <ion-icon name="ellipsis-vertical" slot="icon-only"></ion-icon>
+      </ion-button>
+    </div>
   </div>
 
-  <!-- Contenido -->
   <ion-card-content class="card-body">
-    <!-- Resultado -->
-    <div *ngIf="examen.resultado" class="exam-result">
-      <ion-icon name="document-text-outline"></ion-icon>
-      <span class="label">Resultado:</span>
-      <span class="value">{{ examen.resultado }}</span>
-    </div>
+    <div class="examen-details">
+      <div class="detail-item">
+        <ion-icon name="time-outline"></ion-icon>
+        <div class="detail-content">
+          <span class="detail-label">Tiempo transcurrido</span>
+          <span class="detail-value">{{ getTiempoTranscurrido() }}</span>
+        </div>
+      </div>
 
-    <!-- Valores -->
-    <div *ngIf="examen.valores?.length" class="exam-values">
-      <h4 class="section-title">Valores</h4>
-      <ion-list lines="none">
-        <ion-item *ngFor="let v of examen.valores">
-          <ion-label>
-            <h3>{{ v.parametro }}</h3>
-            <p class="ref">Referencia: {{ v.referencia }}</p>
-          </ion-label>
-          <ion-badge slot="end" [color]="verificarValor(v.valor, v.referencia)">{{ v.valor }}</ion-badge>
-        </ion-item>
-      </ion-list>
+      <div class="detail-item" *ngIf="examen.nombreExamen">
+        <ion-icon name="document-text-outline"></ion-icon>
+        <div class="detail-content">
+          <span class="detail-label">Nombre</span>
+          <span class="detail-value">{{ examen.nombreExamen }}</span>
+        </div>
+      </div>
+
+      <div class="detail-item" *ngIf="examen.descripcionExamen">
+        <ion-icon name="document-text-outline"></ion-icon>
+        <div class="detail-content">
+          <span class="detail-label">Descripción</span>
+          <span class="detail-value">{{ examen.descripcionExamen }}</span>
+        </div>
+      </div>
     </div>
   </ion-card-content>
 </ion-card>

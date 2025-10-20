@@ -1,20 +1,24 @@
 .diagnostic-card {
-  margin: 0 0 20px 0!important;
+  margin: 0 0 20px 0 !important;
   border-radius: 16px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
   position: relative;
   overflow: hidden;
   transition: all 0.3s ease;
-  border: 1px solid var(--ion-color-step-150);
-  background: #fefefe;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  background: #ffffff;
+
+  // 🌤️ Sombra más notoria (modo claro)
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.04),
+    0 6px 12px rgba(0, 0, 0, 0.08),
+    0 12px 24px rgba(0, 0, 0, 0.06);
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-    
-    .severity-bar {
-      width: 6px;
-    }
+    transform: translateY(-3px);
+    box-shadow:
+      0 4px 6px rgba(0, 0, 0, 0.08),
+      0 8px 20px rgba(0, 0, 0, 0.15),
+      0 16px 32px rgba(0, 0, 0, 0.10);
   }
 
   &:last-child {
@@ -22,109 +26,14 @@
   }
 }
 
-// Barra indicadora de gravedad
-.severity-bar {
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 4px;
-  transition: all 0.3s ease;
-  z-index: 2;
-
-  &.leve {
-    background: linear-gradient(180deg, var(--ion-color-success) 0%, var(--ion-color-success-shade) 100%);
-  }
-
-  &.moderado {
-    background: linear-gradient(180deg, var(--ion-color-warning) 0%, var(--ion-color-warning-shade) 100%);
-  }
-
-  &.grave {
-    background: linear-gradient(180deg, var(--ion-color-danger) 0%, var(--ion-color-danger-shade) 100%);
-  }
-
-  &.resuelto {
-    background: linear-gradient(180deg, var(--ion-color-medium) 0%, var(--ion-color-medium-shade) 100%);
-  }
-}
 
 // Header de la card
 .card-header {
-  padding: 20px 20px 16px 24px;
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-}
-
-// Icono del diagnóstico
-.diagnostic-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 14px;
+  padding: 1rem 0.8rem 0.8rem 1.4rem!important;
   display: flex;
   align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  position: relative;
-
-  ion-icon {
-    font-size: 24px;
-    z-index: 1;
-  }
-
-  &::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    opacity: 0.1;
-    z-index: 0;
-  }
-
-  // Colores según gravedad
-  &.leve {
-    color: var(--ion-color-success);
-    &::before {
-      background: var(--ion-color-success);
-    }
-  }
-
-  &.moderado {
-    color: var(--ion-color-warning);
-    &::before {
-      background: var(--ion-color-warning);
-    }
-  }
-
-  &.grave {
-    color: var(--ion-color-danger);
-    &::before {
-      background: var(--ion-color-danger);
-    }
-  }
-
-  &.resuelto {
-    color: var(--ion-color-medium);
-    &::before {
-      background: var(--ion-color-medium);
-    }
-  }
-}
-
-// Información principal
-.diagnostic-main-info {
-  flex: 1;
-  min-width: 0;
-}
-
-.diagnostic-title {
-  margin: 0 0 8px 0;
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--ion-color-dark);
-  line-height: 1.3;
-  word-break: break-word;
+  margin-left: auto;
+  gap: 12px;
 }
 
 .diagnostic-meta {
@@ -134,35 +43,31 @@
   flex-wrap: wrap;
 }
 
-.code-badge {
-  font-size: 11px;
-  font-weight: 600;
-  font-family: 'SF Mono', 'Monaco', 'Inconsolata', monospace;
-  --background: var(--ion-color-step-200);
-  --color: var(--ion-color-step-600);
-}
-
 .diagnostic-date {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
   font-size: 14px;
   color: var(--ion-color-medium);
   font-weight: 500;
 
   ion-icon {
     font-size: 16px;
+    margin-bottom: 2px;
   }
 }
 
 // Acciones de la card
 .card-actions {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+
   .more-btn {
     --color: var(--ion-color-medium);
-    --padding-start: 8px;
-    --padding-end: 8px;
-    margin: -4px -4px 0 0;
-
+    --padding-start: 1px;
+    --padding-end: 1px;
+    margin: 0;
     ion-icon {
       font-size: 20px;
     }
@@ -175,7 +80,7 @@
 
 // Cuerpo de la card
 .card-body {
-  padding: 0 20px 20px 24px;
+  padding: 0 20px 4px 24px!important;
 }
 
 // Detalles del diagnóstico
@@ -192,21 +97,9 @@
   &:last-child {
     margin-bottom: 0;
   }
-}
-
-.detail-icon {
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  margin-top: 2px;
 
   ion-icon {
-    font-size: 18px;
-    color: var(--ion-color-primary);
-    opacity: 0.8;
+    margin-top: 1px;
   }
 }
 
@@ -233,168 +126,27 @@
   }
 }
 
-// Footer de la card
-.card-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: 16px;
-  border-top: 1px solid var(--ion-color-step-150);
-}
-
-.severity-info {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.severity-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-
-  &.leve {
-    background: var(--ion-color-success);
-  }
-
-  &.moderado {
-    background: var(--ion-color-warning);
-  }
-
-  &.grave {
-    background: var(--ion-color-danger);
-  }
-
-  &.resuelto {
-    background: var(--ion-color-medium);
-  }
-}
-
-.severity-text {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--ion-color-medium);
-  text-transform: capitalize;
-}
-
-.status-badge {
-  font-size: 12px;
-  font-weight: 600;
-  --padding-start: 8px;
-  --padding-end: 8px;
-  --padding-top: 4px;
-  --padding-bottom: 4px;
-
-  ion-icon {
-    font-size: 14px;
-    margin-right: 4px;
-  }
-}
-
-// Responsive design
-@media (max-width: 768px) {
-  .diagnostic-card {
-    margin-bottom: 12px;
-  }
-
-  .card-header {
-    padding: 16px 16px 12px 20px;
-    gap: 10px;
-  }
-
-  .diagnostic-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 12px;
-
-    ion-icon {
-      font-size: 20px;
-    }
-  }
-
-  .diagnostic-title {
-    font-size: 16px;
-  }
-
-  .diagnostic-meta {
-    gap: 8px;
-  }
-
-  .diagnostic-date {
-    font-size: 13px;
-
-    ion-icon {
-      font-size: 14px;
-    }
-  }
-
-  .card-body {
-    padding: 0 16px 16px 20px;
-  }
-
-  .detail-item {
-    gap: 10px;
-    margin-bottom: 10px;
-  }
-
-  .detail-icon {
-    width: 20px;
-    height: 20px;
-
-    ion-icon {
-      font-size: 16px;
-    }
-  }
-
-  .detail-content {
-    .detail-label {
-      font-size: 12px;
-    }
-
-    .detail-value {
-      font-size: 14px;
-    }
-  }
-
-  .card-footer {
-    padding-top: 12px;
-  }
-
-  .severity-text {
-    font-size: 12px;
-  }
-
-  .status-badge {
-    font-size: 11px;
-
-    ion-icon {
-      font-size: 12px;
-    }
-  }
-}
-
 // Dark mode
 @media (prefers-color-scheme: dark) {
   .diagnostic-card {
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
-    background: #202020;
-    border-color: var(--ion-color-step-200)!important;
+    background: #1c1c1c; /* más oscuro que #202020 para resaltar */
+    border-color: rgba(255, 255, 255, 0.08) !important;
+
+    /* Sombra más visible sobre fondos oscuros */
+    box-shadow:
+      0 4px 8px rgba(0, 0, 0, 0.6),
+      0 8px 20px rgba(0, 0, 0, 0.4);
 
     &:hover {
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4)!important;
+      box-shadow:
+        0 6px 14px rgba(0, 0, 0, 0.7),
+        0 12px 28px rgba(0, 0, 0, 0.5);
+      transform: translateY(-3px);
     }
-  }
-
-  .diagnostic-title {
-    color: #fff;
   }
 
   .detail-content .detail-value {
     color: #fff;
-  }
-
-  .card-footer {
-    border-top-color: var(--ion-color-step-200)!important;
   }
 
   .card-actions .more-btn:hover {
