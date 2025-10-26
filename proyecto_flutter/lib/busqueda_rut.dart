@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'services/servicesFichaMedica.dart';
+import 'editar_ficha.dart';
 
 class BusquedaRutPage extends StatefulWidget {
   const BusquedaRutPage({super.key});
@@ -67,6 +68,108 @@ class _BusquedaRutPageState extends State<BusquedaRutPage> {
         _errorMessage = 'Error al buscar: $e';
         _fichaEncontrada = null;
       });
+    }
+  }
+
+  void _editarFicha() {
+    if (_fichaEncontrada == null) return;
+    
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditarFichaPage(ficha: _fichaEncontrada!),
+      ),
+    ).then((actualizado) {
+      if (actualizado == true) {
+        // Actualizar la búsqueda para mostrar los datos actualizados
+        _buscarPorRut();
+      }
+    });
+  }
+
+  void _confirmarEliminar() {
+    if (_fichaEncontrada == null) return;
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirmar eliminación'),
+          content: Text(
+            '¿Está seguro de eliminar la ficha médica de ${_fichaEncontrada!['nombre']}?',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Cancelar'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                _eliminarFicha();
+              },
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.red,
+              ),
+              child: const Text('Eliminar'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _eliminarFicha() async {
+    if (_fichaEncontrada == null) return;
+
+    final fichaId = _fichaEncontrada!['id'];
+    
+    try {
+      // Mostrar indicador de carga
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        },
+      );
+
+      await ApiService.eliminarFicha(fichaId);
+
+      if (!mounted) return;
+      
+      // Cerrar el indicador de carga
+      Navigator.of(context).pop();
+      
+      // Limpiar la búsqueda
+      setState(() {
+        _fichaEncontrada = null;
+        _errorMessage = null;
+        _rutController.clear();
+      });
+
+      // Mostrar mensaje de éxito
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Ficha médica eliminada exitosamente'),
+          backgroundColor: Colors.green,
+        ),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      
+      // Cerrar el indicador de carga
+      Navigator.of(context).pop();
+      
+      // Mostrar mensaje de error
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error al eliminar: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
 
@@ -280,21 +383,44 @@ class _BusquedaRutPageState extends State<BusquedaRutPage> {
               _buildInfoRow(Icons.calendar_today, 'F. Nacimiento', fechaNacimiento),
               _buildInfoRow(Icons.bloodtype, 'Tipo Sangre', tipoSangre),
               const SizedBox(height: 16),
-              ElevatedButton.icon(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => FichaDetallePage(ficha: _fichaEncontrada!),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => FichaDetallePage(ficha: _fichaEncontrada!),
+                        ),
+                      );
+                    },
+                    icon: const Icon(Icons.visibility),
+                    label: const Text('Ver Detalles'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF1565C0),
+                      foregroundColor: Colors.white,
                     ),
-                  );
-                },
-                icon: const Icon(Icons.visibility),
-                label: const Text('Ver Detalles Completos'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF1565C0),
-                  foregroundColor: Colors.white,
-                ),
+                  ),
+                  ElevatedButton.icon(
+                    onPressed: () => _editarFicha(),
+                    icon: const Icon(Icons.edit),
+                    label: const Text('Editar'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.orange,
+                      foregroundColor: Colors.white,
+                    ),
+                  ),
+                  ElevatedButton.icon(
+                    onPressed: () => _confirmarEliminar(),
+                    icon: const Icon(Icons.delete),
+                    label: const Text('Eliminar'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                      foregroundColor: Colors.white,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

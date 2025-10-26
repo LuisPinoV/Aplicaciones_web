@@ -121,6 +121,58 @@ app.post('/fichas', async (req, res) => {
   }
 });
 
+// Eliminar una ficha médica
+app.delete('/fichas/:id', async (req, res) => {
+  const id = req.params.id;
+  
+  try {
+    // Primero verificar si existe la ficha
+    const [existe] = await pool.query(
+      'SELECT * FROM FichaMedica WHERE idFichaMedica = ?',
+      [id]
+    );
+
+    if (existe.length === 0) {
+      return res.status(404).json({ error: 'Ficha no encontrada' });
+    }
+
+    const idUsuario = existe[0].idUsuario;
+
+    // Eliminar registros relacionados en orden (respetando foreign keys)
+    // 1. Eliminar ConsultaMedicamento
+    await pool.query(
+      `DELETE cm FROM ConsultaMedicamento cm
+       JOIN Consulta c ON cm.idConsulta = c.idConsulta
+       WHERE c.idFichaMedica = ?`,
+      [id]
+    );
+
+    // 2. Eliminar Consultas
+    await pool.query('DELETE FROM Consulta WHERE idFichaMedica = ?', [id]);
+
+    // 3. Eliminar Diagnósticos
+    await pool.query('DELETE FROM Diagnostico WHERE idFichaMedica = ?', [id]);
+
+    // 4. Eliminar Hospitalizaciones
+    await pool.query('DELETE FROM Hospitalizacion WHERE idFichaMedica = ?', [id]);
+
+    // 5. Eliminar la Ficha Médica
+    await pool.query('DELETE FROM FichaMedica WHERE idFichaMedica = ?', [id]);
+
+    // 6. Eliminar el Usuario
+    await pool.query('DELETE FROM Usuario WHERE idUsuario = ?', [idUsuario]);
+
+    res.status(200).json({ 
+      success: true, 
+      message: 'Ficha médica eliminada correctamente',
+      idFichaMedica: id 
+    });
+  } catch (err) {
+    console.error('Error al eliminar ficha:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 app.get('/pacientes', async (req, res) => {
   try {
     const [rows] = await pool.query(
