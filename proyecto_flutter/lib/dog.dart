@@ -17,7 +17,7 @@ class _DogApiPageState extends State<DogApiPage> {
 
   @override
   void initState() {
-    super.initState();
+    super.initStadete();
     _fetchBreeds();
   }
 

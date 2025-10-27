@@ -9,3 +9,7 @@ Route::get('/', function () {
 use App\Http\Controllers\FichasController;
 
 Route::get('/fichas', [FichasController::class, 'index']);
+
+use App\Http\Controllers\DashboardController;
+
+Route::get('/dashboard', [DashboardController::class, 'dashboard']);

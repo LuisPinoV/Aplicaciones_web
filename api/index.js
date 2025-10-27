@@ -557,4 +557,118 @@ app.get('/health', async (req, res) => {
   }
 });
 
+app.get('/dashboard/tiposangre', async (req, res) => {
+  try {
+    const [rows] = await pool.query(`
+      SELECT \`tipoSangre\` AS tipoSangre, COUNT(*) AS cantidad 
+      FROM Usuario 
+      GROUP BY \`tipoSangre\`
+    `);
+    res.json({ data: rows });
+  } catch (err) {
+    console.error('🔥 Error en /dashboard/tiposangre:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Top 10 diagnósticos más comunes
+app.get('/dashboard/diagnosticos', async (req, res) => {
+  try {
+    const [rows] = await pool.query(`
+      SELECT descripcion, COUNT(*) AS cantidad 
+      FROM Diagnostico 
+      GROUP BY descripcion 
+      ORDER BY cantidad DESC 
+      LIMIT 10
+    `);
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Top 10 medicamentos más prescritos
+app.get('/dashboard/medicamentos', async (req, res) => {
+  try {
+    const [rows] = await pool.query(`
+      SELECT m.nombre AS medicamento, COUNT(*) AS vecesPrescrito 
+      FROM ConsultaMedicamento cm 
+      JOIN Medicamento m ON cm.idMedicamento = m.idMedicamento 
+      GROUP BY m.nombre 
+      ORDER BY vecesPrescrito DESC 
+      LIMIT 10
+    `);
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Cantidad de exámenes por tipo
+app.get('/dashboard/examenes', async (req, res) => {
+  try {
+    const [rows] = await pool.query(`
+      SELECT te.tipoExamen, COUNT(e.idExamen) AS cantidad 
+      FROM Examen e 
+      JOIN TipoExamen te ON e.idTipoExamen = te.idTipoExamen 
+      GROUP BY te.tipoExamen 
+      ORDER BY cantidad DESC
+    `);
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Top 10 enfermedades más frecuentes
+app.get('/dashboard/enfermedades', async (req, res) => {
+  try {
+    const [rows] = await pool.query(`
+      SELECT e.nombre AS enfermedad, COUNT(*) AS cantidad 
+      FROM FichaMedicaEnfermedad fme 
+      JOIN Enfermedad e ON fme.idEnfermedad = e.idEnfermedad 
+      GROUP BY e.nombre 
+      ORDER BY cantidad DESC 
+      LIMIT 10
+    `);
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Top 10 alergias más comunes
+app.get('/dashboard/alergias', async (req, res) => {
+  try {
+    const [rows] = await pool.query(`
+      SELECT a.nombre AS alergia, COUNT(*) AS cantidad 
+      FROM FichaMedicaAlergia fma 
+      JOIN Alergia a ON fma.idAlergia = a.idAlergia 
+      GROUP BY a.nombre 
+      ORDER BY cantidad DESC 
+      LIMIT 10
+    `);
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Top 10 cirugías más realizadas
+app.get('/dashboard/cirugias', async (req, res) => {
+  try {
+    const [rows] = await pool.query(`
+      SELECT c.nombre AS cirujia, COUNT(*) AS cantidad 
+      FROM FichaMedicaCirujia fmc 
+      JOIN Cirujia c ON fmc.idCirujia = c.idCirujia 
+      GROUP BY c.nombre 
+      ORDER BY cantidad DESC 
+      LIMIT 10
+    `);
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 export default app;
