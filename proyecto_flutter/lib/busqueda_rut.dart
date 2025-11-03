@@ -122,18 +122,7 @@ class _BusquedaRutPageState extends State<BusquedaRutPage> {
   Future<void> _eliminarFicha() async {
     if (_fichaEncontrada == null) return;
 
-    final fichaId = _fichaEncontrada!['idFichaMedica'] ?? _fichaEncontrada!['id'];
-    
-    // Validar que fichaId no sea null
-    if (fichaId == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Error: No se pudo obtener el ID de la ficha médica'),
-          backgroundColor: Colors.red,
-        ),
-      );
-      return;
-    }
+    final fichaId = _fichaEncontrada!['id'];
     
     try {
       // Mostrar indicador de carga
@@ -147,7 +136,7 @@ class _BusquedaRutPageState extends State<BusquedaRutPage> {
         },
       );
 
-      await ApiService.eliminarFicha(fichaId as int);
+      await ApiService.eliminarFicha(fichaId);
 
       if (!mounted) return;
       
