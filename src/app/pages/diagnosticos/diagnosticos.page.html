@@ -18,7 +18,7 @@
     <!-- Estadísticas mejoradas -->
     <div class="stats-section" *ngIf="totalDiagnosticos > 0">
       <div class="section-header">
-        <h3>Resumen Médicos</h3>
+        <h3>Resumen Médico</h3>
       </div>
       
       <div class="enhanced-stats-grid">
@@ -60,15 +60,15 @@
           fill="solid" 
           size="small" 
           class="action-btn add-btn"
-          (click)="addDiagnostic()">
+          (click)="addDiagnostico()">
           <ion-icon name="add" slot="start"></ion-icon>
           Nuevo
         </ion-button>
       </div>
     </div>
 
-    <!-- Lista de diagnósticos -->
-    <div class="diagnostics-section">
+    <!-- Lista de diagnosticos -->
+    <div class="diagnosticos-section">
       <!-- spinner inicial opcional (overlay) -->
       <div class="initial-loader" *ngIf="initialLoading">
         <ion-spinner name="crescent"></ion-spinner>
@@ -80,24 +80,27 @@
           <ion-icon name="flask-outline"></ion-icon>
         </div>
         <h3>No hay diagnósticos registrados</h3>
-        <p>Aún no se han registrado diagnósticos médicos para este paciente.</p>
-        <ion-button fill="solid" (click)="addDiagnostic()">
+        <p>Aún no se han registrado diagnósticos médicos</p>
+        <ion-button fill="solid" (click)="addDiagnostico()">
           <ion-icon name="add" slot="start"></ion-icon>
-          Registrar primer diagnostico
+          Registrar primer diagnóstico
         </ion-button>
       </div>
 
-      <div class="diagnostics-list">
+      <div class="diagnostics-list" *ngIf="totalDiagnosticos > 0">
         <app-diagnostico-card
           *ngFor="let diag of diagnosticos; trackBy: trackByDiagnostico; let i = index"
           [diagnostico]="diag"
           [index]="i"
-          class="diagnostic-item">
+          [class.new-diagnoticos-animation]="diag._isNew"
+          (onDelete)="onDiagnosticoDeleted($event)"
+          class="diagnotico-item">
         </app-diagnostico-card>
       </div>
 
       <!-- Infinite scroll -->
       <ion-infinite-scroll
+        *ngIf="totalDiagnosticos > 0"
         threshold="100px"
         (ionInfinite)="loadMore($event)"
         [disabled]="!hasMore">

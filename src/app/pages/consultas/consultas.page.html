@@ -1,22 +1,126 @@
-<ion-header>
+<ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>Consultas</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/historial"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Consultas Médicos</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <ion-list *ngIf="!isLoading; else loading">
-    <ion-item *ngFor="let consulta of consultas">
-      <ion-label>
-        <h2>Medico: {{ consulta.medicoNombre }}</h2>
-        <p>Fecha: {{ consulta.fecha | date:'medium' }}</p>
-        <p>Institución: {{ consulta.institucionMedica }}</p>
-        <p>Descripción: {{ consulta.descripcion }}</p>
-      </ion-label>
-    </ion-item>
-  </ion-list>
+<ion-content #pageContent [fullscreen]="true" scrollEvents="true" (ionScroll)="onScroll($event)">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Consultas</ion-title>
+    </ion-toolbar>
+  </ion-header>
 
-  <ng-template #loading>
-    <ion-spinner name="crescent" style="display:block; margin:auto; margin-top:50%"></ion-spinner>
-  </ng-template>
+  <div class="health-container" *ngIf="paciente">
+    <!-- Estadísticas mejoradas -->
+    <div class="stats-section" *ngIf="totalConsultas > 0">
+      <div class="section-header">
+        <h3>Resumen Médico</h3>
+      </div>
+      
+      <div class="enhanced-stats-grid">
+        <ion-card class="stat-card total">
+          <ion-card-content>
+            <div class="stat-icon">
+              <ion-icon name="medical"></ion-icon>
+            </div>
+            <div class="stat-number">{{ totalConsultas }}</div>
+            <div class="stat-label">Total Consultas</div>
+          </ion-card-content>
+        </ion-card>
+
+        <ion-card class="stat-card recent">
+          <ion-card-content>
+            <div class="stat-icon">
+              <ion-icon name="time"></ion-icon>
+            </div>
+            <div class="stat-number">{{ consultasRecientes }}</div>
+            <div class="stat-label">Recientes (3m)</div>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </div>
+
+    <!-- Acciones rápidas -->
+    <div class="quick-actions-section" *ngIf="totalConsultas > 0">
+      <div class="actions-row">       
+        <ion-button 
+          fill="clear" 
+          size="small" 
+          class="action-btn sort-btn"
+          (click)="sortConsultas()">
+          <ion-icon name="swap-vertical" slot="start"></ion-icon>
+          Ordenar
+        </ion-button>
+        
+        <ion-button 
+          fill="solid" 
+          size="small" 
+          class="action-btn add-btn"
+          (click)="addConsulta()">
+          <ion-icon name="add" slot="start"></ion-icon>
+          Nuevo
+        </ion-button>
+      </div>
+    </div>
+
+    <!-- Lista de consultas -->
+    <div class="consultas-section">
+      <!-- spinner inicial opcional (overlay) -->
+      <div class="initial-loader" *ngIf="initialLoading">
+        <ion-spinner name="crescent"></ion-spinner>
+      </div>
+
+      <!-- Estado vacío -->
+      <div class="empty-state" *ngIf="!initialLoading && totalConsultas === 0">
+        <div class="empty-icon">
+          <ion-icon name="flask-outline"></ion-icon>
+        </div>
+        <h3>No hay consultas registradas</h3>
+        <p>Aún no se han registrado consultas médicas</p>
+        <ion-button fill="solid" (click)="addConsulta()">
+          <ion-icon name="add" slot="start"></ion-icon>
+          Registrar primera consulta
+        </ion-button>
+      </div>
+
+      <div class="consultas-list" *ngIf="totalConsultas > 0">
+        <app-consultas-card
+          *ngFor="let cons of consultas; trackBy: trackByConsulta; let i = index"
+          [consulta]="cons"
+          [index]="i"
+          [class.new-consultasanimation]="cons._isNew"
+          (onDelete)="onConsultaDeleted($event)"
+          (onEdit)="actualizarEstadisticas()"
+          class="consulta-item">
+        </app-consultas-card>
+      </div>
+
+      <!-- Infinite scroll -->
+      <ion-infinite-scroll
+        *ngIf="totalConsultas > 0"
+        threshold="100px"
+        (ionInfinite)="loadMore($event)"
+        [disabled]="!hasMore">
+        <ion-infinite-scroll-content
+          loadingSpinner="crescent"
+          loadingText="Cargando más consultas...">
+        </ion-infinite-scroll-content>
+      </ion-infinite-scroll>
+    </div>
+  </div>
+  
+  <ion-fab
+    vertical="bottom"
+    horizontal="end"
+    slot="fixed"
+    [class.visible]="showScrollTop">
+    <ion-fab-button class="scroll-top-btn" (click)="scrollToTop()">
+      <ion-icon name="arrow-up-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
 </ion-content>

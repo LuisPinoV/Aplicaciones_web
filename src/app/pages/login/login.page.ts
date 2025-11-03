@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, LoadingController, ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
+import { ApiService } from 'src/app/services/api';
 
-import { PacientesService, Paciente } from 'src/app/core/servicios/pacientes.service';
 import { PacienteStoreService } from 'src/app/core/servicios/paciente-store.service';
 
 @Component({
@@ -15,38 +15,28 @@ import { PacienteStoreService } from 'src/app/core/servicios/paciente-store.serv
   imports: [IonicModule, CommonModule, FormsModule]
 })
 export class LoginPage {
-  email: string = '';
+  rut: string = '';
   password: string = '';
   error: string = '';
   isLoading: boolean = false;
 
   constructor(
     private router: Router,
-    private pacientesService: PacientesService,
+    private api: ApiService,
     private pacienteStore: PacienteStoreService,
     private loadingController: LoadingController,
     private toastController: ToastController
   ) {}
 
   async login() {
-    // Limpiar errores previos
     this.error = '';
 
-    // Validaciones básicas
-    if (!this.email.trim() || !this.password.trim()) {
-      this.error = 'Por favor ingresa correo y contraseña';
+    if (!this.rut.trim() || !this.password.trim()) {
+      this.error = 'Por favor ingresa RUT y contraseña';
       this.vibrate();
       return;
     }
 
-    // Validar formato de email
-    if (!this.isValidEmail(this.email)) {
-      this.error = 'Por favor ingresa un correo válido';
-      this.vibrate();
-      return;
-    }
-
-    // Mostrar loading
     const loading = await this.loadingController.create({
       message: 'Iniciando sesión...',
       spinner: 'crescent',
@@ -54,53 +44,32 @@ export class LoginPage {
     });
     await loading.present();
 
-    this.isLoading = true;
-
     try {
-      // Buscar pacientes por mail
-      const pacientes = await this.pacientesService.getPacientes().toPromise();
-      const encontrado = pacientes?.find(p => p.mail === this.email);
+      const resp = await this.api.loginUsuario(this.rut, this.password);
 
-      if (encontrado) {
-        // Validar contraseña
-        if (encontrado.password !== this.password) {
-          await loading.dismiss();
-          this.error = 'Contraseña incorrecta. Verifica tus credenciales.';
-          this.vibrate();
-          return;
-        }
-
-        // Simular delay de autenticación para mejor UX
-        await this.delay(1000);
-
-        // Guardar datos del paciente
-        this.pacienteStore.setPaciente(encontrado);
-        localStorage.setItem('usuario', JSON.stringify(encontrado));
-
-        // Cerrar loading
-        await loading.dismiss();
-        
-        // Mostrar toast de éxito
-        await this.showToast('¡Bienvenido!', 'success');
-        
-        // Navegar con animación
-        await this.router.navigate(['/tabs/inicio'], {
-          replaceUrl: true
-        });
-
-      } else {
-        await loading.dismiss();
-        this.error = 'Correo no encontrado. Verifica tus credenciales.';
+      if (!resp.ok) {
+        this.error = resp.error || 'Credenciales incorrectas';
         this.vibrate();
+        return;
       }
 
-    } catch (error) {
       await loading.dismiss();
-      this.error = 'Error al conectar con el servicio. Intenta nuevamente.';
+      await this.showToast('¡Bienvenido, ' + resp.user.nombre + '!', 'success');
+
+      const usuario = resp.user;
+      localStorage.setItem('usuario', JSON.stringify({
+        ...resp.user,
+        idFichaMedica: resp.user.idFichaMedica
+      }));
+
+      await this.router.navigate(['/tabs/inicio'], { replaceUrl: true });
+    } catch (err: any) {
+      await loading.dismiss();
+      this.error = err.error || 'Error al conectar con el servidor';
       this.vibrate();
-      console.error('Error en login:', error);
     } finally {
       this.isLoading = false;
+      await loading.dismiss();
     }
   }
 

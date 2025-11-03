@@ -1,7 +1,7 @@
-<ion-header>
+<ion-header class="ion-no-border">
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/tabs/perfil"></ion-back-button>
+      <ion-back-button defaultHref="/tabs/perfil" text=""></ion-back-button>
     </ion-buttons>
     <ion-title>Editar Perfil</ion-title>
   </ion-toolbar>
@@ -23,56 +23,79 @@
   </div>
 
   <!-- Formulario -->
-  <form class="edit-form" (ngSubmit)="guardarCambios()">
-    
-    <!-- Información Personal -->
-    <div class="form-section">
-      <h3 class="section-title">Información Personal</h3>
+  <div class="form-container">
+    <form class="edit-form" (ngSubmit)="guardarCambios()">
       
-      <div class="form-group">
-        <ion-item class="form-input" lines="none">
-          <ion-input
-            [(ngModel)]="formData.nombre"
-            name="nombre"
-            label="Nombre completo"
-            labelPlacement="floating"
-            placeholder="Ingresa tu nombre"
-            required>
-          </ion-input>
-        </ion-item>
-      </div>
-
-      <div class="form-group">
-        <ion-item class="form-input" lines="none">
-          <ion-input
-            [(ngModel)]="formData.rut"
-            name="rut"
-            label="RUT"
-            labelPlacement="floating"
-            placeholder="12.345.678-9"
-            readonly>
-          </ion-input>
-        </ion-item>
-        <p class="input-help">El RUT no se puede modificar</p>
-      </div>
-
-      <div class="form-row">
-        <div class="form-group half">
+      <!-- Información Personal -->
+      <div class="form-section">
+        <h3 class="section-title">Información Personal</h3>
+        
+        <!-- Nombre -->
+        <div class="form-group">
           <ion-item class="form-input" lines="none">
+            <ion-icon name="person-outline" slot="start"></ion-icon>
             <ion-input
-              [(ngModel)]="formData.edad"
-              name="edad"
-              type="number"
-              label="Edad"
+              [(ngModel)]="formData.nombre"
+              name="nombre"
+              label="Nombre completo"
               labelPlacement="floating"
-              placeholder="30"
+              placeholder="Ingresa tu nombre"
               required>
             </ion-input>
           </ion-item>
         </div>
 
-        <div class="form-group half">
+        <!-- RUT -->
+        <div class="form-group">
+          <ion-item class="form-input disabled" lines="none">
+            <ion-icon name="card-outline" slot="start"></ion-icon>
+            <ion-input
+              [(ngModel)]="formData.Rut"
+              name="Rut"
+              label="RUT"
+              labelPlacement="floating"
+              placeholder="12.345.678-9"
+              readonly>
+            </ion-input>
+            <ion-icon name="lock-closed" slot="end" class="lock-icon"></ion-icon>
+          </ion-item>
+          <p class="input-help">
+            <ion-icon name="information-circle-outline"></ion-icon>
+            El RUT no se puede modificar
+          </p>
+        </div>
+
+        <!-- Fecha de Nacimiento -->
+        <div class="form-group">
+          <ion-item class="form-input date-input" lines="none">
+            <ion-icon name="calendar-outline" slot="start"></ion-icon>
+            <div class="date-field">
+              <ion-label class="date-label">Fecha de nacimiento</ion-label>
+              <ion-datetime-button datetime="fecha-nacimiento" class="date-button"></ion-datetime-button>
+            </div>
+          </ion-item>
+          
+          <ion-modal [keepContentsMounted]="true">
+            <ng-template>
+              <ion-datetime
+                id="fecha-nacimiento"
+                [(ngModel)]="formData.fechaNacimiento"
+                name="fechaNacimiento"
+                presentation="date"
+                [max]="maxDate"
+                [min]="minDate"
+                [showDefaultButtons]="true"
+                doneText="Confirmar"
+                cancelText="Cancelar">
+              </ion-datetime>
+            </ng-template>
+          </ion-modal>
+        </div>
+
+        <!-- Sexo -->
+        <div class="form-group">
           <ion-item class="form-input" lines="none">
+            <ion-icon name="male-female-outline" slot="start"></ion-icon>
             <ion-select
               [(ngModel)]="formData.sexo"
               name="sexo"
@@ -86,87 +109,59 @@
             </ion-select>
           </ion-item>
         </div>
+
+        <!-- Tipo de Sangre -->
+        <div class="form-group">
+          <ion-item class="form-input" lines="none">
+            <ion-icon name="water-outline" slot="start"></ion-icon>
+            <ion-select
+              [(ngModel)]="formData.tipoSangre"
+              name="tipoSangre"
+              label="Tipo de sangre"
+              labelPlacement="floating"
+              placeholder="Seleccionar"
+              interface="popover">
+              <ion-select-option value="A+">A+</ion-select-option>
+              <ion-select-option value="A-">A-</ion-select-option>
+              <ion-select-option value="B+">B+</ion-select-option>
+              <ion-select-option value="B-">B-</ion-select-option>
+              <ion-select-option value="AB+">AB+</ion-select-option>
+              <ion-select-option value="AB-">AB-</ion-select-option>
+              <ion-select-option value="O+">O+</ion-select-option>
+              <ion-select-option value="O-">O-</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </div>
       </div>
 
-      <div class="form-group">
-        <ion-item class="form-input" lines="none">
-          <ion-select
-            [(ngModel)]="formData.grupo_sanguineo"
-            name="grupo_sanguineo"
-            label="Grupo sanguíneo"
-            labelPlacement="floating"
-            placeholder="Seleccionar"
-            interface="popover">
-            <ion-select-option value="A+">A+</ion-select-option>
-            <ion-select-option value="A-">A-</ion-select-option>
-            <ion-select-option value="B+">B+</ion-select-option>
-            <ion-select-option value="B-">B-</ion-select-option>
-            <ion-select-option value="AB+">AB+</ion-select-option>
-            <ion-select-option value="AB-">AB-</ion-select-option>
-            <ion-select-option value="O+">O+</ion-select-option>
-            <ion-select-option value="O-">O-</ion-select-option>
-          </ion-select>
-        </ion-item>
-      </div>
-    </div>
+      <!-- Botones de acción -->
+      <div class="form-actions">
+        <ion-button 
+          expand="block" 
+          type="submit"
+          class="save-button"
+          [disabled]="isLoading">
+          <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
+          <span *ngIf="!isLoading">Guardar Cambios</span>
+          <span *ngIf="isLoading" class="loading-content">
+            <ion-spinner name="crescent"></ion-spinner>
+            Guardando...
+          </span>
+        </ion-button>
 
-    <!-- Información de Contacto -->
-    <div class="form-section">
-      <h3 class="section-title">Información de Contacto</h3>
-      
-      <div class="form-group">
-        <ion-item class="form-input" lines="none">
-          <ion-input
-            [(ngModel)]="formData.telefono"
-            name="telefono"
-            type="tel"
-            label="Teléfono"
-            labelPlacement="floating"
-            placeholder="+56 9 1111 1111"
-            required>
-          </ion-input>
-        </ion-item>
+        <ion-button 
+          expand="block" 
+          fill="outline"
+          color="medium"
+          class="cancel-button"
+          (click)="cancelarEdicion()"
+          [disabled]="isLoading">
+          <ion-icon name="close-circle-outline" slot="start"></ion-icon>
+          Cancelar
+        </ion-button>
       </div>
 
-      <div class="form-group">
-        <ion-item class="form-input" lines="none">
-          <ion-input
-            [(ngModel)]="formData.mail"
-            name="mail"
-            type="email"
-            label="Correo electrónico"
-            labelPlacement="floating"
-            placeholder="ejemplo@gmail.com"
-            required>
-          </ion-input>
-        </ion-item>
-      </div>
-    </div>
-
-    <!-- Botones de acción -->
-    <div class="form-actions">
-      <ion-button 
-        expand="block" 
-        type="submit"
-        class="save-button"
-        [disabled]="isLoading">
-        <ion-icon name="checkmark-outline" slot="start"></ion-icon>
-        <span *ngIf="!isLoading">Guardar Cambios</span>
-        <span *ngIf="isLoading">Guardando...</span>
-      </ion-button>
-
-      <ion-button 
-        expand="block" 
-        fill="outline"
-        color="medium"
-        class="cancel-button"
-        (click)="cancelarEdicion()"
-        [disabled]="isLoading">
-        <ion-icon name="close-outline" slot="start"></ion-icon>
-        Cancelar
-      </ion-button>
-    </div>
-
-  </form>
+    </form>
+  </div>
 
 </ion-content>

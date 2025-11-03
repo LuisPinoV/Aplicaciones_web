@@ -2,15 +2,14 @@ import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { Router } from '@angular/router';
-import { Paciente } from 'src/app/core/servicios/pacientes.service';
 import { ApiService } from '../../../services/api';
 
-
-interface Procedimiento {
-  idProcedimiento: number;
-  nombre: string;
-  idTipoProcedimiento: number;
-  tipoProcedimiento: string;
+interface Cirugia {
+  idCirujia: number;
+  nombreCirugia: string;
+  descripcionCirugia: string;
+  tipoCirugia: number;
+  fechaCirugia: string;
 }
 
 interface Medicamento {
@@ -39,6 +38,18 @@ interface Consulta {
   idFichaMedica: number;
 }
 
+interface Examen {
+  idFichaMedicaExamen: number;
+  idExamen: number;
+  nombreExamen: string;
+  descripcionExamen: string;
+  idTipoExamen: number;
+  tipoExamen: string;
+  fechaExamen: string;
+  descripcionFicha: string;
+  _isNew?: boolean;
+}
+
 @Component({
   selector: 'app-ficha-paciente-acciones',
   templateUrl: './ficha-paciente-acciones.component.html',
@@ -47,15 +58,15 @@ interface Consulta {
   imports: [IonicModule, CommonModule]
 })
 export class FichaPacienteAccionesComponent implements OnChanges {
-  @Input() paciente?: Paciente;
+  @Input() paciente?: any;
 
-  contadorExamenes = 0;
-  contadorDiagnosticos = 0;
-  contadorHospitalizaciones = 0;
-  contadorConsultas = 0;
-  contadorMedicamentos = 0;
-  contadorAlergias = 0;
-  contadorProcedimientos = 0;
+  contadorExamenes?: number;
+  contadorDiagnosticos?: number;
+  contadorHospitalizaciones?: number;
+  contadorConsultas?: number;
+  contadorMedicamentos?: number;
+  contadorAlergias?: number;
+  contadorCirugias?: number;
 
   constructor(
     private router: Router,
@@ -63,37 +74,53 @@ export class FichaPacienteAccionesComponent implements OnChanges {
   ) {}
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['paciente'] && this.paciente?.id) {
-      this.cargarContadores(this.paciente.id);
+    if (changes['paciente'] && this.paciente?.idUsuario) {
+      this.cargarContadoresDesdeLocalStorage();
     }
   }
 
-  private async cargarContadores(idPaciente: number) {
+  private cargarContadoresDesdeLocalStorage() {
+    const usuarioGuardado = localStorage.getItem('usuario');
+    if (usuarioGuardado) {
+      const paciente = JSON.parse(usuarioGuardado);
+      const idFichaMedica = paciente.idFichaMedica;
+
+      if (idFichaMedica) {
+        this.cargarContadores(idFichaMedica);
+      } else {
+        console.error("No se encontró idFichaMedica en localStorage");
+      }
+    }
+  }
+
+  private async cargarContadores(idFichaMedica: number) {
     try {
-      // Procedimientos de la ficha
-      const procedimientos: Procedimiento[] = await this.api.getProcedimientosPorPaciente(idPaciente);
-      this.contadorProcedimientos = procedimientos.length;
-      this.contadorExamenes = procedimientos.filter(p => p.idTipoProcedimiento === 2).length;
+      const [
+        examenes,
+        diagnosticos,
+        hospitalizaciones,
+        consultas,
+        cirugias,
+        medicamentos,
+        alergias
+      ] = await Promise.all([
+        this.api.getExamenesPorFicha(idFichaMedica),
+        this.api.getDiagnosticosPorFicha(idFichaMedica),
+        this.api.getHospitalizacionesPorFicha(idFichaMedica),
+        this.api.getConsultasPorFicha(idFichaMedica),
+        this.api.getProcedimientosPorFicha(idFichaMedica),
+        this.api.getMedicamentosPorFicha(idFichaMedica),
+        this.api.getAlergiasPorFicha(idFichaMedica)
+      ]);
 
-      // Medicamentos
-      const medicamentos: Medicamento[] = await this.api.getMedicamentosPorPaciente(idPaciente);
-      this.contadorMedicamentos = medicamentos.length;
-
-      // Alergias
-      const alergias: Alergia[] = await this.api.getAlergiasPorPaciente(idPaciente);
-      this.contadorAlergias = alergias.length;
-
-      // Diagnósticos
-      const diagnosticos: Diagnostico[] = await this.api.getDiagnosticos();
-      this.contadorDiagnosticos = diagnosticos.filter(d => d.idFichaMedica === idPaciente).length;
-
-      // Hospitalizaciones
-      const hospitalizaciones: Hospitalizacion[] = await this.api.getHospitalizaciones();
-      this.contadorHospitalizaciones = hospitalizaciones.filter(h => h.idFichaMedica === idPaciente).length;
-
-      // Consultas
-      const consultas: Consulta[] = await this.api.getConsultas();
-      this.contadorConsultas = consultas.filter(c => c.idFichaMedica === idPaciente).length;
+      // Asignar directamente los valores
+      this.contadorExamenes = examenes?.length || 0;
+      this.contadorDiagnosticos = diagnosticos?.length || 0;
+      this.contadorHospitalizaciones = hospitalizaciones?.length || 0;
+      this.contadorConsultas = consultas?.length || 0;
+      this.contadorCirugias = cirugias?.length || 0;
+      this.contadorMedicamentos = medicamentos?.length || 0;
+      this.contadorAlergias = alergias?.length || 0;
 
     } catch (err) {
       console.error('Error cargando contadores', err);

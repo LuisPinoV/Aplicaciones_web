@@ -1,36 +1,94 @@
-<ion-card *ngIf="diagnostico" class="diagnostic-card">
+<ion-card *ngIf="diagnostico" class="diagnostico-card" [ngClass]="{'fade-out': diagnosticoEliminado}">
   <div class="card-header">
-    <div class="diagnostic-meta">
-      <div class="diagnostic-date">
+    <div class="diagnostico-meta">
+      <div class="diagnostico-date">
         <ion-icon name="calendar-outline"></ion-icon>
-        <span>{{ diagnostico.fecha | date:'MMM d, y' }}</span>
+        <span>{{ diagnostico.fecha ? (diagnostico.fecha | date:'MMM d, y') : '' }}</span>
       </div>
     </div>
 
     <div class="card-actions">
-      <ion-button fill="clear" size="small" class="more-btn" (click)="onMoreOptions()">
+      <ion-button fill="clear" size="small" class="more-btn" (click)="abrirOpciones()">
         <ion-icon name="ellipsis-vertical" slot="icon-only"></ion-icon>
       </ion-button>
     </div>
   </div>
 
   <ion-card-content class="card-body">
-    <div class="diagnostic-details">
-      <div class="detail-item">
-        <ion-icon name="time-outline"></ion-icon>
-        <div class="detail-content">
-          <span class="detail-label">Tiempo transcurrido</span>
-          <span class="detail-value">{{ getTiempoTranscurrido() }}</span>
+    <!-- Mostrar el modo de edición -->
+    <ng-container *ngIf="editando; else modoVista">
+      <div class="edit-section">
+        <div class="edit-header">
+          <ion-icon name="create-outline"></ion-icon>
+          <h4>Editando Diagnóstico</h4>
         </div>
-      </div>
 
-      <div class="detail-item" *ngIf="diagnostico.descripcion">
-        <ion-icon name="document-text-outline"></ion-icon>
-        <div class="detail-content">
-          <span class="detail-label">Descripción</span>
-          <span class="detail-value">{{ diagnostico.descripcion }}</span>
+        <div class="edit-form">
+          <ion-item lines="none" class="edit-item">
+            <ion-label position="stacked" class="edit-label">
+              <ion-icon name="calendar-outline" class="label-icon"></ion-icon>
+              Fecha del Diagnóstico
+            </ion-label>
+            <ion-datetime 
+              [(ngModel)]="editable.fechaDiagnostico"
+              presentation="date"
+              class="edit-datetime">
+            </ion-datetime>
+          </ion-item>
+
+          <ion-item lines="none" class="edit-item textarea-item">
+            <ion-label position="stacked" class="edit-label">
+              <ion-icon name="document-text-outline" class="label-icon"></ion-icon>
+              Descripción
+            </ion-label>
+            <ion-textarea 
+              [(ngModel)]="editable.descripcion"
+              placeholder="Agrega notas adicionales..."
+              rows="3"
+              class="edit-textarea">
+            </ion-textarea>
+          </ion-item>
+        </div>
+
+        <div class="botones-edicion">
+          <ion-button 
+            fill="clear" 
+            size="default"
+            class="cancel-edit-btn"
+            (click)="cancelarEdicion()">
+            Cancelar
+          </ion-button>
+          <ion-button 
+            fill="solid"
+            size="default"
+            class="save-edit-btn"
+            (click)="guardarCambios()">
+            <ion-icon name="checkmark" slot="start"></ion-icon>
+            Guardar Cambios
+          </ion-button>
         </div>
       </div>
-    </div>
+    </ng-container>
+
+    <!-- Mostrar la vista normal -->
+    <ng-template #modoVista>
+      <div class="diagnostico-details">
+        <div class="detail-item">
+          <ion-icon name="time-outline"></ion-icon>
+          <div class="detail-content">
+            <span class="detail-label">Tiempo transcurrido</span>
+            <span class="detail-value">{{ getTiempoTranscurrido() }}</span>
+          </div>
+        </div>
+
+        <div class="detail-item" *ngIf="diagnostico.descripcion">
+          <ion-icon name="document-text-outline"></ion-icon>
+          <div class="detail-content">
+            <span class="detail-label">Descripción</span>
+            <span class="detail-value">{{ diagnostico.descripcion }}</span>
+          </div>
+        </div>
+      </div>
+    </ng-template>
   </ion-card-content>
 </ion-card>

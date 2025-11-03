@@ -1,0 +1,73 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancelar()" fill="clear">
+        <ion-icon name="close" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Nueva Alergia</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="modal-container">
+    <div class="section-card">
+      <div class="section-header">
+        <ion-icon name="medical-outline"></ion-icon>
+        <h3>Información de la Alergia</h3>
+      </div>
+
+      <div class="form-group">
+
+        <!-- SELECCIONAR ALERGIA -->
+        <ion-item lines="none" class="custom-item">
+          <ion-label position="stacked" class="custom-label">
+            <ion-icon name="medkit-outline" class="label-icon"></ion-icon>
+            Selecciona la Alergia
+          </ion-label>
+          <ion-select 
+            [(ngModel)]="idAlergiaSeleccionada"
+            placeholder="Selecciona una alergia"
+            interface="popover"
+            class="custom-select">
+            <ion-select-option *ngFor="let a of alergiasDisponibles" [value]="a.idAlergia">
+              {{ a.tipoAlergia }} - {{ a.nombreAlergia }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <!-- FECHA -->
+        <ion-item lines="none" class="custom-item">
+          <ion-label position="stacked" class="custom-label">
+            <ion-icon name="calendar-outline" class="label-icon"></ion-icon>
+            Fecha del Alergia
+          </ion-label>
+          <ion-datetime 
+            [(ngModel)]="fechaAlergia" 
+            presentation="date"
+            [max]="maxDate"
+            class="custom-datetime">
+          </ion-datetime>
+        </ion-item>
+      </div>
+    </div>
+  </div>
+</ion-content>
+
+<ion-footer class="ion-no-border modal-footer">
+  <ion-toolbar>
+    <div class="footer-buttons">
+      <ion-button fill="clear" color="medium" (click)="cancelar()" class="cancel-btn">
+        Cancelar
+      </ion-button>
+      <ion-button 
+        fill="solid"
+        (click)="guardarAlergia()"
+        [disabled]="!idAlergiaSeleccionada"
+        class="save-btn">
+        <ion-icon name="checkmark" slot="start"></ion-icon>
+        Guardar Alergia
+      </ion-button>
+    </div>
+  </ion-toolbar>
+</ion-footer>

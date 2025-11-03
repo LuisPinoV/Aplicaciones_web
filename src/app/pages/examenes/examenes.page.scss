@@ -1,6 +1,6 @@
 // Contenedor principal
 .health-container {
-  padding: 1.8rem 2rem 0.6rem 2rem!important;
+  padding: 1.8rem 2rem 0.6rem 2rem !important;
   max-width: 100%;
 }
 
@@ -14,8 +14,9 @@
   h3 {
     margin: 0;
     font-size: 20px;
-    font-weight: 600;
-    color: var(--ion-color-dark);
+    font-weight: 700;
+    color: #6366f1;
+    letter-spacing: -0.3px;
   }
 
   ion-badge {
@@ -31,16 +32,23 @@
 .enhanced-stats-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 14px!important;
+  gap: 14px !important;
 
   .stat-card {
     text-align: center;
     border-radius: 16px;
     margin: 0;
     transition: all 0.3s ease;
+    border: 1px solid rgba(99, 102, 241, 0.1);
+    box-shadow: 
+      0 2px 4px rgba(99, 102, 241, 0.04),
+      0 4px 8px rgba(99, 102, 241, 0.06);
 
     &:hover {
-      transform: translateY(-2px);
+      transform: translateY(-3px);
+      box-shadow: 
+        0 4px 8px rgba(99, 102, 241, 0.08),
+        0 8px 16px rgba(99, 102, 241, 0.12);
     }
 
     ion-card-content {
@@ -48,58 +56,72 @@
     }
 
     .stat-icon {
-      width: 40px;
-      height: 40px;
+      width: 48px;
+      height: 48px;
       margin: 0 auto 12px;
-      border-radius: 12px;
+      border-radius: 14px;
       display: flex;
       align-items: center;
       justify-content: center;
 
       ion-icon {
-        font-size: 20px;
+        font-size: 24px;
       }
     }
 
     .stat-number {
-      font-size: 28px;
+      font-size: 32px;
       font-weight: 700;
       margin-bottom: 4px;
       color: var(--ion-color-dark);
+      line-height: 1;
     }
 
     .stat-label {
-      font-size: 12px;
+      font-size: 13px;
       color: var(--ion-color-medium);
-      font-weight: 500;
+      font-weight: 600;
       margin: 0;
+      letter-spacing: 0.3px;
     }
 
     // Colores específicos para cada estadística
     &.total {
-      border-top: 4px solid var(--ion-color-primary);
+      border-top: 3px solid #6366f1;
       
       .stat-icon {
-        background: rgba(var(--ion-color-primary-rgb), 0.1);
-        color: var(--ion-color-primary);
+        background: rgba(99, 102, 241, 0.12);
+        color: #6366f1;
+      }
+
+      .stat-number {
+        color: #6366f1;
       }
     }
 
     &.recent {
-      border-top: 4px solid var(--ion-color-success);
+      border-top: 3px solid #6366f1;
       
       .stat-icon {
-        background: rgba(var(--ion-color-success-rgb), 0.1);
-        color: var(--ion-color-success);
+        background: rgba(99, 102, 241, 0.12);
+        color: #6366f1;
+      }
+
+      .stat-number {
+        color: #6366f1;
       }
     }
 
     &.active {
-      border-top: 4px solid var(--ion-color-warning);
+      border-top: 3px solid #f59e0b;
       
       .stat-icon {
-        background: rgba(var(--ion-color-warning-rgb), 0.1);
-        color: var(--ion-color-warning);
+        background: rgba(245, 158, 11, 0.12);
+        color: #f59e0b;
+      }
+
+      .stat-number {
+        color: #f59e0b;
       }
     }
   }
@@ -118,18 +140,30 @@
   .action-btn {
     --border-radius: 12px;
     font-size: 14px;
-    font-weight: 500;
-    height: 36px;
+    font-weight: 600;
+    height: 38px;
+    letter-spacing: 0.2px;
 
     &.add-btn {
-      --background: var(--ion-color-primary);
+      --background: #6366f1;
+      --background-hover: #4f46e5;
+      box-shadow: 0 2px 8px rgba(99, 102, 241, 0.25);
+
+      &:hover {
+        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
+      }
     }
 
     &.filter-btn, &.sort-btn {
-      --color: var(--ion-color-medium);
+      --color: #6366f1;
+      font-weight: 600;
       
       &:hover {
-        --color: var(--ion-color-primary);
+        --color: #4f46e5;
+      }
+
+      ion-icon {
+        color: #6366f1;
       }
     }
   }
@@ -141,7 +175,6 @@
 }
 
 .examenes-list {
-
   .examen-item {
     margin-bottom: 16px;
     
@@ -187,26 +220,24 @@ ion-fab[slot="fixed"].visible {
 
 /* Botón de scroll: redondo, sin contorno azul y con sombra */
 .scroll-top-btn {
-  --background: var(--ion-color-primary);
+  --background: #6366f1;
   --color: #fff;
   --border-radius: 50%;
   width: 52px;
   height: 52px;
-  box-shadow: 0 6px 16px rgba(var(--ion-color-primary-rgb), 0.45);
+  box-shadow: 0 6px 16px rgba(99, 102, 241, 0.45);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   border: none;
   outline: none;
 
-  /* Asegura forma circular */
   border-radius: 50% !important;
   overflow: hidden;
 
-  /* Elimina contorno azul al hacer foco o clic */
   &:focus,
   &:active,
   &:focus-visible {
     outline: none !important;
-    box-shadow: 0 6px 16px rgba(var(--ion-color-primary-rgb), 0.45) !important;
+    box-shadow: 0 6px 16px rgba(99, 102, 241, 0.45) !important;
   }
 
   ion-icon {
@@ -215,20 +246,20 @@ ion-fab[slot="fixed"].visible {
 
   &:hover {
     transform: translateY(-4px);
-    box-shadow: 0 10px 24px rgba(var(--ion-color-primary-rgb), 0.55);
-  }
-
-  @media (prefers-color-scheme: dark) {
-    --background: var(--ion-color-light);
-    --color: var(--ion-color-dark);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.7);
+    box-shadow: 0 10px 24px rgba(99, 102, 241, 0.55);
   }
 }
 
 .initial-loader {
   display: grid;
   place-items: center;
-  padding: 16px;
+  padding: 40px 16px;
+
+  ion-spinner {
+    --color: #6366f1;
+    width: 48px;
+    height: 48px;
+  }
 }
 
 // Estado vacío
@@ -241,19 +272,21 @@ ion-fab[slot="fixed"].visible {
     height: 100px;
     margin: 0 auto 28px;
     border-radius: 50%;
-    background: #6366f1;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
     display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: 0 8px 24px rgba(99, 102, 241, 0.25);
     
     ion-icon {
-      font-size: 50px;      
+      font-size: 50px;
+      color: #fff;
     }
   }
   
   h3 {
     font-size: 22px;
-    font-weight: 600;
+    font-weight: 700;
     color: var(--ion-color-dark);
     margin-bottom: 12px;
   }
@@ -266,26 +299,234 @@ ion-fab[slot="fixed"].visible {
   }
   
   ion-button {
+    --background: #6366f1;
     --border-radius: 12px;
-    font-weight: 500;
+    font-weight: 600;
+    height: 44px;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+
+    &:hover {
+      box-shadow: 0 6px 16px rgba(99, 102, 241, 0.4);
+    }
   }
 }
 
-@media (prefers-color-scheme: dark) {
-  .empty-state {
-    h3 {
-      color: #fff;
-    }
+// Infinite scroll personalizado
+ion-infinite-scroll-content {
+  --color: #6366f1;
+  
+  .infinite-loading-text {
+    color: #6366f1;
+    font-weight: 600;
   }
 }
 
 // Dark mode improvements
 @media (prefers-color-scheme: dark) {
   .section-header h3 {
-    color: #fff;
+    color: #a5b4fc;
   }
 
-  .enhanced-stats-grid .stat-card .stat-number {
-    color: #fff;
+  .enhanced-stats-grid .stat-card {
+    background: #1c1c1c;
+    border-color: rgba(99, 102, 241, 0.2);
+
+    &:hover {
+      border-color: rgba(99, 102, 241, 0.3);
+    }
+
+    .stat-number {
+      color: #e5e7eb;
+    }
+
+    .stat-label {
+      color: #9ca3af;
+    }
+
+    &.total {
+      border-top-color: #818cf8;
+      
+      .stat-icon {
+        background: rgba(129, 140, 248, 0.15);
+        color: #818cf8;
+      }
+
+      .stat-number {
+        color: #a5b4fc;
+      }
+    }
+
+    &.recent {
+      border-top-color: #818cf8;
+      
+      .stat-icon {
+        background: rgba(129, 140, 248, 0.15);
+        color: #818cf8;
+      }
+
+      .stat-number {
+        color: #a5b4fc;
+      }
+    }
+
+    &.active {
+      border-top-color: #fbbf24;
+      
+      .stat-icon {
+        background: rgba(251, 191, 36, 0.15);
+        color: #fbbf24;
+      }
+
+      .stat-number {
+        color: #fcd34d;
+      }
+    }
+  }
+
+  .actions-row {
+    .action-btn {
+      &.add-btn {
+        --background: #818cf8;
+        --background-hover: #a5b4fc;
+      }
+
+      &.filter-btn, &.sort-btn {
+        --color: #818cf8;
+        
+        &:hover {
+          --color: #a5b4fc;
+        }
+
+        ion-icon {
+          color: #818cf8;
+        }
+      }
+    }
+  }
+
+  .scroll-top-btn {
+    --background: #818cf8;
+    box-shadow: 0 6px 16px rgba(129, 140, 248, 0.45);
+
+    &:hover {
+      box-shadow: 0 10px 24px rgba(129, 140, 248, 0.55);
+    }
+
+    &:focus,
+    &:active,
+    &:focus-visible {
+      box-shadow: 0 6px 16px rgba(129, 140, 248, 0.45) !important;
+    }
+  }
+
+  .initial-loader {
+    ion-spinner {
+      --color: #818cf8;
+    }
+  }
+
+  .empty-state {
+    h3 {
+      color: #e5e7eb;
+    }
+
+    p {
+      color: #9ca3af;
+    }
+
+    .empty-icon {
+      background: linear-gradient(135deg, #818cf8 0%, #a78bfa 100%);
+      box-shadow: 0 8px 24px rgba(129, 140, 248, 0.3);
+    }
+
+    ion-button {
+      --background: #818cf8;
+      box-shadow: 0 4px 12px rgba(129, 140, 248, 0.3);
+
+      &:hover {
+        box-shadow: 0 6px 16px rgba(129, 140, 248, 0.4);
+      }
+    }
+  }
+
+  ion-infinite-scroll-content {
+    --color: #818cf8;
+  }
+}
+
+// Animación para nuevo examen insertado
+@keyframes slideInAndHighlight {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+    max-height: 0;
+    margin-bottom: 0;
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(0) scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    max-height: 500px;
+    margin-bottom: 16px;
+  }
+}
+
+// Efecto de pulsación/highlight para el nuevo examen
+.new-examen-animation app-examen-card {
+  position: relative;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      90deg, 
+      transparent, 
+      rgba(99, 102, 241, 0.12), 
+      transparent
+    );
+    animation: shimmer 0.6s ease-out;
+    pointer-events: none;
+    border-radius: 16px;
+    z-index: 1;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+// Animación de fade-out existente
+.fade-out {
+  animation: fadeOutScale 0.3s ease-out forwards;
+}
+
+@keyframes fadeOutScale {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.95);
+    max-height: 0;
+    margin-bottom: 0;
+    padding: 0;
   }
 }

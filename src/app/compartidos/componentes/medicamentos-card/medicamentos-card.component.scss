@@ -1,60 +1,394 @@
-// Estilos adaptados de los otros componentes card
-.medicamento-card {
-  background: var(--ion-color-step-100);
-  border: 1px solid rgba(100, 116, 139, 0.2)!important;
-  border-radius: 12px;
-  margin-bottom: 16px;
-  overflow: hidden;
-  position: relative;
+// ============================================
+// MEDICAMENTO CARD - PALETA AMBER
+// ============================================
 
-  .estado-indicator {
-    position: absolute;
-    left: 0; top: 0; bottom: 0;
-    width: 4px;
-    &.activo { background: var(--ion-color-success); }
-    &.suspendido { background: var(--ion-color-warning); }
-    &.finalizado { background: var(--ion-color-medium); }
+.medicamento-card {
+  margin: 0 0 20px 0 !important;
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(245, 158, 11, 0.12) !important;
+  background: #ffffff;
+
+  box-shadow:
+    0 2px 4px rgba(245, 158, 11, 0.04),
+    0 6px 12px rgba(245, 158, 11, 0.08),
+    0 12px 24px rgba(245, 158, 11, 0.06) !important;
+
+  &:hover {
+    transform: translateY(-3px);
+    border-color: rgba(245, 158, 11, 0.2) !important;
+    box-shadow:
+      0 4px 6px rgba(245, 158, 11, 0.08),
+      0 8px 20px rgba(245, 158, 11, 0.15),
+      0 16px 32px rgba(245, 158, 11, 0.10) !important;
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+// Header de la card
+.card-header {
+  padding: 1rem 0.8rem 0.8rem 1.4rem !important;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  border-bottom: 1px solid rgba(245, 158, 11, 0.08) !important;
+}
+
+// Acciones de la card
+.card-actions {
+  display: flex;
+  align-items: center;
+
+  .more-btn {
+    --color: #f59e0b !important;
+    --padding-start: 1px;
+    --padding-end: 1px;
+    margin: 0;
+    
+    ion-icon {
+      font-size: 20px;
+    }
+
+    &:hover {
+      --color: #d97706 !important;
+    }
+  }
+}
+
+// Cuerpo de la card
+.card-body {
+  padding: 16px 20px 16px 24px !important;
+}
+
+// Detalles del medicamento
+.medicamento-details {
+  margin-bottom: 0;
+}
+
+.detail-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 14px;
+
+  &:not(:last-child) {
+    padding-bottom: 14px;
+    border-bottom: 1px solid rgba(245, 158, 11, 0.06) !important;
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  ion-icon {
+    margin-top: 1px;
+    color: #f59e0b !important;
+    font-size: 20px;
+    min-width: 20px;
+  }
+}
+
+.detail-content {
+  flex: 1;
+  min-width: 0;
+
+  .detail-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #f59e0b !important;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .detail-value {
+    display: block;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--ion-color-dark);
+    line-height: 1.5;
+  }
+}
+
+// Estilos para modo de edición
+.edit-section {
+  padding: 8px 0 0 0 !important;
+
+  h4 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 20px 0;
+    padding-bottom: 12px;
+    border-bottom: 2px solid rgba(245, 158, 11, 0.12) !important;
+    font-size: 15px;
+    font-weight: 700;
+    color: #f59e0b !important;
+    letter-spacing: -0.2px;
+
+    ion-icon {
+      font-size: 22px;
+      color: #f59e0b !important;
+    }
+  }
+}
+
+.edit-item {
+  --background: rgba(245, 158, 11, 0.05) !important;
+  --border-radius: 12px;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --inner-padding-end: 0;
+  --min-height: 56px;
+  border-radius: 12px;
+  border: 1px solid rgba(245, 158, 11, 0.1) !important;
+  transition: all 0.3s ease;
+  margin-bottom: 12px;
+  
+  &:hover {
+    --background: rgba(245, 158, 11, 0.08) !important;
+    border-color: rgba(245, 158, 11, 0.2) !important;
+  }
+
+  &.item-has-focus {
+    border-color: #f59e0b !important;
+    --background: rgba(245, 158, 11, 0.08) !important;
+  }
+  
+  &.textarea-item {
+    --background: rgba(245, 158, 11, 0.05) !important;
+    --min-height: 100px;
+
+    ion-textarea {
+      --padding-top: 12px;
+      --padding-bottom: 12px;
+      min-height: 80px;
+    }
+  }
+
+  ion-label {
+    color: #f59e0b !important;
+    font-weight: 600 !important;
+    font-size: 13px !important;
+    margin-bottom: 4px;
+  }
+
+  ion-input,
+  ion-textarea {
+    --color: var(--ion-text-color);
+    font-size: 15px;
+    font-weight: 500;
+  }
+}
+
+.botones-edicion {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(245, 158, 11, 0.1) !important;
+  justify-content: flex-end;
+
+  ion-button[fill="clear"] {
+    --color: #f59e0b !important;
+    --padding-start: 20px;
+    --padding-end: 20px;
+    font-weight: 600;
+
+    &:hover {
+      --color: #d97706 !important;
+    }
+  }
+
+  ion-button[fill="solid"] {
+    --background: #f59e0b !important;
+    --background-hover: #d97706 !important;
+    --padding-start: 24px;
+    --padding-end: 24px;
+    --border-radius: 12px;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3) !important;
+    transition: all 0.3s ease;
+
+    &:hover {
+      box-shadow: 0 6px 16px rgba(245, 158, 11, 0.4) !important;
+      transform: translateY(-1px);
+    }
+
+    ion-icon {
+      font-size: 18px;
+    }
+  }
+}
+
+// ============================================
+// DARK MODE
+// ============================================
+@media (prefers-color-scheme: dark) {
+  .medicamento-card {
+    background: #1c1c1c;
+    border-color: rgba(245, 158, 11, 0.2) !important;
+
+    box-shadow:
+      0 4px 8px rgba(0, 0, 0, 0.6),
+      0 8px 20px rgba(245, 158, 11, 0.15) !important;
+
+    &:hover {
+      border-color: rgba(245, 158, 11, 0.35) !important;
+      box-shadow:
+        0 6px 14px rgba(0, 0, 0, 0.7),
+        0 12px 28px rgba(245, 158, 11, 0.25) !important;
+    }
   }
 
   .card-header {
-    padding: 16px 16px 8px 20px;
-    .titulo { font-size: 1rem; font-weight: 600; margin: 0 0 4px 0; }
-    .motivo { font-size: 0.85rem; color: var(--ion-color-medium); margin: 0; }
+    border-bottom-color: rgba(245, 158, 11, 0.15) !important;
   }
 
-  .card-content {
-    padding: 12px 16px 16px 20px;
-    border-top: 1px solid var(--ion-color-step-200);
+  .detail-item {
+    border-bottom-color: rgba(245, 158, 11, 0.1) !important;
 
-    .info-item {
-      display: flex; align-items: center; gap: 10px;
-      padding: 6px 0;
-      ion-icon { font-size: 16px; color: var(--ion-color-primary); }
-      .label { font-size: 0.8rem; color: var(--ion-color-medium); min-width: 70px; }
-      .value { font-size: 0.9rem; font-weight: 500; }
+    ion-icon {
+      color: #fbbf24 !important;
+    }
+  }
+
+  .detail-content {
+    .detail-label {
+      color: #fbbf24 !important;
     }
 
-    .medicamento-footer {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-top: 12px; padding-top: 12px;
-      border-top: 1px solid var(--ion-color-step-200);
+    .detail-value {
+      color: #e5e7eb;
+    }
+  }
 
-      .fecha-inicio {
-        display: flex; align-items: center; gap: 6px;
-        font-size: 0.8rem; color: var(--ion-color-medium);
+  .card-actions .more-btn {
+    --color: #fbbf24 !important;
+
+    &:hover {
+      --color: #fcd34d !important;
+    }
+  }
+
+  // Dark mode para modo de edición
+  .edit-section {
+    h4 {
+      border-bottom-color: rgba(245, 158, 11, 0.2) !important;
+      color: #fcd34d !important;
+
+      ion-icon {
+        color: #fbbf24 !important;
       }
-      .estado-badge {
-        font-size: 0.7rem; font-weight: 600; padding: 4px 8px; border-radius: 6px;
-        &.activo { background: rgba(var(--ion-color-success-rgb), 0.1); color: var(--ion-color-success); }
-        &.suspendido { background: rgba(var(--ion-color-warning-rgb), 0.1); color: var(--ion-color-warning); }
-        &.finalizado { background: rgba(var(--ion-color-medium-rgb), 0.15); color: var(--ion-color-medium); }
+    }
+  }
+
+  .edit-item {
+    --background: rgba(251, 191, 36, 0.08) !important;
+    border-color: rgba(245, 158, 11, 0.2) !important;
+
+    &:hover {
+      --background: rgba(251, 191, 36, 0.12) !important;
+      border-color: rgba(245, 158, 11, 0.3) !important;
+    }
+
+    &.item-has-focus {
+      border-color: #fbbf24 !important;
+      --background: rgba(251, 191, 36, 0.12) !important;
+    }
+
+    ion-label {
+      color: #fbbf24 !important;
+    }
+
+    ion-input,
+    ion-textarea {
+      --color: #e5e7eb;
+    }
+  }
+
+  .botones-edicion {
+    border-top-color: rgba(245, 158, 11, 0.2) !important;
+
+    ion-button[fill="clear"] {
+      --color: #fbbf24 !important;
+
+      &:hover {
+        --color: #fcd34d !important;
+      }
+    }
+
+    ion-button[fill="solid"] {
+      --background: #fbbf24 !important;
+      --background-hover: #fcd34d !important;
+      box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3) !important;
+
+      &:hover {
+        box-shadow: 0 6px 16px rgba(251, 191, 36, 0.4) !important;
       }
     }
   }
 }
 
+// Animación de entrada
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.medicamento-card {
+  animation: fadeInUp 0.3s ease-out;
+}
+
+// Animación de salida
+.fade-out {
+  animation: fadeOutScale 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  pointer-events: none;
+}
+
+@keyframes fadeOutScale {
+  0% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    max-height: 500px;
+    margin-bottom: 20px;
+  }
+  50% {
+    opacity: 0;
+    transform: scale(0.85) translateY(-10px);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.7) translateY(-20px);
+    max-height: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+}
+
+// Mejoras adicionales para inputs
+ion-input,
+ion-textarea {
+  --placeholder-color: rgba(245, 158, 11, 0.4);
+  --placeholder-opacity: 1;
+}
+
 @media (prefers-color-scheme: dark) {
-  .medicamento-card {
-    background: #202020;
+  ion-input,
+  ion-textarea {
+    --placeholder-color: rgba(251, 191, 36, 0.4);
   }
 }

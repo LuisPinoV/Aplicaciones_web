@@ -1,23 +1,126 @@
-<div class="hospitalizacion-card">
+<ion-card *ngIf="hospitalizacion" class="hospitalizacion-card" [ngClass]="{'fade-out': hospitalizacionEliminado}">
   <div class="card-header">
-    <div class="hospitalizacion-icon">
-      <ion-icon name="business-outline"></ion-icon>
+    <div class="hospitalizacion-meta">
+      <div class="hospitalizacion-date">
+        <ion-icon name="calendar-outline"></ion-icon>
+        <span>{{ hospitalizacion.fecha ? (hospitalizacion.fecha | date:'MMM d, y') : '' }}</span>
+      </div>
     </div>
-    <div class="hospitalizacion-info">
-      <h3>{{ hospitalizacion.institucionMedica }}</h3>
+
+    <div class="card-actions">
+      <ion-button fill="clear" size="small" class="more-btn" (click)="abrirOpciones()">
+        <ion-icon name="ellipsis-vertical" slot="icon-only"></ion-icon>
+      </ion-button>
     </div>
   </div>
 
-  <div class="card-content">
-    <div class="info-row">
-      <div class="info-item">
-        <ion-icon name="calendar-outline"></ion-icon>
-        <span>{{ getFechaFormateada() }}</span>
+  <ion-card-content class="card-body">
+    <!-- Mostrar el modo de edición -->
+    <ng-container *ngIf="editando; else modoVista">
+      <div class="edit-section">
+        <div class="edit-header">
+          <ion-icon name="create-outline"></ion-icon>
+          <h4>Editando Hospitalización</h4>
+        </div>
+
+        <div class="edit-form">
+          <ion-item lines="none" class="edit-item">
+            <ion-label position="stacked" class="edit-label">
+              <ion-icon name="calendar-outline" class="label-icon"></ion-icon>
+              Fecha del Hospitalización
+            </ion-label>
+            <ion-datetime 
+              [(ngModel)]="editable.fecha"
+              presentation="date"
+              class="edit-datetime">
+            </ion-datetime>
+          </ion-item>
+
+          <ion-item lines="none" class="edit-item textarea-item">
+            <ion-label position="stacked" class="edit-label">
+              <ion-icon name="document-text-outline" class="label-icon"></ion-icon>
+              Institución Médica
+            </ion-label>
+            <ion-textarea 
+              [(ngModel)]="editable.institucionMedica"
+              placeholder="Agrega notas adicionales..."
+              rows="3"
+              class="edit-textarea">
+            </ion-textarea>
+          </ion-item>
+
+          <ion-item lines="none" class="edit-item">
+            <ion-label position="stacked" class="edit-label">
+              <ion-icon name="alarm-outline" class="label-icon"></ion-icon>
+              Duración (días)
+            </ion-label>
+
+            <div class="duracion-control" style="display:flex;align-items:center;gap:8px;">
+              <ion-input
+                type="number"
+                inputmode="numeric"
+                pattern="[0-9]*"
+                min="0"
+                step="1"
+                placeholder="0"
+                [(ngModel)]="editable.duracion"
+                (ionBlur)="editable.duracion = editable.duracion ? +editable.duracion : 0"
+                class="edit-number"
+                style="text-align:center;max-width:96px;">
+              </ion-input>
+            </div>
+          </ion-item>
+        </div>
+
+        <div class="botones-edicion">
+          <ion-button 
+            fill="clear" 
+            size="default"
+            class="cancel-edit-btn"
+            (click)="cancelarEdicion()">
+            Cancelar
+          </ion-button>
+          <ion-button 
+            fill="solid"
+            size="default"
+            class="save-edit-btn"
+            (click)="guardarCambios()">
+            <ion-icon name="checkmark" slot="start"></ion-icon>
+            Guardar Cambios
+          </ion-button>
+        </div>
       </div>
-      <div class="info-item">
-        <ion-icon name="time-outline"></ion-icon>
-        <span>{{ getDuracionFormateada() }}</span>
+    </ng-container>
+
+    <!-- Mostrar la vista normal -->
+    <ng-template #modoVista>
+      <div class="hospitalizacion-details">
+        <div class="detail-item">
+          <ion-icon name="time-outline"></ion-icon>
+          <div class="detail-content">
+            <span class="detail-label">Tiempo transcurrido</span>
+            <span class="detail-value">{{ getTiempoTranscurrido() }}</span>
+          </div>
+        </div>
+
+        <div class="detail-item" *ngIf="hospitalizacion.institucionMedica">
+          <ion-icon name="document-text-outline"></ion-icon>
+          <div class="detail-content">
+            <span class="detail-label">Institución Médica</span>
+            <span class="detail-value">{{ hospitalizacion.institucionMedica }}</span>
+          </div>
+        </div>
+
+        <div class="detail-item" *ngIf="hospitalizacion.duracion">
+          <ion-icon name="alarm-outline"></ion-icon>
+          <div class="detail-content">
+            <span class="detail-label">Duración</span>
+            <span class="detail-value">
+              {{ hospitalizacion.duracion }} {{ (hospitalizacion.duracion === 1) ? 'día' : 'días' }}
+            </span>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-</div>
+    </ng-template>
+  </ion-card-content>
+</ion-card>

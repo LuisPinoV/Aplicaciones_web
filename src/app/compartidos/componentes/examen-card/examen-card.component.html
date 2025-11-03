@@ -1,44 +1,221 @@
-<ion-card *ngIf="examen" class="examen-card">
+<ion-card *ngIf="examen" class="examen-card" [ngClass]="{'fade-out': examenEliminado}">
   <div class="card-header">
     <div class="examen-meta">
       <div class="examen-date">
         <ion-icon name="calendar-outline"></ion-icon>
-        <span>{{ examen.fechaExamen | date:'MMM d, y' }}</span>
+        <span>{{ examen.fechaExamen ? (examen.fechaExamen | date:'MMM d, y') : '' }}</span>
       </div>
+      
+      <ion-badge *ngIf="examen.tipoExamen" class="tipo-badge">
+        {{ examen.tipoExamen }}
+      </ion-badge>
     </div>
 
     <div class="card-actions">
-      <ion-button fill="clear" size="small" class="more-btn" (click)="onMoreOptions()">
+      <ion-button fill="clear" size="small" class="more-btn" (click)="abrirOpciones()">
         <ion-icon name="ellipsis-vertical" slot="icon-only"></ion-icon>
       </ion-button>
     </div>
   </div>
 
   <ion-card-content class="card-body">
-    <div class="examen-details">
-      <div class="detail-item">
-        <ion-icon name="time-outline"></ion-icon>
-        <div class="detail-content">
-          <span class="detail-label">Tiempo transcurrido</span>
-          <span class="detail-value">{{ getTiempoTranscurrido() }}</span>
+    <!-- Modo de edición -->
+    <ng-container *ngIf="editando; else modoVista">
+      <div class="edit-section">
+        <div class="edit-header">
+          <ion-icon name="create-outline"></ion-icon>
+          <h4>Editando Examen</h4>
+        </div>
+
+        <div class="edit-form">
+          <ion-item lines="none" class="edit-item">
+            <ion-label position="stacked" class="edit-label">
+              <ion-icon name="calendar-outline" class="label-icon"></ion-icon>
+              Fecha del Examen
+            </ion-label>
+            <ion-datetime 
+              [(ngModel)]="editable.fechaExamen"
+              presentation="date"
+              class="edit-datetime">
+            </ion-datetime>
+          </ion-item>
+
+          <ion-item lines="none" class="edit-item textarea-item">
+            <ion-label position="stacked" class="edit-label">
+              <ion-icon name="document-text-outline" class="label-icon"></ion-icon>
+              Descripción Específica (Opcional)
+            </ion-label>
+            <ion-textarea 
+              [(ngModel)]="editable.descripcionFicha"
+              placeholder="Agrega notas adicionales..."
+              rows="3"
+              class="edit-textarea">
+            </ion-textarea>
+          </ion-item>
+
+          <!-- Sección de Resultados Editables -->
+          <div class="resultados-edit-section" *ngIf="resultadosEditables.length > 0">
+            <div class="resultados-header">
+              <ion-icon name="analytics-outline"></ion-icon>
+              <h4>Resultados del Examen</h4>
+            </div>
+
+            <div class="resultados-edit-list">
+              <div class="resultado-edit-item" *ngFor="let resultado of resultadosEditables; let i = index">
+                <div class="resultado-info">
+                  <span class="resultado-nombre">{{ resultado.nombre }}</span>
+                  <span class="resultado-formato">{{ resultado.formato }}</span>
+                </div>
+                
+                <ion-item lines="none" class="edit-item resultado-input-item">
+                  <ion-label position="stacked" class="edit-label-small">
+                    Valor obtenido
+                  </ion-label>
+                  <ion-input
+                    type="number"
+                    [(ngModel)]="resultado.valor"
+                    placeholder="0.00"
+                    class="resultado-input">
+                  </ion-input>
+                </ion-item>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="botones-edicion">
+          <ion-button 
+            fill="clear" 
+            size="default"
+            class="cancel-edit-btn"
+            (click)="cancelarEdicion()">
+            Cancelar
+          </ion-button>
+          <ion-button 
+            fill="solid"
+            size="default"
+            class="save-edit-btn"
+            (click)="guardarCambios()">
+            <ion-icon name="checkmark" slot="start"></ion-icon>
+            Guardar Cambios
+          </ion-button>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- Vista normal -->
+    <ng-template #modoVista>
+      <div class="examen-details">
+        <div class="detail-item">
+          <ion-icon name="time-outline"></ion-icon>
+          <div class="detail-content">
+            <span class="detail-label">Tiempo transcurrido</span>
+            <span class="detail-value">{{ getTiempoTranscurrido() }}</span>
+          </div>
+        </div>
+
+        <div class="detail-item" *ngIf="examen.nombreExamen">
+          <ion-icon name="document-text-outline"></ion-icon>
+          <div class="detail-content">
+            <span class="detail-label">Nombre</span>
+            <span class="detail-value">{{ examen.nombreExamen }}</span>
+          </div>
+        </div>
+
+        <div class="detail-item" *ngIf="examen.descripcionExamen">
+          <ion-icon name="document-text-outline"></ion-icon>
+          <div class="detail-content">
+            <span class="detail-label">Descripción</span>
+            <span class="detail-value">{{ examen.descripcionExamen }}</span>
+          </div>
+        </div>
+
+        <div class="detail-item" *ngIf="examen.descripcionFicha">
+          <ion-icon name="document-text-outline"></ion-icon>
+          <div class="detail-content">
+            <span class="detail-label">Descripción específica</span>
+            <span class="detail-value">{{ examen.descripcionFicha }}</span>
+          </div>
         </div>
       </div>
 
-      <div class="detail-item" *ngIf="examen.nombreExamen">
-        <ion-icon name="document-text-outline"></ion-icon>
-        <div class="detail-content">
-          <span class="detail-label">Nombre</span>
-          <span class="detail-value">{{ examen.nombreExamen }}</span>
-        </div>
-      </div>
+      <!-- Sección de resultados desplegable -->
+      <div class="results-section" *ngIf="examen.resultadosObtenidos && examen.resultadosObtenidos.length > 0">
+        <button class="results-toggle" (click)="toggleResultados()">
+          <div class="toggle-content">
+            <ion-icon name="analytics-outline"></ion-icon>
+            <span>Ver Resultados ({{ examen.resultadosObtenidos.length }})</span>
+          </div>
+          <ion-icon 
+            [name]="mostrarResultados ? 'chevron-up-outline' : 'chevron-down-outline'"
+            class="toggle-icon">
+          </ion-icon>
+        </button>
 
-      <div class="detail-item" *ngIf="examen.descripcionExamen">
-        <ion-icon name="document-text-outline"></ion-icon>
-        <div class="detail-content">
-          <span class="detail-label">Descripción</span>
-          <span class="detail-value">{{ examen.descripcionExamen }}</span>
+        <div class="results-content" [class.expanded]="mostrarResultados">
+          <div class="results-grid">
+            <div 
+              class="result-item" 
+              *ngFor="let resultado of examen.resultadosObtenidos"
+              [attr.data-status]="getResultadoStatus(resultado)">
+              
+              <div class="result-header">
+                <span class="result-name">{{ resultado.nombre }}</span>
+                <span class="result-format">{{ resultado.formato }}</span>
+              </div>
+
+              <div class="result-comparison">
+                <div class="valor-obtenido">
+                  <span class="valor-label">Obtenido</span>
+                  <div class="valor-container">
+                    <span 
+                      class="valor-numero"
+                      [style.color]="getColorByDeviation(resultado)">
+                      {{ resultado.valor }}
+                    </span>
+                    <ion-icon 
+                      *ngIf="getResultadoEsperado(resultado)"
+                      [name]="isValorMayorQueEsperado(resultado) ? 'arrow-up' : 'arrow-down'"
+                      [style.color]="getColorByDeviation(resultado)"
+                      class="direction-icon">
+                    </ion-icon>
+                  </div>
+                </div>
+
+                <div class="comparison-bar-container">
+                  <div class="comparison-bar">
+                    <div 
+                      class="bar-fill"
+                      [style.width.%]="getBarWidth(resultado)"
+                      [style.background]="getColorByDeviation(resultado)">
+                    </div>
+                  </div>
+                  <span class="comparacion-texto" [style.color]="getColorByDeviation(resultado)">
+                    {{ getComparacionTexto(resultado) }}
+                  </span>
+                </div>
+
+                <div class="valor-esperado">
+                  <span class="valor-label">Esperado</span>
+                  <span class="valor-numero">
+                    {{ getResultadoEsperado(resultado)?.valor || 'N/A' }}
+                  </span>
+                </div>
+              </div>
+
+              <div class="status-indicator" [attr.data-status]="getResultadoStatus(resultado)">
+                <ion-icon 
+                  [name]="getStatusIcon(resultado)"
+                  [style.color]="getColorByDeviation(resultado)">
+                </ion-icon>
+                <span [style.color]="getColorByDeviation(resultado)">
+                  {{ getStatusText(resultado) }}
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </ng-template>
   </ion-card-content>
 </ion-card>

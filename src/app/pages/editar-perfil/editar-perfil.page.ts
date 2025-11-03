@@ -3,9 +3,25 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, ToastController, AlertController, LoadingController } from '@ionic/angular';
 import { Router } from '@angular/router';
+import { ApiService } from 'src/app/services/api';
 
-import { PacienteStoreService } from 'src/app/core/servicios/paciente-store.service';
-import { Paciente } from 'src/app/core/servicios/pacientes.service';
+export interface Paciente {
+  idUsuario: number;
+  nombre: string;
+  Rut: string;
+  fechaNacimiento: string;
+  sexo: string;
+  tipoSangre: string;
+}
+
+interface FormData {
+  idUsuario?: number;
+  nombre: string;
+  Rut: string;
+  fechaNacimiento: string;
+  sexo: string;
+  tipoSangre: string;
+}
 
 @Component({
   selector: 'app-editar-perfil',
@@ -16,86 +32,125 @@ import { Paciente } from 'src/app/core/servicios/pacientes.service';
 })
 export class EditarPerfilPage implements OnInit {
   paciente?: Paciente;
-  formData: Partial<Paciente> = {};
-  originalData: Partial<Paciente> = {};
+  formData: FormData = {
+    nombre: '',
+    Rut: '',
+    fechaNacimiento: '',
+    sexo: '',
+    tipoSangre: ''
+  };
+  originalData: FormData = {
+    nombre: '',
+    Rut: '',
+    fechaNacimiento: '',
+    sexo: '',
+    tipoSangre: ''
+  };
   isLoading = false;
 
+  // Fecha máxima (hoy) para el datepicker
+  maxDate: string = new Date().toISOString();
+  
+  // Fecha mínima (hace 120 años)
+  minDate: string = new Date(new Date().setFullYear(new Date().getFullYear() - 120)).toISOString();
+
   constructor(
-    private pacienteStore: PacienteStoreService,
     private router: Router,
     private toastController: ToastController,
     private alertController: AlertController,
-    private loadingController: LoadingController
+    private loadingController: LoadingController,
+    private api: ApiService
   ) {}
 
-  ngOnInit() {
-    this.paciente = this.pacienteStore.getPaciente();
+  async ngOnInit() {
+    await this.cargarDatosPaciente();
+  }
 
-    if (!this.paciente) {
-      this.router.navigate(['/login']);
+  async ionViewWillEnter() {
+    await this.cargarDatosPaciente();
+  }
+
+  // Cargar datos actuales del paciente desde la API
+  private async cargarDatosPaciente() {
+    const usuarioGuardado = localStorage.getItem('usuario');
+
+    if (!usuarioGuardado) {
+      console.error('No se encontraron datos del paciente en localStorage');
+      await this.showToast('No se encontraron datos del usuario', 'danger');
+      this.router.navigate(['/tabs/perfil']);
       return;
     }
 
-    this.cargarDatosPaciente();
-  }
+    try {
+      const usuarioTemp = JSON.parse(usuarioGuardado);
+      const idUsuario = usuarioTemp.idUsuario;
 
-  ionViewWillEnter() {
-    // También cargar datos cuando la vista esté a punto de entrar
-    // por si vienen de otra pantalla
-    this.cargarDatosPaciente();
-  }
-
-  // Cargar datos actuales del paciente
-  private cargarDatosPaciente() {
-    let paciente = this.pacienteStore.getPaciente();
-    
-    // Si no hay datos en el store, intentar cargar desde localStorage
-    if (!paciente) {
-      const usuarioLocal = localStorage.getItem('usuario');
-      if (usuarioLocal) {
-        try {
-          paciente = JSON.parse(usuarioLocal);
-          // Actualizar el store con los datos de localStorage
-          if (paciente) {
-            this.pacienteStore.setPaciente(paciente);
-          }
-        } catch (error) {
-          console.error('Error al parsear datos del localStorage:', error);
-        }
+      if (!idUsuario) {
+        throw new Error('ID de usuario no encontrado');
       }
-    }
-    
-    if (paciente) {
-      console.log('Datos del paciente cargados:', paciente); // Debug
-      
-      // Crear copia de los datos originales
-      this.originalData = { ...paciente };
-      
-      // Crear copia para el formulario con todos los campos
-      this.formData = {
-        id: paciente.id,
-        nombre: paciente.nombre || '',
-        rut: paciente.rut || '',
-        edad: paciente.edad || undefined,
-        sexo: paciente.sexo || '',
-        grupo_sanguineo: paciente.grupo_sanguineo || '',
-        telefono: paciente.telefono || '',
-        mail: paciente.mail || '',
-        password: paciente.password // Mantener password original
-      };
 
-      console.log('FormData inicializado:', this.formData); // Debug
+      // Mostrar loading
+      const loading = await this.loadingController.create({
+        message: 'Cargando datos...',
+        spinner: 'crescent'
+      });
+      await loading.present();
+
+      // Obtener datos actualizados desde la API
+      this.paciente = await this.api.getPacienteById(idUsuario);
+
+      // Formatear la fecha para el ion-datetime (ISO format)
+      const fechaFormateada = this.paciente.fechaNacimiento 
+        ? new Date(this.paciente.fechaNacimiento).toISOString()
+        : '';
+
+      // Crear copia de los datos originales
+      this.originalData = {
+        idUsuario: this.paciente.idUsuario,
+        nombre: this.paciente.nombre || '',
+        Rut: this.formatearRut(this.paciente.Rut.toString()),
+        fechaNacimiento: fechaFormateada,
+        sexo: this.paciente.sexo || '',
+        tipoSangre: this.paciente.tipoSangre || ''
+      };
       
-      // Forzar detección de cambios para asegurar que el formulario se actualice
-      setTimeout(() => {
-        console.log('FormData después del timeout:', this.formData);
-      }, 100);
+      // Crear copia para el formulario
+      this.formData = { ...this.originalData };
+
+      await loading.dismiss();
       
-    } else {
-      console.error('No se encontraron datos del paciente');
-      this.showToast('Error: No se encontraron datos del usuario', 'error');
+    } catch (error) {
+      console.error('Error al cargar datos del paciente:', error);
+      await this.showToast('Error al cargar datos del usuario', 'danger');
       this.router.navigate(['/tabs/perfil']);
     }
+  }
+
+  // Formatear RUT chileno
+  private formatearRut(rut: string): string {
+    // Eliminar puntos y guión
+    const rutLimpio = rut.replace(/\./g, '').replace(/-/g, '');
+    
+    if (rutLimpio.length < 2) return rut;
+
+    // Separar número y dígito verificador
+    const cuerpo = rutLimpio.slice(0, -1);
+    const dv = rutLimpio.slice(-1);
+
+    // Formatear con puntos
+    let rutFormateado = '';
+    let contador = 0;
+    
+    for (let i = cuerpo.length - 1; i >= 0; i--) {
+      rutFormateado = cuerpo[i] + rutFormateado;
+      contador++;
+      if (contador === 3 && i !== 0) {
+        rutFormateado = '.' + rutFormateado;
+        contador = 0;
+      }
+    }
+
+    return `${rutFormateado}-${dv}`;
   }
 
   // Obtener iniciales para el avatar
@@ -127,26 +182,21 @@ export class EditarPerfilPage implements OnInit {
       errors.push('El nombre es obligatorio');
     }
 
-    if (!this.formData.edad || this.formData.edad < 1 || this.formData.edad > 120) {
-      errors.push('La edad debe estar entre 1 y 120 años');
-    }
-
-    if (!this.formData.telefono?.trim()) {
-      errors.push('El teléfono es obligatorio');
-    }
-
-    if (!this.formData.mail?.trim()) {
-      errors.push('El correo electrónico es obligatorio');
-    } else if (!this.isValidEmail(this.formData.mail)) {
-      errors.push('El formato del correo electrónico no es válido');
+    if (!this.formData.fechaNacimiento) {
+      errors.push('La fecha de nacimiento es obligatoria');
+    } else {
+      const edad = this.calcularEdad(this.formData.fechaNacimiento);
+      if (edad < 0 || edad > 120) {
+        errors.push('La fecha de nacimiento no es válida');
+      }
     }
 
     if (!this.formData.sexo) {
       errors.push('Debe seleccionar el sexo');
     }
 
-    if (!this.formData.grupo_sanguineo) {
-      errors.push('Debe seleccionar el grupo sanguíneo');
+    if (!this.formData.tipoSangre) {
+      errors.push('Debe seleccionar el tipo de sangre');
     }
 
     return {
@@ -155,14 +205,22 @@ export class EditarPerfilPage implements OnInit {
     };
   }
 
-  // Validar email
-  private isValidEmail(email: string): boolean {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
+  // Calcular edad desde fecha de nacimiento
+  private calcularEdad(fechaNacimiento: string): number {
+    const hoy = new Date();
+    const nacimiento = new Date(fechaNacimiento);
+    let edad = hoy.getFullYear() - nacimiento.getFullYear();
+    const mes = hoy.getMonth() - nacimiento.getMonth();
+    
+    if (mes < 0 || (mes === 0 && hoy.getDate() < nacimiento.getDate())) {
+      edad--;
+    }
+    
+    return edad;
   }
 
   // Verificar si hay cambios
-  private hayaCambios(): boolean {
+  private hayCambios(): boolean {
     return JSON.stringify(this.formData) !== JSON.stringify(this.originalData);
   }
 
@@ -171,12 +229,12 @@ export class EditarPerfilPage implements OnInit {
     // Validar formulario
     const validation = this.validarFormulario();
     if (!validation.isValid) {
-      await this.showToast(`Error: ${validation.errors[0]}`, 'error');
+      await this.showToast(validation.errors[0], 'danger');
       return;
     }
 
     // Verificar si hay cambios
-    if (!this.hayaCambios()) {
+    if (!this.hayCambios()) {
       await this.showToast('No hay cambios para guardar', 'warning');
       return;
     }
@@ -191,62 +249,65 @@ export class EditarPerfilPage implements OnInit {
     this.isLoading = true;
 
     try {
-      // Simular llamada a API (puedes reemplazar esto con tu servicio real)
-      await this.simularGuardadoAPI();
-
-      // Actualizar datos en el store local
-      const pacienteActualizado = this.formData as Paciente;
-      this.pacienteStore.setPaciente(pacienteActualizado);
+      const idUsuario = this.formData.idUsuario!;
       
-      // Actualizar localStorage también
-      localStorage.setItem('usuario', JSON.stringify(pacienteActualizado));
+      // Preparar datos a enviar
+      const datosActualizar: Partial<Paciente> = {
+        nombre: this.formData.nombre,
+        fechaNacimiento: this.formData.fechaNacimiento,
+        sexo: this.formData.sexo,
+        tipoSangre: this.formData.tipoSangre
+      };
+
+      // Actualizar en la base de datos
+      const pacienteActualizado = await this.api.updatePaciente(idUsuario, datosActualizar);
+      
+
+      // Marcar que se guardaron cambios para recargar en tab5
+      localStorage.setItem('perfilActualizado', 'true');
 
       await loading.dismiss();
       
       // Mostrar éxito
       await this.showToast('Perfil actualizado correctamente', 'success');
       
-      // Regresar a la pantalla anterior
+      // Pequeña pausa para que el usuario vea el mensaje
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      // Regresar a la pantalla de perfil
       await this.router.navigate(['/tabs/perfil']);
 
-    } catch (error) {
+    } catch (error: any) {
       await loading.dismiss();
       console.error('Error al guardar:', error);
-      await this.showToast('Error al guardar los cambios', 'error');
+      
+      const errorMessage = error?.response?.data?.message || 
+                          error?.message || 
+                          'Error al guardar los cambios';
+      
+      await this.showToast(errorMessage, 'danger');
     } finally {
       this.isLoading = false;
     }
   }
 
-  // Simular guardado en API (microservicio)
-  private async simularGuardadoAPI(): Promise<void> {
-    return new Promise((resolve, reject) => {
-      // Simular delay de red
-      setTimeout(() => {
-        // Simular posible error (5% de probabilidad)
-        if (Math.random() < 0.05) {
-          reject(new Error('Error de conexión'));
-        } else {
-          console.log('Datos que se enviarían al microservicio:', this.formData);
-          resolve();
-        }
-      }, 2000);
-    });
-  }
-
   // Cancelar edición
   async cancelarEdicion() {
-    if (this.hayaCambios()) {
+    if (this.hayCambios()) {
       const alert = await this.alertController.create({
         header: 'Descartar Cambios',
         message: '¿Estás seguro de que quieres descartar los cambios realizados?',
+        cssClass: 'custom-alert',
         buttons: [
           {
             text: 'Continuar Editando',
-            role: 'cancel'
+            role: 'cancel',
+            cssClass: 'alert-button-cancel'
           },
           {
             text: 'Descartar',
+            role: 'destructive',
+            cssClass: 'alert-button-confirm',
             handler: () => {
               this.router.navigate(['/tabs/perfil']);
             }
@@ -260,7 +321,7 @@ export class EditarPerfilPage implements OnInit {
   }
 
   // Mostrar toast
-  private async showToast(message: string, color: 'success' | 'error' | 'warning' | 'primary' = 'primary') {
+  private async showToast(message: string, color: 'success' | 'danger' | 'warning' | 'primary' = 'primary') {
     const toast = await this.toastController.create({
       message,
       duration: 3000,
@@ -268,16 +329,11 @@ export class EditarPerfilPage implements OnInit {
       position: 'top',
       buttons: [
         {
-          text: '✕',
+          icon: 'close',
           role: 'cancel'
         }
       ]
     });
     await toast.present();
-  }
-
-  // Manejar back button del sistema
-  ionViewWillLeave() {
-    // Aquí podrías agregar lógica adicional si el usuario sale sin guardar
   }
 }

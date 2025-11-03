@@ -1,44 +1,53 @@
 .edit-profile-content {
-  --background: #f8f9fa;
+  --background: #f5f7fa;
 }
 
 // Avatar Section
 .avatar-section {
   text-align: center;
-  padding: 40px 20px 30px;
-  background: white;
-  margin-bottom: 20px;
+  padding: 40px 20px 50px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  position: relative;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 
   .avatar-container {
     position: relative;
     display: inline-block;
-    margin-bottom: 12px;
+    margin-bottom: 16px;
 
     .current-avatar {
       width: 100px;
       height: 100px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: white;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 36px;
       font-weight: 700;
-      color: white;
-      box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
-      border: 4px solid white;
+      color: #667eea;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      border: 5px solid rgba(255, 255, 255, 0.3);
+      transition: transform 0.3s ease;
+
+      &:hover {
+        transform: scale(1.05);
+      }
     }
 
     .change-avatar-btn {
       position: absolute;
-      bottom: -5px;
-      right: -5px;
+      bottom: 2px;
+      right: 2px;
       width: 36px;
       height: 36px;
       border-radius: 50%;
-      --background: #667eea;
-      --color: white;
-      --box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+      --background: white;
+      --color: #667eea;
+      --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+      margin: 0;
+      --padding-start: 0;
+      --padding-end: 0;
 
       ion-icon {
         font-size: 18px;
@@ -48,40 +57,38 @@
 
   .avatar-text {
     font-size: 14px;
-    color: #666;
+    color: white;
     margin: 0;
     font-weight: 500;
+    letter-spacing: 0.3px;
   }
+}
+
+// Form Container
+.form-container {
+  margin-top: -30px;
+  position: relative;
+  z-index: 2;
 }
 
 // Form Styles
 .edit-form {
-  padding: 0 16px 160px;
+  padding: 0 16px 200px;
 }
 
 .form-section {
   background: white;
-  border-radius: 16px;
-  padding: 24px;
+  border-radius: 20px;
+  padding: 28px 20px;
   margin-bottom: 20px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
 
   .section-title {
     font-size: 18px;
     font-weight: 700;
-    color: #333;
-    margin: 0 0 20px 0;
-    display: flex;
-    align-items: center;
-
-    &::before {
-      content: '';
-      width: 4px;
-      height: 20px;
-      background: #667eea;
-      border-radius: 2px;
-      margin-right: 12px;
-    }
+    color: #2d3748;
+    margin: 0 0 24px 0;
+    padding-left: 4px;
   }
 }
 
@@ -93,55 +100,102 @@
     margin-bottom: 0;
   }
 
-  &.half {
-    width: calc(50% - 6px);
-  }
-
   .form-input {
-    --background: #f8f9ff;
-    --border-radius: 12px;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    --background: #f8fafc;
+    --border-radius: 14px;
+    border-radius: 14px;
+    padding: 4px 8px;
     transition: all 0.3s ease;
-    overflow: hidden;
+    border: 2px solid transparent;
 
     &.item-has-focus {
-      --background: #f0f2ff;
+      --background: white;
+      border-color: #667eea;
       box-shadow: 0 4px 16px rgba(102, 126, 234, 0.15);
-      transform: translateY(-2px);
+    }
+
+    &.disabled {
+      opacity: 0.65;
+      --background: #f1f5f9;
+    }
+
+    ion-icon[slot="start"] {
+      color: #667eea;
+      font-size: 22px;
+      margin-right: 16px;
+      margin-left: 4px;
+    }
+
+    ion-icon.lock-icon {
+      color: #94a3b8;
+      font-size: 20px;
+      margin-right: 4px;
     }
 
     ion-input,
     ion-select {
-      --color: #333;
+      --color: #1e293b;
       font-size: 16px;
-      --padding-start: 2px;
-      --padding-end: 16px;
-      --padding-top: 3px;
-      --padding-bottom: 3px;
-      --placeholder-color: #999;
+      font-weight: 500;
+      --padding-start: 0;
+      --padding-end: 8px;
+      --placeholder-color: #94a3b8;
+      --placeholder-opacity: 1;
+    }
+
+    ion-label {
+      font-size: 13px;
+      color: #64748b;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    // Date input específico
+    &.date-input {
+      display: flex;
+      align-items: center;
+
+      .date-field {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .date-label {
+        font-size: 13px;
+        color: #64748b;
+        font-weight: 600;
+        margin: 0;
+        padding: 0;
+      }
+
+      .date-button {
+        margin: 0;
+        padding: 0;
+        --padding-start: 0;
+        --padding-end: 0;
+        width: 100%;
+        display: flex;
+        justify-content: flex-start;
+      }
     }
   }
 
   .input-help {
     font-size: 12px;
-    color: #666;
-    margin: 6px 0 0 0;
-    padding-left: 4px;
+    color: #64748b;
+    margin: 8px 0 0 12px;
+    padding-left: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    ion-icon {
+      font-size: 16px;
+      color: #667eea;
+    }
   }
-}
-
-// Form Row for side-by-side inputs
-.form-row {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 20px;
-}
-
-// Readonly input style
-.form-input ion-input[readonly] {
-  --color: #999;
-  opacity: 0.7;
 }
 
 // Form Actions
@@ -152,174 +206,188 @@
   right: 0;
   background: white;
   padding: 20px 16px;
-  border-top: 1px solid #eee;
+  padding-bottom: calc(20px + env(safe-area-inset-bottom));
+  border-top: 1px solid #e2e8f0;
   box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
-  z-index: 10;
+  z-index: 100;
 }
 
 .save-button {
   --background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  --border-radius: 12px;
-  --box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+  --border-radius: 14px;
+  --box-shadow: 0 6px 20px rgba(102, 126, 234, 0.35);
   margin-bottom: 12px;
-  height: 50px;
-  font-weight: 600;
+  height: 52px;
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 0.3px;
   transition: all 0.3s ease;
 
-  &:hover {
-    transform: translateY(-2px);
-    --box-shadow: 0 12px 30px rgba(102, 126, 234, 0.5);
+  &:not([disabled]):active {
+    transform: scale(0.98);
   }
 
   &:disabled {
-    --background: #ccc;
-    opacity: 0.6;
+    --background: #cbd5e0;
+    --box-shadow: none;
+    opacity: 0.7;
+  }
+
+  .loading-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
   }
 }
 
 .cancel-button {
-  --border-radius: 12px;
+  --border-radius: 14px;
   --border-width: 2px;
-  height: 50px;
-  font-weight: 600;
+  --border-color: #cbd5e0;
+  --color: #64748b;
+  height: 52px;
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 0.3px;
   transition: all 0.3s ease;
 
+  &:active {
+    transform: scale(0.98);
+  }
+
   &:hover {
-    transform: translateY(-2px);
+    --border-color: #94a3b8;
+    --color: #475569;
   }
 }
 
-// Loading state
-.save-button.loading {
-  --background: #ccc;
-  pointer-events: none;
-
-  &::after {
-    content: '';
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    border: 2px solid transparent;
-    border-top-color: white;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin-left: 8px;
+// Custom Alert Styles
+.custom-alert {
+  .alert-button-cancel {
+    color: #64748b;
+    font-weight: 600;
   }
-}
 
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
+  .alert-button-confirm {
+    color: #dc2626;
+    font-weight: 700;
   }
-}
-
-// Toast styles
-.success-toast {
-  --background: #10b981;
-  --color: white;
-}
-
-.error-toast {
-  --background: #ef4444;
-  --color: white;
 }
 
 // Responsive Design
 @media (max-width: 768px) {
   .avatar-section {
-    padding: 30px 20px 25px;
+    padding: 36px 20px 46px;
 
     .avatar-container .current-avatar {
-      width: 80px;
-      height: 80px;
-      font-size: 28px;
+      width: 90px;
+      height: 90px;
+      font-size: 32px;
     }
   }
 
   .form-section {
-    padding: 20px;
-    margin-bottom: 16px;
+    padding: 24px 18px;
+    border-radius: 18px;
 
     .section-title {
-      font-size: 16px;
-    }
-  }
-
-  .form-row {
-    flex-direction: column;
-    gap: 0;
-
-    .form-group.half {
-      width: 100%;
+      font-size: 17px;
+      margin-bottom: 20px;
     }
   }
 
   .edit-form {
-      padding: 0 16px 150px;
+    padding: 0 14px 190px;
   }
 
   .form-actions {
-    padding: 16px;
+    padding: 18px 14px;
+    padding-bottom: calc(18px + env(safe-area-inset-bottom));
   }
 
   .save-button,
   .cancel-button {
-    height: 45px;
+    height: 50px;
+    font-size: 15px;
   }
 }
 
 // Dark mode support
 @media (prefers-color-scheme: dark) {
   .edit-profile-content {
-    --background: #121212!important;
+    --background: #0f172a;
   }
 
-  .avatar-section,
+  .avatar-section {
+    background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+  }
+
   .form-section {
-    background: #1e1e1e!important;
+    background: #1e293b;
   }
 
   .section-title {
-    color: #fff!important;
+    color: #f1f5f9 !important;
   }
 
   .form-input {
-    --background: rgba(255, 255, 255, 0.05)!important;
-    --border-color: rgba(255, 255, 255, 0.1)!important;
+    --background: #0f172a;
+    border-color: transparent;
 
     &.item-has-focus {
-      --background: rgba(102, 126, 234, 0.1)!important;
+      --background: #1e293b;
+      border-color: #5a67d8;
+    }
+
+    &.disabled {
+      --background: #334155;
     }
 
     ion-input,
     ion-select {
-      --color: #fff!important;
-      --placeholder-color: #999!important;
+      --color: #f1f5f9;
+      --placeholder-color: #64748b;
+    }
+
+    ion-label,
+    .date-label {
+      color: #94a3b8 !important;
     }
   }
 
   .input-help {
-    color: #999!important;
+    color: #94a3b8 !important;
   }
 
   .form-actions {
-    background: #1e1e1e!important;
-    border-color: #333!important;
+    background: #1e293b;
+    border-color: #334155;
+  }
+
+  .cancel-button {
+    --border-color: #475569;
+    --color: #cbd5e0;
+
+    &:hover {
+      --border-color: #64748b;
+      --color: #e2e8f0;
+    }
   }
 }
 
-// Animation for form appearance
-.edit-form {
-  animation: slideInUp 0.6s ease-out;
+// Animation
+.form-container {
+  animation: slideUp 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-@keyframes slideInUp {
+@keyframes slideUp {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(40px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
+

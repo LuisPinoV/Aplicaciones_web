@@ -1,0 +1,121 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancelar()" fill="clear">
+        <ion-icon name="close" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Nueva Consulta</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="modal-container">
+    <!-- Sección de información básica -->
+    <div class="section-card">
+      <div class="section-header">
+        <ion-icon name="medical-outline"></ion-icon>
+        <h3>Información de la Consulta</h3>
+      </div>
+
+      <div class="form-group">
+        <ion-item lines="none" class="custom-item">
+          <ion-label position="stacked" class="custom-label">
+            <ion-icon name="calendar-outline" class="label-icon"></ion-icon>
+            Fecha de la Consulta
+          </ion-label>
+          <ion-datetime 
+            [(ngModel)]="fecha" 
+            presentation="date"
+            [max]="maxDate"
+            class="custom-datetime">
+          </ion-datetime>
+        </ion-item>
+
+        <!-- SELECT DE MÉDICO -->
+        <ion-item lines="none" class="custom-item">
+          <ion-label position="stacked" class="custom-label">
+            <ion-icon name="person-outline" class="label-icon"></ion-icon>
+            Médico
+          </ion-label>
+          <ion-select 
+            [(ngModel)]="idMedico"
+            (ionChange)="onMedicoChange($event)"
+            placeholder="Selecciona un médico"
+            interface="action-sheet"
+            class="custom-select">
+            <ion-select-option 
+              *ngFor="let medico of medicosDisponibles" 
+              [value]="medico.idMedico">
+              {{ medico.nombre }}
+            </ion-select-option>
+            <ion-select-option value="nuevo">
+              + Agregar nuevo médico
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <!-- INPUT PARA NUEVO MÉDICO (SE MUESTRA CONDICIONALMENTE) -->
+        <ion-item lines="none" class="custom-item" *ngIf="mostrarInputNuevoMedico">
+          <ion-label position="stacked" class="custom-label">
+            <ion-icon name="add-circle-outline" class="label-icon"></ion-icon>
+            Nombre del nuevo médico
+          </ion-label>
+          <ion-input 
+            [(ngModel)]="nuevoMedicoNombre"
+            placeholder="Ingresa el nombre del médico"
+            class="custom-input">
+          </ion-input>
+        </ion-item>
+
+        <ion-item lines="none" class="custom-item textarea-item">
+          <ion-label position="stacked" class="custom-label">
+            <ion-icon name="business-outline" class="label-icon"></ion-icon>
+            Institución Médica
+          </ion-label>
+          <ion-textarea 
+            [(ngModel)]="institucionMedica" 
+            placeholder="Nombre de la institución..."
+            rows="1"
+            class="custom-textarea">
+          </ion-textarea>
+        </ion-item>
+
+        <ion-item lines="none" class="custom-item textarea-item">
+          <ion-label position="stacked" class="custom-label">
+            <ion-icon name="document-text-outline" class="label-icon"></ion-icon>
+            Descripción
+          </ion-label>
+          <ion-textarea 
+            [(ngModel)]="descripcion" 
+            placeholder="Agrega notas sobre la consulta..."
+            rows="3"
+            class="custom-textarea">
+          </ion-textarea>
+        </ion-item>
+      </div>
+    </div>
+  </div>
+</ion-content>
+
+<ion-footer class="ion-no-border modal-footer">
+  <ion-toolbar>
+    <div class="footer-buttons">
+      <ion-button 
+        fill="clear" 
+        color="medium" 
+        (click)="cancelar()"
+        class="cancel-btn">
+        Cancelar
+      </ion-button>
+      <ion-button 
+        fill="solid" 
+        (click)="guardarConsulta()"
+        [disabled]="descripcion.length === 0"
+        class="save-btn">
+        <ion-icon name="checkmark" slot="start"></ion-icon>
+        Guardar Consulta
+      </ion-button>
+    </div>
+  </ion-toolbar>
+</ion-footer>

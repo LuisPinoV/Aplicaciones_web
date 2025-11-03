@@ -1,8 +1,6 @@
 <ion-content class="login-content">
   <div class="background-overlay"></div>
-  
   <div class="login-container">
-    <!-- Header con logo/título -->
     <div class="header-section">
       <div class="logo-container">
         <ion-icon name="medical" class="logo-icon"></ion-icon>
@@ -11,22 +9,21 @@
       <p class="welcome-text">¡Bienvenido de vuelta!</p>
     </div>
 
-    <!-- Formulario de login -->
     <ion-card class="login-card">
       <ion-card-content>
         <form class="login-form">
           
-          <!-- Campo de correo -->
+          <!-- Campo de RUT -->
           <div class="input-group">
             <ion-item class="custom-input" lines="none">
-              <ion-icon name="mail-outline" slot="start" class="input-icon"></ion-icon>
+              <ion-icon name="person-outline" slot="start" class="input-icon"></ion-icon>
               <ion-input
-                [(ngModel)]="email"
-                name="email"
-                type="email"
-                label="Correo electrónico"
+                [(ngModel)]="rut"
+                name="rut"
+                type="text"
+                label="RUT"
                 labelPlacement="floating"
-                placeholder="ejemplo@gmail.com"
+                placeholder="12345678-9"
                 required
                 class="custom-input-field"
                 (ionInput)="onInputChange()"
@@ -62,7 +59,7 @@
             </div>
           </ion-text>
 
-          <!-- Botón de login -->
+          <!-- Botón -->
           <ion-button 
             expand="block" 
             shape="round"
@@ -72,7 +69,6 @@
             <ion-icon name="log-in-outline" slot="start"></ion-icon>
             Iniciar Sesión
           </ion-button>
-
           <!-- Enlaces adicionales -->
           <div class="additional-links">
             <ion-button fill="clear" size="small" class="forgot-password">
@@ -92,6 +88,5 @@
         </ion-button>
       </p>
     </div>
-
   </div>
 </ion-content>

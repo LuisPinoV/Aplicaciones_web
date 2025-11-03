@@ -1,55 +1,159 @@
-<div *ngIf="consultas" class="diagnostico-card">
-  <!-- Indicador de tipo/prioridad de consulta -->
-  <div class="severity-indicator" [class]="getConsultaSeverityClass()"></div>
-  
+<ion-card *ngIf="consulta" class="consulta-card" [ngClass]="{'fade-out': consultaEliminado}">
   <div class="card-header">
-    <div class="diagnostico-icon">
-      <ion-icon [name]="getConsultaIcon()"></ion-icon>
+    <div class="consulta-meta">
+      <div class="consulta-date">
+        <ion-icon name="calendar-outline"></ion-icon>
+        <span>{{ consulta.fecha ? (consulta.fecha | date:'MMM d, y') : '' }}</span>
+      </div>
     </div>
-    <div class="diagnostico-info">
-      <h3 class="titulo">{{ consultas.institucionMedica }}</h3>
-      <p class="codigo" *ngIf="consultas.especialidad">{{ consultas.especialidad }}</p>
-    </div>
+
     <div class="card-actions">
-      <ion-button fill="clear" size="small" class="more-btn">
-        <ion-icon name="ellipsis-horizontal" slot="icon-only"></ion-icon>
+      <ion-button fill="clear" size="small" class="more-btn" (click)="abrirOpciones()">
+        <ion-icon name="ellipsis-vertical" slot="icon-only"></ion-icon>
       </ion-button>
     </div>
   </div>
 
-  <div class="card-content">
-    <div class="info-row">
-      <div class="info-item">
-        <ion-icon name="calendar-outline"></ion-icon>
-        <span class="label">Fecha consulta</span>
-        <span class="value">{{ consultas.fecha | date:'MMM d, y' }}</span>
+  <ion-card-content class="card-body">
+    <!-- Mostrar el modo de edición -->
+    <ng-container *ngIf="editando; else modoVista">
+      <div class="edit-section">
+        <div class="edit-header">
+          <ion-icon name="create-outline"></ion-icon>
+          <h4>Editando Consulta</h4>
+        </div>
+
+        <div class="edit-form">
+          <ion-item lines="none" class="edit-item">
+            <ion-label position="stacked" class="edit-label">
+              <ion-icon name="calendar-outline" class="label-icon"></ion-icon>
+              Fecha de la Consulta
+            </ion-label>
+            <ion-datetime 
+              [(ngModel)]="editable.fecha"
+              presentation="date"
+              class="edit-datetime">
+            </ion-datetime>
+          </ion-item>
+
+          <!-- SELECT DE MÉDICO -->
+          <ion-item lines="none" class="edit-item">
+            <ion-label position="stacked" class="edit-label">
+              <ion-icon name="person-outline" class="label-icon"></ion-icon>
+              Médico
+            </ion-label>
+            <ion-select 
+              [(ngModel)]="editable.idMedico"
+              (ionChange)="onMedicoChange($event)"
+              placeholder="Selecciona un médico"
+              interface="action-sheet"
+              class="edit-select">
+              <ion-select-option 
+                *ngFor="let medico of medicosDisponibles" 
+                [value]="medico.idMedico">
+                {{ medico.nombre }}
+              </ion-select-option>
+              <ion-select-option value="nuevo">
+                + Agregar nuevo médico
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+
+          <!-- INPUT PARA NUEVO MÉDICO (SE MUESTRA CONDICIONALMENTE) -->
+          <ion-item lines="none" class="edit-item" *ngIf="mostrarInputNuevoMedico">
+            <ion-label position="stacked" class="edit-label">
+              <ion-icon name="add-circle-outline" class="label-icon"></ion-icon>
+              Nombre del nuevo médico
+            </ion-label>
+            <ion-input 
+              [(ngModel)]="nuevoMedicoNombre"
+              placeholder="Ingresa el nombre del médico"
+              class="edit-input">
+            </ion-input>
+          </ion-item>
+
+          <ion-item lines="none" class="edit-item textarea-item">
+            <ion-label position="stacked" class="edit-label">
+              <ion-icon name="business-outline" class="label-icon"></ion-icon>
+              Institución médica
+            </ion-label>
+            <ion-textarea 
+              [(ngModel)]="editable.institucionMedica"
+              placeholder="Nombre de la institución..."
+              rows="1"
+              class="edit-textarea">
+            </ion-textarea>
+          </ion-item>
+
+          <ion-item lines="none" class="edit-item textarea-item">
+            <ion-label position="stacked" class="edit-label">
+              <ion-icon name="document-text-outline" class="label-icon"></ion-icon>
+              Descripción
+            </ion-label>
+            <ion-textarea 
+              [(ngModel)]="editable.descripcion"
+              placeholder="Agrega notas adicionales..."
+              rows="3"
+              class="edit-textarea">
+            </ion-textarea>
+          </ion-item>
+        </div>
+
+        <div class="botones-edicion">
+          <ion-button 
+            fill="clear" 
+            size="default"
+            class="cancel-edit-btn"
+            (click)="cancelarEdicion()">
+            Cancelar
+          </ion-button>
+          <ion-button 
+            fill="solid"
+            size="default"
+            class="save-edit-btn"
+            (click)="guardarCambios()">
+            <ion-icon name="checkmark" slot="start"></ion-icon>
+            Guardar Cambios
+          </ion-button>
+        </div>
       </div>
-    </div>
-    
-    <div class="info-row" *ngIf="consultas.medico">
-      <div class="info-item">
-        <ion-icon name="person-outline"></ion-icon>
-        <span class="label">Médico</span>
-        <span class="value">{{ consultas.medico }}</span>
+    </ng-container>
+
+    <!-- Mostrar la vista normal -->
+    <ng-template #modoVista>
+      <div class="consulta-details">
+        <div class="detail-item">
+          <ion-icon name="time-outline"></ion-icon>
+          <div class="detail-content">
+            <span class="detail-label">Tiempo transcurrido</span>
+            <span class="detail-value">{{ getTiempoTranscurrido() }}</span>
+          </div>
+        </div>
+
+        <div class="detail-item" *ngIf="consulta.institucionMedica">
+          <ion-icon name="document-text-outline"></ion-icon>
+          <div class="detail-content">
+            <span class="detail-label">Institucion médica</span>
+            <span class="detail-value">{{ consulta.institucionMedica }}</span>
+          </div>
+        </div>
+
+        <div class="detail-item" *ngIf="consulta.medicoNombre">
+          <ion-icon name="document-text-outline"></ion-icon>
+          <div class="detail-content">
+            <span class="detail-label">Médico</span>
+            <span class="detail-value">{{ consulta.medicoNombre }}</span>
+          </div>
+        </div>
+
+        <div class="detail-item" *ngIf="consulta.descripcion">
+          <ion-icon name="document-text-outline"></ion-icon>
+          <div class="detail-content">
+            <span class="detail-label">Descripción</span>
+            <span class="detail-value">{{ consulta.descripcion }}</span>
+          </div>
+        </div>
       </div>
-    </div>
-    
-    <div class="info-row" *ngIf="consultas.motivo">
-      <div class="info-item">
-        <ion-icon name="document-text-outline"></ion-icon>
-        <span class="label">Motivo</span>
-        <span class="value">{{ consultas.motivo }}</span>
-      </div>
-    </div>
-    
-    <div class="diagnostico-footer" *ngIf="shouldShowFooter()">
-      <div class="tiempo-transcurrido" *ngIf="getTiempoTranscurrido()">
-        <ion-icon name="time-outline"></ion-icon>
-        <span>{{ getTiempoTranscurrido() }}</span>
-      </div>
-      <div class="estado-badge" [class]="getConsultaEstadoClass()" *ngIf="consultas.estado">
-        {{ getEstadoTexto() }}
-      </div>
-    </div>
-  </div>
-</div>
+    </ng-template>
+  </ion-card-content>
+</ion-card>

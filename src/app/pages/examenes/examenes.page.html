@@ -92,6 +92,9 @@
           *ngFor="let exam of examenes; trackBy: trackByExamen; let i = index"
           [examen]="exam"
           [index]="i"
+          [class.new-examen-animation]="exam._isNew"
+          (onDelete)="onExamenDeleted($event)"
+          (onEdit)="actualizarEstadisticas()"
           class="examen-item">
         </app-examen-card>
       </div>

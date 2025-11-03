@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonicModule, IonContent, ToastController, ActionSheetController } from '@ionic/angular';
+import { IonicModule, IonContent, ToastController, ActionSheetController, ModalController } from '@ionic/angular';
 import { Router } from '@angular/router';
-import { Paciente } from 'src/app/core/servicios/pacientes.service';
-import { PacienteStoreService } from 'src/app/core/servicios/paciente-store.service';
 import { DiagnosticoCardComponent } from 'src/app/compartidos/componentes/diagnostico-card/diagnostico-card.component';
+import { AddDiagnosticoModalComponent } from 'src/app/compartidos/componentes/add-diagnostico-modal/add-diagnostico-modal.component';
+import { Paciente } from 'src/app/core/servicios/pacientes.service';
 import { ApiService, Diagnostico } from 'src/app/services/api';
 
 @Component({
@@ -32,27 +32,171 @@ export class DiagnosticosPage {
   diagnosticosActivos = 0;
 
   constructor(
-    private pacienteStore: PacienteStoreService,
     private router: Router,
     private apiService: ApiService,
     private toastController: ToastController,
-    private actionSheetController: ActionSheetController
+    private actionSheetController: ActionSheetController,
+    private modalController: ModalController
   ) {}
 
-  async ngOnInit() {
-    this.paciente = this.pacienteStore.getPaciente();
-    
-    if (!this.paciente) {
-      await new Promise(resolve => setTimeout(resolve, 100));
-      this.paciente = this.pacienteStore.getPaciente();
+  ngOnInit() {
+    const usuarioGuardado = localStorage.getItem('usuario');
+
+    if (usuarioGuardado) {
+      try {
+        this.paciente = JSON.parse(usuarioGuardado) as Paciente;
+      } catch (error) {
+        console.error('Error al parsear usuario desde localStorage:', error);
+        this.paciente = undefined;
+      }
     }
-    
+
     if (!this.paciente) {
-      this.router.navigate(['/login']);
-      return;
+      this.router.navigate(['/login'], { replaceUrl: true });
     }
+
+    window.addEventListener('diagnosticoEliminado', (e: any) => {
+      const id = e.detail;
+      this.diagnosticos = this.diagnosticos.filter(ex => ex.idDiagnostico !== id);
+    });
+  }
+
+  onDiagnosticoDeleted(idDiagnostico: number) {
+    this.diagnosticos = this.diagnosticos.filter(ex => ex.idDiagnostico !== idDiagnostico);
     
-    await this.loadFirstPage();
+    this.totalDiagnosticos = Math.max(0, this.totalDiagnosticos - 1);
+    
+    const tresMesesAtras = new Date();
+    tresMesesAtras.setMonth(tresMesesAtras.getMonth() - 3);
+
+    this.diagnosticosRecientes = this.diagnosticos.filter(
+      p => new Date(p.fecha) >= tresMesesAtras
+    ).length;
+
+    if (this.totalDiagnosticos === 0) {
+      this.diagnosticosActivos = 0;
+    }
+  }
+
+  async addDiagnostico() {
+    const modal = await this.modalController.create({
+      component: AddDiagnosticoModalComponent,
+      cssClass: 'diagnostico-modal-dark-border',
+      componentProps: {
+        paciente: this.paciente
+      }
+    });
+
+    modal.onDidDismiss().then(async (data) => {
+      if (data.data && data.data.nuevoDiagnostico) {
+        await this.insertarNuevoDiagnostico(data.data.nuevoDiagnostico);
+      }
+    });
+
+    return await modal.present();
+  }
+
+  private async insertarNuevoDiagnostico(nuevoDiagnostico: Diagnostico) {
+    try {
+      const diagnosticoCompleto: Diagnostico = await this.apiService.obtenerDiagnosticoPorId(nuevoDiagnostico.idDiagnostico);
+      
+      this.totalDiagnosticos++;
+      
+      const fechaNuevo = new Date(diagnosticoCompleto.fecha).getTime();
+      
+      if (this.diagnosticos.length === 0) {
+        diagnosticoCompleto._isNew = true;
+        this.diagnosticos = [diagnosticoCompleto];
+        
+        setTimeout(() => {
+          if (this.diagnosticos[0]) {
+            this.diagnosticos[0]._isNew = false;
+          }
+        }, 600);
+        
+        this.actualizarEstadisticas();
+        return;
+      }
+
+      let posicionCorrecta = -1;
+      
+      for (let i = 0; i < this.diagnosticos.length; i++) {
+        const fechaActual = new Date(this.diagnosticos[i].fecha).getTime();
+        if (fechaNuevo >= fechaActual) {
+          posicionCorrecta = i;
+          break;
+        }
+      }
+
+      if (posicionCorrecta === -1) {
+        posicionCorrecta = this.diagnosticos.length;
+      }
+
+      const posicionEnLista = posicionCorrecta + 1;
+      
+      if (posicionEnLista <= this.offset) {
+        
+        diagnosticoCompleto._isNew = true;
+        
+        const nuevoArray = [...this.diagnosticos];
+        nuevoArray.splice(posicionCorrecta, 0, diagnosticoCompleto);
+        
+        if (nuevoArray.length > this.offset) {
+          nuevoArray.pop();
+        } else {
+          this.offset++;
+        }
+        
+        this.diagnosticos = nuevoArray;
+        
+        setTimeout(() => {
+          const diagnostico = this.diagnosticos.find(e => e.idDiagnostico === diagnosticoCompleto.idDiagnostico);
+          if (diagnostico) {
+            diagnostico._isNew = false;
+          }
+        }, 600);
+        
+        this.showSuccessToast('Diagnóstico agregado correctamente');
+      } else {
+        this.showSuccessToast('Diagnóstico agregado. Desliza hacia abajo para verlo.');
+      }
+      
+      this.actualizarEstadisticas();
+      
+    } catch (error) {
+      console.error('Error al insertar nuevo diagnóstico:', error);
+      this.showErrorToast('Error al actualizar la lista de diagnósticos');
+    }
+  }
+
+  private async actualizarEstadisticas() {
+    try {
+      const idFicha = (this.paciente as any).idFichaMedica || (this.paciente as any).id || (this.paciente as any).Rut;
+      const stats = await this.apiService.getEstadisticasDiagnosticos(idFicha);
+      
+      this.totalDiagnosticos = stats.total ?? 0;
+      this.diagnosticosRecientes = stats.recientes ?? 0;
+      this.diagnosticosActivos = stats.activos ?? 0;
+    } catch (error) {
+      console.error('Error al actualizar estadísticas:', error);
+    }
+  }
+
+  async loadDiagnosticos() {
+    const idFicha = (this.paciente as any).idFichaMedica;
+    const response = await this.apiService.getDiagnosticosPaginados(idFicha, 10, 0);
+    this.diagnosticos = response.data;
+    this.totalDiagnosticos = this.diagnosticos.length;
+  }
+
+  ionViewWillEnter() {
+    const usuarioGuardado = localStorage.getItem('usuario');
+    this.paciente = usuarioGuardado ? JSON.parse(usuarioGuardado) : undefined;
+    if (!this.paciente) this.router.navigate(['/login'], { replaceUrl: true });
+
+    if (this.diagnosticos.length === 0) {
+      this.loadFirstPage();
+    }
   }
 
   private async loadFirstPage() {
@@ -91,21 +235,11 @@ export class DiagnosticosPage {
       const idFicha = (this.paciente as any).idFichaMedica || (this.paciente as any).id || (this.paciente as any).Rut;
       const res = await this.apiService.getDiagnosticosPaginados(idFicha, this.limit, this.offset);
 
-      console.log('Respuesta del servidor:', res);
-      console.log('Pagination:', res.pagination);
-
       const nuevos = res.data ?? [];
       this.diagnosticos.push(...nuevos);
 
       this.hasMore = res.pagination?.hasMore ?? false;
       this.offset = res.pagination?.nextOffset ?? (this.offset + nuevos.length);
-
-      console.log('Después de actualizar:', { 
-        nuevosLength: nuevos.length,
-        totalDiagnosticos: this.diagnosticos.length,
-        hasMore: this.hasMore, 
-        nextOffset: this.offset 
-      });
     } catch (e) {
       console.error(e);
       this.showErrorToast('Error al cargar más diagnósticos');
@@ -148,16 +282,6 @@ export class DiagnosticosPage {
       ]
     });
     await actionSheet.present();
-  }
-
-  async addDiagnostic() {
-    const toast = await this.toastController.create({
-      message: 'Abriendo formulario de nuevo diagnóstico...',
-      duration: 2000,
-      color: 'primary',
-      position: 'bottom'
-    });
-    await toast.present();
   }
 
   private sortByDate(order: 'asc' | 'desc') {

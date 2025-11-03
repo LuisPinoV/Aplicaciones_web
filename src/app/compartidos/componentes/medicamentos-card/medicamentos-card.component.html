@@ -1,37 +1,126 @@
-<div *ngIf="medicamento" class="medicamento-card">
-  <div class="estado-indicator" [class]="getEstadoClass()"></div>
+<ion-card *ngIf="medicamento" class="medicamento-card" [ngClass]="{'fade-out': medicamentoEliminado}">
   <div class="card-header">
-    <div class="medicamento-info">
-      <h3 class="titulo">{{ medicamento.nombre }}</h3>
-      <p class="motivo">{{ medicamento.motivo }}</p>
+    <div class="card-actions">
+      <ion-button fill="clear" size="small" class="more-btn" (click)="abrirOpciones()">
+        <ion-icon name="ellipsis-vertical" slot="icon-only"></ion-icon>
+      </ion-button>
     </div>
   </div>
-  <div class="card-content">
-    <div class="info-row">
-      <div class="info-item">
-        <ion-icon name="eyedrop-outline"></ion-icon>
-        <span class="label">Dosis</span>
-        <span class="value">{{ medicamento.dosis }}</span>
+
+  <ion-card-content class="card-body">
+
+    <!-- === MODO EDICIÓN === -->
+    <ng-container *ngIf="editando; else modoVista">
+      <div class="edit-section">
+        <h4>
+          <ion-icon name="create-outline"></ion-icon>
+          Editando medicamento
+        </h4>
+
+        <ion-item lines="none" class="edit-item">
+          <ion-label position="stacked">Nombre del medicamento</ion-label>
+          <ion-input [(ngModel)]="editable.nombreMedicamento" placeholder="Ej: Paracetamol 500mg"></ion-input>
+        </ion-item>
+
+        <ion-item lines="none" class="edit-item">
+          <ion-label position="stacked">Tipo de medicamento</ion-label>
+          <ion-input [(ngModel)]="editable.tipoMedicamento" placeholder="Ej: Analgésico, Antibiótico"></ion-input>
+        </ion-item>
+
+        <ion-item lines="none" class="edit-item">
+          <ion-label position="stacked">Cantidad</ion-label>
+          <ion-input type="number" [(ngModel)]="editable.cantidad" placeholder="Ej: 20"></ion-input>
+        </ion-item>
+
+        <ion-item lines="none" class="edit-item">
+          <ion-label position="stacked">Formato</ion-label>
+          <ion-input [(ngModel)]="editable.formato" placeholder="Ej: comprimidos, ml, cápsulas"></ion-input>
+        </ion-item>
+
+        <ion-item lines="none" class="edit-item">
+          <ion-label position="stacked">Tiempo de consumo (días)</ion-label>
+          <ion-input type="number" [(ngModel)]="editable.tiempoConsumo" placeholder="Ej: 7"></ion-input>
+        </ion-item>
+
+        <ion-item lines="none" class="edit-item">
+          <ion-label position="stacked">Frecuencia de consumo</ion-label>
+          <ion-input [(ngModel)]="editable.frecuenciaConsumo" placeholder="Ej: cada 8 horas, diario"></ion-input>
+        </ion-item>
+
+        <ion-item lines="none" class="edit-item textarea-item">
+          <ion-label position="stacked">Descripción</ion-label>
+          <ion-textarea 
+            [(ngModel)]="editable.descripcionMedicamento" 
+            placeholder="Notas adicionales, indicaciones especiales..."
+            rows="3">
+          </ion-textarea>
+        </ion-item>
+
+        <div class="botones-edicion">
+          <ion-button fill="clear" (click)="cancelarEdicion()">
+            Cancelar
+          </ion-button>
+          <ion-button fill="solid" (click)="guardarCambios()">
+            <ion-icon name="checkmark" slot="start"></ion-icon>
+            Guardar
+          </ion-button>
+        </div>
       </div>
-      <div class="info-item">
-        <ion-icon [name]="getViaIcon()"></ion-icon>
-        <span class="label">Vía</span>
-        <span class="value">{{ medicamento.via }}</span>
+    </ng-container>
+
+    <!-- === MODO VISTA === -->
+    <ng-template #modoVista>
+      <div class="medicamento-details">
+
+        <div class="detail-item">
+          <ion-icon name="medkit-outline"></ion-icon>
+          <div class="detail-content">
+            <span class="detail-label">Nombre</span>
+            <span class="detail-value">{{ medicamento.nombreMedicamento }}</span>
+          </div>
+        </div>
+
+        <div class="detail-item">
+          <ion-icon name="flask-outline"></ion-icon>
+          <div class="detail-content">
+            <span class="detail-label">Tipo</span>
+            <span class="detail-value">{{ medicamento.tipoMedicamento }}</span>
+          </div>
+        </div>
+
+        <div class="detail-item" *ngIf="medicamento.descripcionMedicamento">
+          <ion-icon name="document-text-outline"></ion-icon>
+          <div class="detail-content">
+            <span class="detail-label">Descripción</span>
+            <span class="detail-value">{{ medicamento.descripcionMedicamento }}</span>
+          </div>
+        </div>
+
+        <div class="detail-item">
+          <ion-icon name="cube-outline"></ion-icon>
+          <div class="detail-content">
+            <span class="detail-label">Cantidad y formato</span>
+            <span class="detail-value">{{ medicamento.cantidad }} {{ medicamento.formato }}</span>
+          </div>
+        </div>
+
+        <div class="detail-item">
+          <ion-icon name="time-outline"></ion-icon>
+          <div class="detail-content">
+            <span class="detail-label">Tiempo de consumo</span>
+            <span class="detail-value">{{ medicamento.tiempoConsumo }} días</span>
+          </div>
+        </div>
+
+        <div class="detail-item">
+          <ion-icon name="repeat-outline"></ion-icon>
+          <div class="detail-content">
+            <span class="detail-label">Frecuencia</span>
+            <span class="detail-value">{{ medicamento.frecuenciaConsumo }}</span>
+          </div>
+        </div>
+
       </div>
-      <div class="info-item">
-        <ion-icon name="time-outline"></ion-icon>
-        <span class="label">Frecuencia</span>
-        <span class="value">{{ medicamento.frecuencia }}</span>
-      </div>
-    </div>
-    <div class="medicamento-footer">
-      <div class="fecha-inicio">
-        <ion-icon name="calendar-outline"></ion-icon>
-        <span>Iniciado: {{ medicamento.fechaInicio | date:'dd/MM/yyyy' }}</span>
-      </div>
-      <div class="estado-badge" [class]="getEstadoClass()">
-        {{ medicamento.estado }}
-      </div>
-    </div>
-  </div>
-</div>
+    </ng-template>
+  </ion-card-content>
+</ion-card>

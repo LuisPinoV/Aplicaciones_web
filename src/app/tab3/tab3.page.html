@@ -1,150 +1,230 @@
 <ion-header [translucent]="true">
-  <ion-toolbar color="primary">
-    <ion-title>MediNet</ion-title>
+  <ion-toolbar>
+    <ion-title>Inicio</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="medinet-page">
-  <ion-header collapse="condense">
-    <ion-toolbar color="primary">
-      <ion-title size="large">MediNet</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true">
 
-  <div class="health-container">
-    <!-- Header Section -->
-    <div class="header-section">
-      <h1>MediNet</h1>
-      <p>Mantén tu bienestar bajo control</p>
-    </div>
-
-    <!-- Welcome Card -->
+  <div class="inicio-container">
+    <!-- Tarjeta de Bienvenida con Info del Paciente -->
     <ion-card class="welcome-card">
       <ion-card-content>
-        <h2>¡Buenos días, {{ fichaNombre }}!</h2>
-        <p>Tienes {{ pendingMedications }} medicamentos pendientes hoy</p>
+        <div class="welcome-header">
+          <div class="avatar-circle">
+            <ion-icon name="person"></ion-icon>
+          </div>
+          <div class="welcome-info">
+            <h2>¡Hola, {{ fichaNombre }}!</h2>
+            <p class="welcome-details">{{ fichaEdad }} años • {{ fichaSexo }}</p>
+            <p class="welcome-blood">Tipo de sangre: {{ fichaTipoSangre }}</p>
+          </div>
+        </div>
       </ion-card-content>
     </ion-card>
 
-    <!-- Medications Today Section -->
-    <div class="section">
+    <!-- Cards de Resumen -->
+    <div class="stats-grid">
+      <ion-card class="stat-card" (click)="navegarA('medicamentos')">
+        <ion-card-content>
+          <div class="stat-icon-wrapper medicamentos">
+            <ion-icon name="medkit"></ion-icon>
+          </div>
+          <div class="stat-number">{{ totalMedicamentos }}</div>
+          <div class="stat-label">Medicamentos</div>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card class="stat-card" (click)="navegarA('alergias')">
+        <ion-card-content>
+          <div class="stat-icon-wrapper alergias">
+            <ion-icon name="warning"></ion-icon>
+          </div>
+          <div class="stat-number">{{ totalAlergias }}</div>
+          <div class="stat-label">Alergias</div>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card class="stat-card" (click)="navegarA('examenes')">
+        <ion-card-content>
+          <div class="stat-icon-wrapper examenes">
+            <ion-icon name="flask"></ion-icon>
+          </div>
+          <div class="stat-number">{{ totalExamenes }}</div>
+          <div class="stat-label">Exámenes</div>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card class="stat-card" (click)="navegarA('consultas')">
+        <ion-card-content>
+          <div class="stat-icon-wrapper consultas">
+            <ion-icon name="people"></ion-icon>
+          </div>
+          <div class="stat-number">{{ totalConsultas }}</div>
+          <div class="stat-label">Consultas</div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <!-- Sección: Consultas Recientes -->
+    <div class="section" *ngIf="consultasRecientes && consultasRecientes.length > 0">
       <div class="section-header">
-        <h3>Medicamentos de Hoy</h3>
-        <ion-button fill="clear" size="small" color="primary" (click)="viewAllMedications()">
+        <h3>
+          <ion-icon name="people"></ion-icon>
+          Consultas Recientes
+        </h3>
+        <ion-button fill="clear" size="small" (click)="navegarA('consultas')">
+          Ver todas
+        </ion-button>
+      </div>
+      
+      <ion-card class="item-card" *ngFor="let consulta of consultasRecientes" (click)="verDetalle('consulta', consulta.idConsulta)">
+        <ion-card-content>
+          <div class="item-header">
+            <div class="item-icon consultas">
+              <ion-icon name="people"></ion-icon>
+            </div>
+            <div class="item-info">
+              <h4>{{ consulta.medicoNombre || 'Consulta Médica' }}</h4>
+              <p class="item-date">{{ formatearFecha(consulta.fecha) }}</p>
+              <p class="item-description">{{ consulta.descripcion || 'Sin descripción' }}</p>
+            </div>
+          </div>
+          <ion-icon name="chevron-forward" class="chevron"></ion-icon>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <!-- Sección: Medicamentos Activos -->
+    <div class="section" *ngIf="medicamentosActivos && medicamentosActivos.length > 0">
+      <div class="section-header">
+        <h3>
+          <ion-icon name="medkit"></ion-icon>
+          Medicamentos Activos
+        </h3>
+        <ion-button fill="clear" size="small" (click)="navegarA('medicamentos')">
           Ver todos
         </ion-button>
       </div>
-
-      <div *ngIf="!todayMedications || todayMedications.length === 0" class="empty-message">
-        <ion-icon name="medkit-outline"></ion-icon>
-        <p>No tienes medicamentos registrados para hoy</p>
-      </div>
-
-      <ion-card *ngFor="let med of todayMedications" class="medication-card">
+      
+      <ion-card class="item-card" *ngFor="let med of medicamentosActivos" (click)="verDetalle('medicamento', med.idConsultaMedicamento)">
         <ion-card-content>
-          <div class="medication-header">
-            <h4>{{ med.name }}</h4>
+          <div class="item-header">
+            <div class="item-icon medicamentos">
+              <ion-icon name="medkit"></ion-icon>
+            </div>
+            <div class="item-info">
+              <h4>{{ med.nombreMedicamento }}</h4>
+              <p class="item-type">{{ med.tipoMedicamento }}</p>
+              <p class="item-description">{{ med.cantidad }} {{ med.formato }} • {{ med.frecuenciaConsumo }}</p>
+            </div>
           </div>
-          <div class="medication-actions">
-            <ion-button size="small" color="success" (click)="markAsTaken(med)">
-              <ion-icon name="checkmark"></ion-icon>
-              Tomado
-            </ion-button>
-            <ion-button size="small" color="medium" fill="outline" (click)="skipMedication(med)">
-              Omitir
-            </ion-button>
-          </div>
+          <ion-icon name="chevron-forward" class="chevron"></ion-icon>
         </ion-card-content>
       </ion-card>
     </div>
 
-    <!-- Stats Section -->
-    <div class="section">
+    <!-- Sección: Exámenes Recientes -->
+    <div class="section" *ngIf="examenesRecientes && examenesRecientes.length > 0">
       <div class="section-header">
-        <h3>Resumen</h3>
-      </div>
-      <div class="stats-grid">
-        <ion-card class="stat-card">
-          <ion-card-content>
-            <ion-icon name="medical" class="stat-icon"></ion-icon>
-            <div class="stat-number">{{ activeMedications }}</div>
-            <div class="stat-label">Medicamentos activos</div>
-          </ion-card-content>
-        </ion-card>
-
-        <ion-card class="stat-card">
-          <ion-card-content>
-            <ion-icon name="document-text" class="stat-icon"></ion-icon>
-            <div class="stat-number">{{ monthlyExams }}</div>
-            <div class="stat-label">Exámenes este mes</div>
-          </ion-card-content>
-        </ion-card>
-      </div>
-    </div>
-
-    <!-- Quick Actions Section -->
-    <div class="section">
-      <div class="section-header">
-        <h3>Acciones Rápidas</h3>
-      </div>
-
-      <div class="quick-actions-grid">
-        <ion-card class="action-card" (click)="addMedication()">
-          <ion-card-content>
-            <ion-icon name="medical" class="action-icon"></ion-icon>
-            <p>Agregar Medicamento</p>
-          </ion-card-content>
-        </ion-card>
-
-        <ion-card class="action-card" (click)="addExam()">
-          <ion-card-content>
-            <ion-icon name="document-attach" class="action-icon"></ion-icon>
-            <p>Subir Examen</p>
-          </ion-card-content>
-        </ion-card>
-
-        <ion-card class="action-card" (click)="scheduleAppointment()">
-          <ion-card-content>
-            <ion-icon name="calendar" class="action-icon"></ion-icon>
-            <p>Agendar Cita</p>
-          </ion-card-content>
-        </ion-card>
-
-        <ion-card class="action-card emergency" (click)="emergency()">
-          <ion-card-content>
-            <ion-icon name="warning" class="action-icon"></ion-icon>
-            <p>Emergencia</p>
-          </ion-card-content>
-        </ion-card>
-      </div>
-    </div>
-
-    <!-- Recent Activity Section -->
-    <div class="section">
-      <div class="section-header">
-        <h3>Actividad Reciente</h3>
-        <ion-button fill="clear" size="small" color="primary" (click)="viewHistory()">
-          Ver historial
+        <h3>
+          <ion-icon name="flask"></ion-icon>
+          Exámenes Recientes
+        </h3>
+        <ion-button fill="clear" size="small" (click)="navegarA('examenes')">
+          Ver todos
         </ion-button>
       </div>
-
-      <div *ngIf="!recentActivities || recentActivities.length === 0" class="empty-message">
-        <ion-icon name="time-outline"></ion-icon>
-        <p>No hay actividad reciente</p>
-      </div>
-
-      <ion-card class="activity-card" *ngIf="recentActivities && recentActivities.length > 0">
+      
+      <ion-card class="item-card" *ngFor="let examen of examenesRecientes" (click)="verDetalle('examen', examen.idFichaMedicaExamen)">
         <ion-card-content>
-          <ion-item *ngFor="let activity of recentActivities" lines="none" class="activity-item">
-            <ion-icon [name]="activity.icon" class="activity-icon"></ion-icon>
-            <ion-label>
-              <h4>{{ activity.title }}</h4>
-              <p>{{ activity.time }}</p>
-            </ion-label>
-            <ion-badge *ngIf="activity.badge" color="danger" slot="end">{{ activity.badge }}</ion-badge>
-          </ion-item>
+          <div class="item-header">
+            <div class="item-icon examenes">
+              <ion-icon name="flask"></ion-icon>
+            </div>
+            <div class="item-info">
+              <h4>{{ examen.nombreExamen }}</h4>
+              <p class="item-date">{{ formatearFecha(examen.fechaExamen) }}</p>
+              <p class="item-type">{{ examen.tipoExamen }}</p>
+            </div>
+          </div>
+          <ion-icon name="chevron-forward" class="chevron"></ion-icon>
         </ion-card-content>
       </ion-card>
+    </div>
+
+    <!-- Sección: Diagnósticos Recientes -->
+    <div class="section" *ngIf="diagnosticosRecientes && diagnosticosRecientes.length > 0">
+      <div class="section-header">
+        <h3>
+          <ion-icon name="document-text"></ion-icon>
+          Diagnósticos Recientes
+        </h3>
+        <ion-button fill="clear" size="small" (click)="navegarA('diagnosticos')">
+          Ver todos
+        </ion-button>
+      </div>
+      
+      <ion-card class="item-card" *ngFor="let diag of diagnosticosRecientes" (click)="verDetalle('diagnostico', diag.idDiagnostico)">
+        <ion-card-content>
+          <div class="item-header">
+            <div class="item-icon diagnosticos">
+              <ion-icon name="document-text"></ion-icon>
+            </div>
+            <div class="item-info">
+              <h4>Diagnóstico</h4>
+              <p class="item-date">{{ formatearFecha(diag.fecha) }}</p>
+              <p class="item-description">{{ diag.descripcion }}</p>
+            </div>
+          </div>
+          <ion-icon name="chevron-forward" class="chevron"></ion-icon>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <!-- Sección: Alergias Registradas -->
+    <div class="section" *ngIf="alergias && alergias.length > 0">
+      <div class="section-header">
+        <h3>
+          <ion-icon name="warning"></ion-icon>
+          Alergias Importantes
+        </h3>
+        <ion-button fill="clear" size="small" (click)="navegarA('alergias')">
+          Ver todas
+        </ion-button>
+      </div>
+      
+      <ion-card class="item-card alert-card" *ngFor="let alergia of alergias" (click)="verDetalle('alergia', alergia.idFichaMedicaAlergia)">
+        <ion-card-content>
+          <div class="item-header">
+            <div class="item-icon alergias">
+              <ion-icon name="warning"></ion-icon>
+            </div>
+            <div class="item-info">
+              <h4>{{ alergia.nombreAlergia }}</h4>
+              <p class="item-type">{{ alergia.tipoAlergia }}</p>
+              <p class="item-description">{{ alergia.descripcionAlergia }}</p>
+            </div>
+          </div>
+          <ion-icon name="chevron-forward" class="chevron"></ion-icon>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <!-- Mensaje cuando no hay datos -->
+    <div class="empty-state" *ngIf="!tieneDatos()">
+      <ion-icon name="medical-outline"></ion-icon>
+      <h3>Comienza tu historial médico</h3>
+      <p>Dirígete a la sección de Historial para agregar tu información médica</p>
+      <ion-button (click)="navegarA('historial')">
+        Ir a Historial
+      </ion-button>
+    </div>
+
+    <!-- Loading State -->
+    <div class="loading-container" *ngIf="cargando">
+      <ion-spinner name="circular"></ion-spinner>
+      <p>Cargando información...</p>
     </div>
   </div>
 </ion-content>

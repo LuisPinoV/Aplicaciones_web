@@ -1,26 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonicModule, AlertController, ToastController } from '@ionic/angular';
-import { Paciente } from 'src/app/core/servicios/pacientes.service';
-import { PacienteStoreService } from 'src/app/core/servicios/paciente-store.service';
+import { IonicModule } from '@ionic/angular';
 import { Router } from '@angular/router';
-import { FormsModule } from '@angular/forms';
-import { ApiService } from '../services/api';
+import { ApiService, FichaMedica, Consulta, Medicamento, Examen, Diagnostico, Alergia } from '../services/api';
+import { PacienteStoreService } from 'src/app/core/servicios/paciente-store.service';
 
-interface Medication {
-  id: number;
-  name: string;
-  taken?: boolean;
-}
-
-interface Activity {
-  id: number;
-  title: string;
-  time: string;
-  type: string;
-  icon: string;
-  badge?: string;
-  progress?: boolean;
+interface Paciente {
+  idUsuario: number;
+  nombre: string;
+  Rut: string;
 }
 
 @Component({
@@ -28,191 +16,212 @@ interface Activity {
   templateUrl: './tab3.page.html',
   styleUrls: ['./tab3.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule]
+  imports: [IonicModule, CommonModule]
 })
 export class Tab3Page implements OnInit {
   paciente?: Paciente;
-  fichaNombre: string = '';
-  pendingMedications: number = 0;
-  activeMedications: number = 0;
-  monthlyExams: number = 0;
 
-  todayMedications: Medication[] = [];
-  recentActivities: Activity[] = [];
+  // Datos del paciente
+  fichaNombre: string = '';
+  fichaEdad: number = 0;
+  fichaSexo: string = '';
+  fichaTipoSangre: string = '';
+
+  // Contadores
+  totalMedicamentos: number = 0;
+  totalAlergias: number = 0;
+  totalExamenes: number = 0;
+  totalConsultas: number = 0;
+
+  // Datos de secciones (máximo 5 elementos)
+  consultasRecientes: Consulta[] = [];
+  medicamentosActivos: Medicamento[] = [];
+  examenesRecientes: Examen[] = [];
+  diagnosticosRecientes: Diagnostico[] = [];
+  alergias: Alergia[] = [];
+
+  cargando: boolean = true;
+  idFicha: number = 1; // Cambiar según tu lógica de autenticación
 
   constructor(
     private api: ApiService,
     private router: Router,
-    private pacienteStore: PacienteStoreService,
-    private toastController: ToastController,
-    private alertController: AlertController
+    private pacienteStore: PacienteStoreService
   ) {}
 
   async ngOnInit() {
-    this.paciente = this.pacienteStore.getPaciente();
+    const usuarioGuardado = localStorage.getItem('usuario');
+
+    if (usuarioGuardado) {
+      try {
+        this.paciente = JSON.parse(usuarioGuardado) as Paciente;
+      } catch (error) {
+        console.error('Error al parsear usuario desde localStorage:', error);
+        this.paciente = undefined;
+      }
+    }
+
     if (!this.paciente) {
-      this.router.navigate(['/login']);
+      this.router.navigate(['/login'], { replaceUrl: true });
     }
-    await this.cargarFicha();
+
+    await this.cargarDatos();
   }
 
-  // ================== Carga de datos desde backend ==================
-  async cargarFicha() {
+  async cargarDatos() {
+    this.cargando = true;
     try {
-      const fichaCompleta = await this.api.getFichaCompleta(1); // idFichaMedica = 1
-      this.fichaNombre = fichaCompleta.ficha.nombre;
+      // Cargar información básica de la ficha
+      const fichaCompleta = await this.api.getFichaCompleta(this.idFicha);
+      const ficha = fichaCompleta.ficha;
+      
+      this.fichaNombre = ficha.nombre;
+      this.fichaSexo = ficha.sexo;
+      this.fichaTipoSangre = ficha.tipoSangre;
+      
+      // Calcular edad
+      const fechaNac = new Date(ficha.fechaNacimiento);
+      const hoy = new Date();
+      this.fichaEdad = hoy.getFullYear() - fechaNac.getFullYear();
 
-      // Obtener medicamentos
-      const meds = await this.api.getMedicamentosFicha(1);
-      this.todayMedications = meds.map((m: any) => ({
-        id: m.idMedicamento,
-        name: m.nombre
-      }));
+      // Cargar datos de cada sección en paralelo
+      await Promise.all([
+        this.cargarConsultas(),
+        this.cargarMedicamentos(),
+        this.cargarExamenes(),
+        this.cargarDiagnosticos(),
+        this.cargarAlergias()
+      ]);
 
-      // Contadores
-      this.pendingMedications = this.todayMedications.length;
-      this.activeMedications = this.todayMedications.length;
-
-      // contador examenes 
-      const procedimientos = await this.api.getProcedimientosFicha(1);
-      this.monthlyExams = procedimientos.filter(
-        (p: any) => p.idTipoProcedimiento === 2
-      ).length;
-
-      // Mapear actividad reciente (opcional, puedes personalizar)
-      this.recentActivities = [
-        ...fichaCompleta.diagnosticos.map((d: any) => ({
-          id: d.idDiagnostico,
-          title: `Diagnóstico: ${d.descripcion}`,
-          time: new Date(d.fecha).toLocaleDateString(),
-          type: 'exam',
-          icon: 'document-text'
-        })),
-        ...fichaCompleta.consultas.map((c: any) => ({
-          id: c.idConsulta,
-          title: `Consulta: ${c.descripcion || 'Realizada'}`,
-          time: new Date(c.fecha).toLocaleDateString(),
-          type: 'medication',
-          icon: 'medical'
-        }))
-      ];
     } catch (error) {
-      console.error('Error al cargar la ficha:', error);
+      console.error('Error al cargar datos:', error);
+    } finally {
+      this.cargando = false;
     }
   }
 
-  // ================== Medicamentos ==================
-  async markAsTaken(medication: Medication) {
-    medication.taken = true;
-    this.pendingMedications = this.todayMedications.filter(m => !m.taken).length;
-
-    const toast = await this.toastController.create({
-      message: `${medication.name} marcado como tomado`,
-      duration: 2000,
-      color: 'success',
-      position: 'bottom'
-    });
-    await toast.present();
+  async cargarConsultas() {
+    try {
+      const consultas = await this.api.getConsultasPorFicha(this.idFicha);
+      this.totalConsultas = consultas.length;
+      
+      this.consultasRecientes = consultas
+        .sort((a: Consulta, b: Consulta) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())
+        .slice(0, 3);
+    } catch (error) {
+      console.error('Error al cargar consultas:', error);
+    }
   }
 
-  async skipMedication(medication: Medication) {
-    const alert = await this.alertController.create({
-      header: 'Omitir medicamento',
-      message: `¿Estás seguro de que quieres omitir ${medication.name}?`,
-      buttons: [
-        { text: 'Cancelar', role: 'cancel' },
-        {
-          text: 'Omitir',
-          handler: () => {
-            medication.taken = true;
-            this.pendingMedications = this.todayMedications.filter(m => !m.taken).length;
-            this.showSkipToast(medication);
-          }
-        }
-      ]
-    });
-    await alert.present();
+  async cargarMedicamentos() {
+    try {
+      const medicamentos = await this.api.getMedicamentosPorFicha(this.idFicha);
+      this.totalMedicamentos = medicamentos.length;
+      this.medicamentosActivos = medicamentos.slice(0, 3);
+    } catch (error) {
+      console.error('Error al cargar medicamentos:', error);
+    }
   }
 
-  private async showSkipToast(medication: Medication) {
-    const toast = await this.toastController.create({
-      message: `${medication.name} omitido`,
-      duration: 2000,
-      color: 'warning',
-      position: 'bottom'
-    });
-    await toast.present();
+  async cargarExamenes() {
+    try {
+      const examenes = await this.api.getExamenesPorFicha(this.idFicha);
+      this.totalExamenes = examenes.length;
+      
+      this.examenesRecientes = examenes
+        .sort((a: Examen, b: Examen) => new Date(b.fechaExamen).getTime() - new Date(a.fechaExamen).getTime())
+        .slice(0, 3);
+    } catch (error) {
+      console.error('Error al cargar exámenes:', error);
+    }
   }
 
-  // ================== Navegación ==================
-  viewAllMedications() {
-    this.router.navigate(['/tabs/historial/medicamentos']);
+  async cargarDiagnosticos() {
+    try {
+      const diagnosticos = await this.api.getDiagnosticosPorFicha(this.idFicha);
+      
+      this.diagnosticosRecientes = diagnosticos
+        .sort((a: Consulta, b: Consulta) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())
+        .slice(0, 3);
+    } catch (error) {
+      console.error('Error al cargar diagnósticos:', error);
+    }
   }
 
-  viewHistory() {
-    console.log('Navegar al historial de actividad');
+  async cargarAlergias() {
+    try {
+      const alergias = await this.api.getAlergiasPorFicha(this.idFicha);
+      this.totalAlergias = alergias.length;
+      
+      this.alergias = alergias.slice(0, 3);
+    } catch (error) {
+      console.error('Error al cargar alergias:', error);
+    }
   }
 
-  // ================== Acciones rápidas ==================
-  async addMedication() {
-    const toast = await this.toastController.create({
-      message: 'Abriendo formulario de medicamentos...',
-      duration: 1500,
-      color: 'primary',
-      position: 'bottom'
-    });
-    await toast.present();
-    console.log('Navegar a agregar medicamento');
+  // Navegación
+  navegarA(seccion: string) {
+    switch (seccion) {
+      case 'medicamentos':
+        this.router.navigate(['/tabs/historial/medicamentos']);
+        break;
+      case 'alergias':
+        this.router.navigate(['/tabs/historial/alergias']);
+        break;
+      case 'examenes':
+        this.router.navigate(['/tabs/historial/examenes']);
+        break;
+      case 'consultas':
+        this.router.navigate(['/tabs/historial/consultas']);
+        break;
+      case 'diagnosticos':
+        this.router.navigate(['/tabs/historial/diagnosticos']);
+        break;
+      case 'historial':
+        this.router.navigate(['/tabs/historial']);
+        break;
+    }
   }
 
-  async addExam() {
-    const toast = await this.toastController.create({
-      message: 'Abriendo cámara/galería...',
-      duration: 1500,
-      color: 'primary',
-      position: 'bottom'
-    });
-    await toast.present();
-    console.log('Subir examen');
+  verDetalle(tipo: string, id: number) {
+    // Navegar al detalle según el tipo
+    switch (tipo) {
+      case 'consulta':
+        this.router.navigate(['/tabs/historial/consultas', id]);
+        break;
+      case 'medicamento':
+        this.router.navigate(['/tabs/historial/medicamentos', id]);
+        break;
+      case 'examen':
+        this.router.navigate(['/tabs/historial/examenes', id]);
+        break;
+      case 'diagnostico':
+        this.router.navigate(['/tabs/historial/diagnosticos', id]);
+        break;
+      case 'alergia':
+        this.router.navigate(['/tabs/historial/alergias', id]);
+        break;
+    }
   }
 
-  async scheduleAppointment() {
-    const toast = await this.toastController.create({
-      message: 'Abriendo calendario...',
-      duration: 1500,
-      color: 'secondary',
-      position: 'bottom'
-    });
-    await toast.present();
-    console.log('Agendar cita');
+  // Utilidades
+  formatearFecha(fecha: string): string {
+    const date = new Date(fecha);
+    const opciones: Intl.DateTimeFormatOptions = { 
+      day: '2-digit', 
+      month: 'short', 
+      year: 'numeric' 
+    };
+    return date.toLocaleDateString('es-CL', opciones);
   }
 
-  async emergency() {
-    const alert = await this.alertController.create({
-      header: 'Emergencia Médica',
-      message: '¿Necesitas contactar servicios de emergencia?',
-      buttons: [
-        { text: 'Cancelar', role: 'cancel' },
-        { text: 'Llamar 911', handler: () => this.callEmergency() },
-        { text: 'Contactos de emergencia', handler: () => this.showEmergencyContacts() }
-      ]
-    });
-    await alert.present();
-  }
-
-  private callEmergency() {
-    console.log('Llamando a emergencias');
-    window.open('tel:911', '_system');
-  }
-
-  private async showEmergencyContacts() {
-    const toast = await this.toastController.create({
-      message: 'Mostrando contactos de emergencia...',
-      duration: 2000,
-      color: 'danger',
-      position: 'bottom'
-    });
-    await toast.present();
-    console.log('Mostrar contactos de emergencia');
+  tieneDatos(): boolean {
+    return (
+      this.consultasRecientes.length > 0 ||
+      this.medicamentosActivos.length > 0 ||
+      this.examenesRecientes.length > 0 ||
+      this.diagnosticosRecientes.length > 0 ||
+      this.alergias.length > 0
+    );
   }
 }

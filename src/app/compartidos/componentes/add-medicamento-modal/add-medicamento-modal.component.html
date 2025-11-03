@@ -1,0 +1,149 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancelar()" fill="clear">
+        <ion-icon name="close" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Nuevo Medicamento</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="modal-container">
+    
+    <!-- Sección de selección de medicamento -->
+    <div class="section-card">
+      <div class="section-header">
+        <ion-icon name="search-outline"></ion-icon>
+        <h3>Seleccionar Medicamento</h3>
+      </div>
+
+      <!-- Filtro por tipo -->
+      <ion-item lines="none" class="filter-item">
+        <ion-label position="stacked">Tipo de medicamento</ion-label>
+        <ion-select 
+          [(ngModel)]="tipoSeleccionado" 
+          (ionChange)="onTipoChange($event)"
+          placeholder="Todos los tipos"
+          interface="popover">
+          <ion-select-option value="todos">Todos los tipos</ion-select-option>
+          <ion-select-option 
+            *ngFor="let tipo of tiposMedicamentos" 
+            [value]="tipo.idTipoMedicamento">
+            {{ tipo.tipoMedicamento }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <!-- Barra de búsqueda -->
+      <ion-searchbar
+        [(ngModel)]="searchText"
+        (ionInput)="filtrarMedicamentos($event)"
+        placeholder="Buscar por nombre..."
+        animated="true"
+        debounce="300">
+      </ion-searchbar>
+
+      <!-- Botón para limpiar filtros -->
+      <div *ngIf="searchText || tipoSeleccionado" class="filtros-activos">
+        <ion-chip (click)="limpiarFiltros()">
+          <ion-icon name="close-circle"></ion-icon>
+          <ion-label>Limpiar filtros</ion-label>
+        </ion-chip>
+      </div>
+
+      <!-- Medicamento seleccionado -->
+      <div *ngIf="medicamentoSeleccionado" class="selected-med">
+        <div class="selected-content">
+          <ion-icon name="checkmark-circle" color="success"></ion-icon>
+          <div>
+            <strong>{{ medicamentoSeleccionado.nombreMedicamento }}</strong>
+            <p>{{ medicamentoSeleccionado.tipoMedicamento }}</p>
+            <p *ngIf="medicamentoSeleccionado.descripcionMedicamento" class="descripcion-small">
+              {{ medicamentoSeleccionado.descripcionMedicamento }}
+            </p>
+          </div>
+        </div>
+        <ion-button fill="clear" size="small" (click)="limpiarSeleccion()">
+          <ion-icon name="close" slot="icon-only"></ion-icon>
+        </ion-button>
+      </div>
+
+      <!-- Lista de medicamentos -->
+      <div *ngIf="!medicamentoSeleccionado" class="medicamentos-list">
+        <ion-list *ngIf="medicamentosFiltrados.length > 0">
+          <ion-item 
+            *ngFor="let med of medicamentosFiltrados" 
+            button 
+            (click)="seleccionarMedicamento(med)"
+            lines="none"
+            class="med-item">
+            <ion-icon name="medkit-outline" slot="start"></ion-icon>
+            <ion-label>
+              <h3>{{ med.nombreMedicamento }}</h3>
+              <p>{{ med.tipoMedicamento }}</p>
+              <p *ngIf="med.descripcionMedicamento" class="descripcion-small">
+                {{ med.descripcionMedicamento }}
+              </p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+
+        <!-- No hay resultados -->
+        <div *ngIf="medicamentosFiltrados.length === 0" class="no-results">
+          <ion-icon name="search-outline"></ion-icon>
+          <p *ngIf="searchText">No se encontró "{{ searchText }}"</p>
+          <p *ngIf="!searchText && tipoSeleccionado">No hay medicamentos de este tipo</p>
+          <p *ngIf="!searchText && !tipoSeleccionado">No hay medicamentos disponibles</p>
+          <ion-button fill="outline" (click)="abrirFormularioNuevo()">
+            <ion-icon name="add" slot="start"></ion-icon>
+            Agregar al catálogo
+          </ion-button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sección de detalles (solo si hay medicamento seleccionado) -->
+    <div *ngIf="medicamentoSeleccionado" class="section-card">
+      <div class="section-header">
+        <ion-icon name="document-text-outline"></ion-icon>
+        <h3>Detalles de la Prescripción</h3>
+      </div>
+
+      <div class="form-group">
+        <ion-item lines="none" class="custom-item">
+          <ion-label position="stacked">Cantidad</ion-label>
+          <ion-input type="number" [(ngModel)]="cantidad" placeholder="Ej: 20"></ion-input>
+        </ion-item>
+
+        <ion-item lines="none" class="custom-item">
+          <ion-label position="stacked">Formato</ion-label>
+          <ion-input [(ngModel)]="formato" placeholder="Ej: cápsulas, ml, comprimidos..."></ion-input>
+        </ion-item>
+
+        <ion-item lines="none" class="custom-item">
+          <ion-label position="stacked">Tiempo de consumo (días)</ion-label>
+          <ion-input type="number" [(ngModel)]="tiempoConsumo" placeholder="Ej: 7"></ion-input>
+        </ion-item>
+
+        <ion-item lines="none" class="custom-item">
+          <ion-label position="stacked">Frecuencia de consumo</ion-label>
+          <ion-input [(ngModel)]="frecuenciaConsumo" placeholder="Ej: cada 8 horas"></ion-input>
+        </ion-item>
+      </div>
+    </div>
+  </div>
+</ion-content>
+
+<ion-footer class="ion-no-border modal-footer">
+  <ion-toolbar>
+    <div class="footer-buttons">
+      <ion-button fill="clear" color="medium" (click)="cancelar()">Cancelar</ion-button>
+      <ion-button fill="solid" (click)="guardarMedicamento()" [disabled]="!medicamentoSeleccionado">
+        <ion-icon name="checkmark" slot="start"></ion-icon>
+        Guardar Medicamento
+      </ion-button>
+    </div>
+  </ion-toolbar>
+</ion-footer>

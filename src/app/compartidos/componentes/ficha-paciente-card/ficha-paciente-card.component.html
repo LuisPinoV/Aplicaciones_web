@@ -1,4 +1,4 @@
-<ion-card class="modern-profile-card" *ngIf="paciente">
+<ion-card class="modern-profile-card" [class.editing]="isEditing" *ngIf="paciente">
   
   <!-- Header con avatar y nombre -->
   <div class="profile-header">
@@ -13,10 +13,18 @@
         </div>
       </div>
       <div class="name-section">
-        <h2 class="patient-name">{{ paciente.nombre || 'Paciente' }}</h2>
-        <p class="patient-id">ID: {{ paciente.rut }}</p>
+        <ng-container *ngIf="!isEditing">
+          <h2 class="patient-name">{{ paciente.nombre || 'Paciente' }}</h2>
+          <p class="patient-id">RUT: {{ paciente.Rut }}</p>
+        </ng-container>
       </div>
     </div>
+  </div>
+
+  <!-- Loading overlay -->
+  <div class="loading-overlay" *ngIf="isSaving">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Guardando cambios...</p>
   </div>
 
   <!-- Grid de información -->
@@ -29,8 +37,10 @@
           <ion-icon name="calendar"></ion-icon>
         </div>
         <div class="card-content">
-          <span class="card-value">{{ displayAge }}</span>
-          <span class="card-label">Edad</span>
+          <ng-container *ngIf="!isEditing">
+            <span class="card-value">{{ displayAge }}</span>
+            <span class="card-label">Edad</span>
+          </ng-container>
         </div>
       </div>
 
@@ -40,8 +50,10 @@
           <ion-icon name="person"></ion-icon>
         </div>
         <div class="card-content">
-          <span class="card-value">{{ displaySex }}</span>
-          <span class="card-label">Sexo</span>
+          <ng-container *ngIf="!isEditing">
+            <span class="card-value">{{ displaySex }}</span>
+            <span class="card-label">Sexo</span>
+          </ng-container>
         </div>
       </div>
 
@@ -51,41 +63,11 @@
           <ion-icon name="water"></ion-icon>
         </div>
         <div class="card-content">
-          <span class="card-value">{{ paciente.grupo_sanguineo }}</span>
-          <span class="card-label">Grupo</span>
+          <ng-container *ngIf="!isEditing">
+            <span class="card-value">{{ displayBloodType }}</span>
+            <span class="card-label">Grupo</span>
+          </ng-container>
         </div>
-      </div>
-
-    </div>
-
-    <!-- Información de contacto -->
-    <div class="contact-section">
-      <h3 class="section-title">Información de Contacto</h3>
-      
-      <div class="contact-item">
-        <div class="contact-icon phone-icon">
-          <ion-icon name="call"></ion-icon>
-        </div>
-        <div class="contact-info">
-          <span class="contact-value">{{ paciente.telefono }}</span>
-          <span class="contact-label">Teléfono</span>
-        </div>
-        <ion-button fill="clear" size="small" class="contact-action">
-          <ion-icon name="call-outline"></ion-icon>
-        </ion-button>
-      </div>
-
-      <div class="contact-item">
-        <div class="contact-icon email-icon">
-          <ion-icon name="mail"></ion-icon>
-        </div>
-        <div class="contact-info">
-          <span class="contact-value">{{ paciente.mail }}</span>
-          <span class="contact-label">Correo electrónico</span>
-        </div>
-        <ion-button fill="clear" size="small" class="contact-action">
-          <ion-icon name="mail-outline"></ion-icon>
-        </ion-button>
       </div>
     </div>
   </div>

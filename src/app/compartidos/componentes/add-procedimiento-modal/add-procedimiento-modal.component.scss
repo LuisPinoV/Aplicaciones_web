@@ -1,0 +1,479 @@
+:host {
+  @media (prefers-color-scheme: dark) {
+    border: 1.5px solid rgba(52, 211, 153, 0.4) !important;
+    border-radius: 16px;
+    box-shadow: 0 0 20px rgba(52, 211, 153, 0.16),
+                0 10px 40px rgba(0, 0, 0, 0.5) !important;
+    overflow: hidden;
+  }
+}
+
+ion-header {
+  ion-toolbar {
+    --background: var(--ion-background-color);
+    --border-width: 0;
+    padding: 8px 0;
+
+    ion-title {
+      font-weight: 700;
+      font-size: 20px;
+      color: #10b981 !important;
+    }
+
+    ion-button {
+      --padding-start: 12px;
+      --padding-end: 12px;
+      --color: #10b981 !important;
+      
+      ion-icon {
+        font-size: 24px;
+      }
+
+      &:hover {
+        --color: #059669 !important;
+      }
+    }
+  }
+}
+
+ion-content {
+  --background: var(--ion-background-color);
+  
+  &::part(scroll) {
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+      margin: 8px 0;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: rgba(16, 185, 129, 0.77) !important;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: rgba(16, 185, 129, 0.648) !important;
+        width: 8px;
+      }
+    }
+  }
+}
+
+.modal-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding-bottom: 0px!important;
+}
+
+// Tarjetas de sección
+.section-card {
+  background: var(--ion-card-background);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 6px;
+  border: 1px solid rgba(16, 185, 129, 0.12) !important;
+  box-shadow: 
+    0 2px 4px rgba(16, 185, 129, 0.04),
+    0 4px 8px rgba(16, 185, 129, 0.06) !important;
+  transition: all 0.3s ease;
+
+  &:hover {
+    box-shadow: 
+      0 4px 8px rgba(16, 185, 129, 0.08),
+      0 8px 16px rgba(16, 185, 129, 0.1) !important;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid rgba(16, 185, 129, 0.12) !important;
+
+    ion-icon {
+      font-size: 22px;
+      color: #10b981 !important;
+    }
+
+    h3 {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 700;
+      color: #10b981 !important;
+      letter-spacing: -0.2px;
+    }
+  }
+}
+
+// Formulario
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.custom-item {
+  --background: rgba(16, 185, 129, 0.05) !important;
+  --border-radius: 12px;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --inner-padding-end: 0;
+  border-radius: 12px;
+  border: 1px solid rgba(16, 185, 129, 0.1) !important;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    --background: rgba(16, 185, 129, 0.08) !important;
+    border-color: rgba(16, 185, 129, 0.2) !important;
+  }
+
+  &.item-has-focus {
+    border-color: #10b981 !important;
+    --background: rgba(16, 185, 129, 0.08) !important;
+  }
+  
+  &.textarea-item {
+    --background: rgba(16, 185, 129, 0.05) !important;
+  }
+}
+
+.custom-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 17px!important;
+  color: #10b981 !important;
+  margin-bottom: 8px;
+  margin-top: 5px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+
+  .label-icon {
+    font-size: 16px;
+    color: #10b981 !important;
+  }
+}
+
+.custom-select,
+.custom-datetime,
+.custom-textarea {
+  margin-top: 4px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.custom-textarea {
+  --padding-top: 12px;
+  --padding-bottom: 12px;
+}
+
+// Estilos específicos para el datetime (calendario)
+.custom-datetime {
+  --padding-start: 0;
+  --padding-end: 0;
+  margin: 12px 0 14px 0;
+  
+  ion-datetime {
+    --background: transparent;
+    border-radius: 12px;
+    padding: 12px;
+    
+    // Header del calendario
+    .calendar-header {
+      padding: 0 4px 12px;
+    }
+
+    // Botones de navegación
+    .calendar-action-buttons {
+      ion-button {
+        --color: #10b981 !important;
+        --background-hover: rgba(16, 185, 129, 0.1) !important;
+      }
+    }
+
+    // Selector de mes/año
+    .calendar-month-year {
+      color: #10b981 !important;
+      font-weight: 600;
+      font-size: 15px;
+    }
+
+    // Días de la semana
+    .calendar-day-of-week {
+      color: #10b981 !important;
+      font-weight: 600;
+      font-size: 12px;
+      opacity: 0.7;
+    }
+
+    // Días del mes
+    .calendar-day {
+      color: var(--ion-text-color);
+      font-size: 14px;
+      
+      &:hover {
+        background: rgba(16, 185, 129, 0.1) !important;
+        color: #10b981 !important;
+      }
+    }
+
+    // Día seleccionado
+    .calendar-day-active {
+      background: #10b981 !important;
+      color: #fff !important;
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4) !important;
+    }
+
+    // Día de hoy
+    .calendar-day-today {
+      color: #10b981 !important;
+      font-weight: 600;
+      
+      &::after {
+        background: #10b981 !important;
+      }
+    }
+  }
+}
+
+// Footer
+.modal-footer {
+  ion-toolbar {
+    --background: var(--ion-background-color);
+    --border-width: 0;
+    padding: 12px 16px;
+    box-shadow: 0 -2px 10px rgba(16, 185, 129, 0.1) !important;
+    border-top: 1px solid rgba(16, 185, 129, 0.1) !important;
+  }
+}
+
+.footer-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+
+  .cancel-btn {
+    --padding-start: 20px;
+    --padding-end: 20px;
+    font-weight: 600;
+    --color: #10b981 !important;
+
+    &:hover {
+      --color: #059669 !important;
+    }
+  }
+
+  .save-btn {
+    --background: #10b981 !important;
+    --background-hover: #059669 !important;
+    --padding-start: 24px;
+    --padding-end: 24px;
+    font-weight: 600;
+    flex: 1;
+    max-width: 200px;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3) !important;
+    transition: all 0.3s ease;
+
+    &:hover {
+      box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4) !important;
+      transform: translateY(-1px);
+    }
+
+    &::part(native) {
+      border-radius: 12px;
+      height: 48px;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      box-shadow: none !important;
+    }
+  }
+}
+
+// Dark mode
+@media (prefers-color-scheme: dark) {
+  ion-header {
+    ion-toolbar {
+      ion-title {
+        color: #6ee7b7 !important;
+      }
+
+      ion-button {
+        --color: #6ee7b7 !important;
+
+        &:hover {
+          --color: #a7f3d0 !important;
+        }
+      }
+    }
+  }
+
+  .section-card {
+    background: #1c1c1c;
+    border-color: rgba(16, 185, 129, 0.2) !important;
+
+    &:hover {
+      box-shadow: 
+        0 4px 8px rgba(16, 185, 129, 0.15),
+        0 8px 16px rgba(16, 185, 129, 0.12) !important;
+    }
+
+    .section-header {
+      border-bottom-color: rgba(16, 185, 129, 0.2) !important;
+
+      ion-icon {
+        color: #34d399 !important;
+      }
+
+      h3 {
+        color: #6ee7b7 !important;
+      }
+    }
+  }
+
+  .custom-item {
+    --background: rgba(52, 211, 153, 0.08) !important;
+    border-color: rgba(16, 185, 129, 0.2) !important;
+
+    &:hover {
+      --background: rgba(52, 211, 153, 0.12) !important;
+      border-color: rgba(16, 185, 129, 0.3) !important;
+    }
+
+    &.item-has-focus {
+      border-color: #34d399 !important;
+      --background: rgba(52, 211, 153, 0.12) !important;
+    }
+  }
+
+  .custom-label {
+    color: #34d399 !important;
+
+    .label-icon {
+      color: #34d399 !important;
+    }
+  }
+
+  // Estilos del calendario en dark mode
+  .custom-datetime {
+    ion-datetime {
+      .calendar-action-buttons {
+        ion-button {
+          --color: #34d399 !important;
+          --background-hover: rgba(52, 211, 153, 0.15) !important;
+        }
+      }
+
+      .calendar-month-year {
+        color: #6ee7b7 !important;
+      }
+
+      .calendar-day-of-week {
+        color: #34d399 !important;
+      }
+
+      .calendar-day {
+        color: #e5e7eb !important;
+        
+        &:hover {
+          background: rgba(52, 211, 153, 0.15) !important;
+          color: #6ee7b7 !important;
+        }
+      }
+
+      .calendar-day-active {
+        background: #34d399 !important;
+        box-shadow: 0 2px 8px rgba(52, 211, 153, 0.5) !important;
+      }
+
+      .calendar-day-today {
+        color: #6ee7b7 !important;
+        
+        &::after {
+          background: #34d399 !important;
+        }
+      }
+    }
+  }
+
+  .modal-footer {
+    ion-toolbar {
+      box-shadow: 0 -2px 10px rgba(16, 185, 129, 0.15) !important;
+      border-top-color: rgba(16, 185, 129, 0.2) !important;
+    }
+  }
+
+  .footer-buttons {
+    .cancel-btn {
+      --color: #34d399 !important;
+
+      &:hover {
+        --color: #6ee7b7 !important;
+      }
+    }
+
+    .save-btn {
+      --background: #34d399 !important;
+      --background-hover: #6ee7b7 !important;
+      box-shadow: 0 4px 12px rgba(52, 211, 153, 0.3) !important;
+
+      &:hover {
+        box-shadow: 0 6px 16px rgba(52, 211, 153, 0.4) !important;
+      }
+    }
+  }
+}
+
+// Responsive
+@media (max-width: 576px) {
+  .modal-container {
+    padding-bottom: 20px;
+  }
+
+  .footer-buttons {
+    flex-direction: column-reverse;
+
+    .save-btn {
+      max-width: 100%;
+    }
+  }
+}
+
+// Animaciones
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.section-card {
+  animation: slideIn 0.3s ease-out;
+}
+
+// Animación de entrada del modal
+@keyframes modalSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-container {
+  animation: modalSlideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}

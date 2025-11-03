@@ -1,274 +1,457 @@
-// hospitalizacion-card.component.scss
-
 .hospitalizacion-card {
-  background: var(--ion-color-step-100);
-  border: 1px solid rgba(100, 116, 139, 0.2);
-  border-radius: 12px;
-  margin-bottom: 16px;
-  overflow: hidden;
+  margin: 0 0 20px 0 !important;
+  border-radius: 16px;
   position: relative;
-  transition: all 0.2s ease;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(236, 72, 153, 0.12);
+  background: #ffffff;
+
+  box-shadow:
+    0 2px 4px rgba(236, 72, 153, 0.04),
+    0 6px 12px rgba(236, 72, 153, 0.08),
+    0 12px 24px rgba(236, 72, 153, 0.06);
 
   &:hover {
-    border-color: var(--ion-color-step-500);
+    transform: translateY(-3px);
+    border-color: rgba(236, 72, 153, 0.2);
+    box-shadow:
+      0 4px 6px rgba(236, 72, 153, 0.08),
+      0 8px 20px rgba(236, 72, 153, 0.15),
+      0 16px 32px rgba(236, 72, 153, 0.10);
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+// Header de la card
+.card-header {
+  padding: 1rem 0.8rem 0.8rem 1.4rem !important;
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  gap: 12px;
+  border-bottom: 1px solid rgba(236, 72, 153, 0.08);
+}
+
+.hospitalizacion-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.hospitalizacion-date {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: #ec4899 !important;
+  font-weight: 600;
+
+  ion-icon {
+    font-size: 18px;
+    margin-bottom: 2px;
+    color: #ec4899 !important;
+  }
+}
+
+// Acciones de la card
+.card-actions {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+
+  .more-btn {
+    --color: #ec4899 !important;
+    --padding-start: 1px;
+    --padding-end: 1px;
+    margin: 0;
     
-    .severity-indicator {
-      width: 6px;
+    ion-icon {
+      font-size: 20px;
+    }
+
+    &:hover {
+      --color: #db2777 !important;
+    }
+  }
+}
+
+// Cuerpo de la card
+.card-body {
+  padding: 16px 20px 16px 24px !important;
+}
+
+// Detalles del hospitalizacion
+.hospitalizacion-details {
+  margin-bottom: 0;
+}
+
+.detail-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(236, 72, 153, 0.06);
+
+  &:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+
+  ion-icon {
+    margin-top: 1px;
+    color: #ec4899 !important;
+    font-size: 20px;
+    min-width: 20px;
+  }
+}
+
+.detail-content {
+  flex: 1;
+  min-width: 0;
+
+  .detail-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #ec4899 !important;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .detail-value {
+    display: block;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--ion-color-dark);
+    line-height: 1.5;
+  }
+}
+
+// Badge de tipo de hospitalizacion
+.tipo-badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: rgba(236, 72, 153, 0.12);
+  color: #ec4899 !important;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+// Estilos para modo de edición
+.edit-section {
+  padding: 8px 0 0 0!important;
+}
+
+.edit-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid rgba(236, 72, 153, 0.12);
+
+  ion-icon {
+    font-size: 22px;
+    color: #ec4899 !important;
+  }
+
+  h4 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 700;
+    color: #ec4899 !important;
+    letter-spacing: -0.2px;
+  }
+}
+
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.edit-item {
+  --background: rgba(236, 72, 153, 0.05);
+  --border-radius: 12px;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --inner-padding-end: 0;
+  border-radius: 12px;
+  border: 1px solid rgba(236, 72, 153, 0.1);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    --background: rgba(236, 72, 153, 0.08);
+    border-color: rgba(236, 72, 153, 0.2);
+  }
+
+  &.item-has-focus {
+    border-color: #ec4899 !important;
+    --background: rgba(236, 72, 153, 0.08);
+  }
+  
+  &.textarea-item {
+    --background: rgba(236, 72, 153, 0.05);
+  }
+}
+
+.edit-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 17px !important;
+  color: #ec4899 !important;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+
+  .label-icon {
+    font-size: 20px;
+    margin-bottom: 4px;
+    color: #ec4899 !important;
+  }
+}
+
+.edit-select,
+.edit-datetime,
+.edit-textarea {
+  margin-top: 4px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.edit-textarea {
+  --padding-top: 12px;
+  --padding-bottom: 12px;
+}
+
+// Estilos del datetime en modo edición
+.edit-datetime {
+  --padding-start: 0;
+  --padding-end: 0;
+  padding: 3px 0!important;
+  margin: 10px 0 14px 0;
+}
+
+.botones-edicion {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(236, 72, 153, 0.1);
+  justify-content: flex-end;
+
+  .cancel-edit-btn {
+    --color: #ec4899 !important;
+    --padding-start: 20px;
+    --padding-end: 20px;
+    font-weight: 600;
+
+    &:hover {
+      --color: #db2777 !important;
     }
   }
 
-  // Indicador de gravedad simplificado
-  .severity-indicator {
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 4px;
-    transition: width 0.3s ease;
-    z-index: 2;
-    
-    &.leve { 
-      background: rgb(52, 168, 83);
+  .save-edit-btn {
+    --background: #ec4899 !important;
+    --background-hover: #db2777 !important;
+    --padding-start: 24px;
+    --padding-end: 24px;
+    --border-radius: 12px;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(236, 72, 153, 0.3);
+    transition: all 0.3s ease;
+
+    &:hover {
+      box-shadow: 0 6px 16px rgba(236, 72, 153, 0.4);
+      transform: translateY(-1px);
     }
-    &.moderado { 
-      background: rgb(251, 146, 60);
-    }
-    &.grave { 
-      background: rgb(239, 68, 68);
-    }
-    &.resuelto { 
-      background: rgb(100, 116, 139);
+  }
+}
+
+ion-item {
+  --border-color: rgba(236, 72, 153, 0.1);
+  
+  ion-label {
+    color: #ec4899 !important;
+    font-weight: 600;
+    font-size: 13px;
+  }
+}
+
+// Dark mode
+@media (prefers-color-scheme: dark) {
+  .hospitalizacion-card {
+    background: #1c1c1c;
+    border-color: rgba(236, 72, 153, 0.2) !important;
+
+    box-shadow:
+      0 4px 8px rgba(0, 0, 0, 0.6),
+      0 8px 20px rgba(236, 72, 153, 0.15);
+
+    &:hover {
+      border-color: rgba(236, 72, 153, 0.35);
+      box-shadow:
+        0 6px 14px rgba(0, 0, 0, 0.7),
+        0 12px 28px rgba(236, 72, 153, 0.25);
+      transform: translateY(-3px);
     }
   }
 
   .card-header {
-    display: flex;
-    align-items: flex-start;
-    padding: 16px 16px 8px 20px;
-    background: var(--ion-color-step-100);
-    border-bottom: 1px solid var(--ion-color-step-300);
+    border-bottom-color: rgba(236, 72, 153, 0.15);
+  }
 
-    .hospitalizacion-icon {
-      width: 42px;
-      height: 42px;
-      border-radius: 12px;
-      background: rgba(var(--ion-color-primary-rgb), 0.1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-right: 12px;
-      flex-shrink: 0;
+  .detail-item {
+    border-bottom-color: rgba(236, 72, 153, 0.1);
+  }
 
-      ion-icon {
-        font-size: 22px;
-        color: rgb(var(--ion-color-primary-rgb));
-      }
-    }
+  .detail-content .detail-value {
+    color: #e5e7eb;
+  }
 
-    .hospitalizacion-info {
-      flex: 1;
-      min-width: 0;
-
-      .titulo {
-        font-size: 1rem;
-        font-weight: 600;
-        color: var(--ion-text-color);
-        line-height: 1.3;
-        margin: 0 0 4px 0;
-        word-break: break-word;
-      }
-
-      .codigo {
-        font-size: 0.75rem;
-        font-weight: 500;
-        color: var(--ion-color-medium);
-        margin: 0;
-        font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
-        background: var(--ion-color-step-200);
-        padding: 2px 6px;
-        border-radius: 4px;
-        display: inline-block;
-      }
-    }
-
-    .card-actions {
-      .more-btn {
-        --color: var(--ion-color-medium);
-        --padding-start: 8px;
-        --padding-end: 8px;
-        margin: -8px -4px 0 0;
-
-        ion-icon {
-          font-size: 18px;
-        }
-      }
+  .hospitalizacion-date {
+    color: #f472b6 !important;
+    
+    ion-icon {
+      color: #f472b6 !important;
     }
   }
 
-  .card-content {
-    padding: 12px 16px 16px 20px;
+  .detail-content .detail-label {
+    color: #f472b6 !important;
+  }
 
-    .info-row {
-      margin-bottom: 12px;
+  .detail-item ion-icon {
+    color: #f472b6 !important;
+  }
 
-      .info-item {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 8px 0;
+  .card-actions .more-btn {
+    --color: #f472b6 !important;
 
-        ion-icon {
-          font-size: 16px;
-          color: rgb(var(--ion-color-primary-rgb));
-          flex-shrink: 0;
-          opacity: 0.8;
-        }
+    &:hover {
+      --color: #f9a8d4 !important;
+    }
+  }
 
-        .label {
-          font-size: 0.85rem;
-          font-weight: 500;
-          color: var(--ion-color-medium);
-          min-width: 0;
-          flex: 1;
-        }
+  ion-item {
+    --border-color: rgba(236, 72, 153, 0.2);
+    
+    ion-label {
+      color: #f472b6 !important;
+    }
+  }
 
-        .value {
-          font-size: 0.9rem;
-          font-weight: 600;
-          color: var(--ion-text-color);
-          text-align: right;
-        }
+  // Dark mode para modo de edición
+  .edit-header {
+    border-bottom-color: rgba(236, 72, 153, 0.2);
+
+    ion-icon {
+      color: #f472b6 !important;
+    }
+
+    h4 {
+      color: #f9a8d4 !important;
+    }
+  }
+
+  .edit-item {
+    --background: rgba(244, 114, 182, 0.08);
+    border-color: rgba(236, 72, 153, 0.2);
+
+    &:hover {
+      --background: rgba(244, 114, 182, 0.12);
+      border-color: rgba(236, 72, 153, 0.3);
+    }
+
+    &.item-has-focus {
+      border-color: #f472b6 !important;
+      --background: rgba(244, 114, 182, 0.12);
+    }
+  }
+
+  .edit-label {
+    color: #f472b6 !important;
+
+    .label-icon {
+      color: #f472b6 !important;
+    }
+  }
+
+  .botones-edicion {
+    border-top-color: rgba(236, 72, 153, 0.2);
+
+    .cancel-edit-btn {
+      --color: #f472b6 !important;
+
+      &:hover {
+        --color: #f9a8d4 !important;
       }
     }
 
-    .hospitalizacion-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 12px;
-      padding-top: 12px;
-      border-top: 1px solid var(--ion-color-step-300);
+    .save-edit-btn {
+      --background: #f472b6 !important;
+      --background-hover: #f9a8d4 !important;
+      box-shadow: 0 4px 12px rgba(244, 114, 182, 0.3);
 
-      .tiempo-transcurrido {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        font-size: 0.8rem;
-        color: var(--ion-color-medium);
-        font-weight: 500;
-
-        ion-icon {
-          font-size: 14px;
-          opacity: 0.7;
-        }
-      }
-
-      .estado-badge {
-        font-size: 0.7rem;
-        font-weight: 600;
-        padding: 4px 8px;
-        border-radius: 6px;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        
-        &.activo {
-          background: rgba(52, 168, 83, 0.1);
-          color: rgb(52, 168, 83);
-        }
-        
-        &.cronico {
-          background: rgba(251, 146, 60, 0.1);
-          color: rgb(251, 146, 60);
-        }
-        
-        &.resuelto {
-          background: rgba(100, 116, 139, 0.1);
-          color: rgb(100, 116, 139);
-        }
+      &:hover {
+        box-shadow: 0 6px 16px rgba(244, 114, 182, 0.4);
       }
     }
+  }
+} // End of dark mode
+
+// Animación de entrada
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-// Responsive design simplificado
-@media (max-width: 768px) {
-  .hospitalizacion-card {
-    margin-bottom: 12px;
-
-    .card-header {
-      padding: 12px 12px 6px 16px;
-
-      .hospitalizacion-icon {
-        width: 36px;
-        height: 36px;
-        margin-right: 10px;
-
-        ion-icon {
-          font-size: 18px;
-        }
-      }
-
-      .hospitalizacion-info {
-        .titulo {
-          font-size: 0.95rem;
-        }
-        
-        .codigo {
-          font-size: 0.7rem;
-          padding: 2px 4px;
-        }
-      }
-    }
-
-    .card-content {
-      padding: 8px 12px 12px 16px;
-
-      .info-item {
-        gap: 10px;
-        padding: 6px 0;
-
-        .label {
-          font-size: 0.8rem;
-        }
-
-        .value {
-          font-size: 0.85rem;
-        }
-
-        ion-icon {
-          font-size: 14px;
-        }
-      }
-
-      .hospotalizacion-footer {
-        margin-top: 8px;
-        padding-top: 8px;
-        
-        .tiempo-transcurrido {
-          font-size: 0.75rem;
-          gap: 4px;
-
-          ion-icon {
-            font-size: 12px;
-          }
-        }
-
-        .estado-badge {
-          font-size: 0.65rem;
-          padding: 3px 6px;
-        }
-      }
-    }
-  }
+.hospitalizacion-card {
+  animation: fadeInUp 0.3s ease-out;
 }
 
-// Modo oscuro simplificado
-@media (prefers-color-scheme: dark) {
-  .hospitalizacion-card {
-    background: #202020;
+// Animación de salida mejorada
+.fade-out {
+  animation: fadeOutScale 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  pointer-events: none;
+}
 
-    .card-header .hospitalizacion-icon {
-      background: rgba(var(--ion-color-primary-rgb), 0.15);
-    }
+@keyframes fadeOutScale {
+  0% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    max-height: 500px;
+    margin-bottom: 20px;
+  }
+  50% {
+    opacity: 0;
+    transform: scale(0.85) translateY(-10px);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.7) translateY(-20px);
+    max-height: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
   }
 }

@@ -1,0 +1,496 @@
+:host {
+  @media (prefers-color-scheme: dark) {
+    border: 1.5px solid rgba(96, 165, 250, 0.333);
+    border-radius: 16px;
+    box-shadow: 0 0 20px rgba(96, 165, 250, 0.15),
+                0 10px 40px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+  }
+}
+
+ion-header {
+  ion-toolbar {
+    --background: var(--ion-background-color);
+    --border-width: 0;
+    padding: 8px 0;
+
+    ion-title {
+      font-weight: 700;
+      font-size: 20px;
+      color: #3b82f6;
+    }
+
+    ion-button {
+      --padding-start: 12px;
+      --padding-end: 12px;
+      --color: #3b82f6;
+      
+      ion-icon {
+        font-size: 24px;
+      }
+
+      &:hover {
+        --color: #2563eb;
+      }
+    }
+  }
+}
+
+ion-content {
+  --background: var(--ion-background-color);
+  
+  &::part(scroll) {
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+      margin: 8px 0;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: rgba(59, 131, 246, 0.753);
+      border-radius: 10px;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: rgba(59, 131, 246, 0.64);
+        width: 8px;
+      }
+    }
+  }
+}
+
+.modal-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding-bottom: 0px;
+}
+
+// Tarjetas de sección
+.section-card {
+  background: var(--ion-card-background);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 5px;
+  border: 1px solid rgba(59, 130, 246, 0.12);
+  box-shadow: 
+    0 2px 4px rgba(59, 130, 246, 0.04),
+    0 4px 8px rgba(59, 130, 246, 0.06);
+  transition: all 0.3s ease;
+
+  &:hover {
+    box-shadow: 
+      0 4px 8px rgba(59, 130, 246, 0.08),
+      0 8px 16px rgba(59, 130, 246, 0.1);
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid rgba(59, 130, 246, 0.12);
+
+    ion-icon {
+      font-size: 22px;
+      color: #3b82f6;
+    }
+
+    h3 {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 700;
+      color: #3b82f6;
+      letter-spacing: -0.2px;
+    }
+  }
+}
+
+// Formulario
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.custom-item {
+  --background: rgba(59, 130, 246, 0.05);
+  --border-radius: 12px;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --inner-padding-end: 0;
+  border-radius: 12px;
+  border: 1px solid rgba(59, 130, 246, 0.1);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    --background: rgba(59, 130, 246, 0.08);
+    border-color: rgba(59, 130, 246, 0.2);
+  }
+
+  &.item-has-focus {
+    border-color: #3b82f6;
+    --background: rgba(59, 130, 246, 0.08);
+  }
+  
+  &.textarea-item {
+    --background: rgba(59, 130, 246, 0.05);
+  }
+}
+
+.custom-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 17px;
+  color: #3b82f6;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+
+  .label-icon {
+    font-size: 20px;
+    margin-bottom: 4px;
+    color: #3b82f6;
+  }
+}
+
+.custom-select,
+.custom-datetime,
+.custom-textarea {
+  margin-top: 4px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.custom-textarea {
+  --padding-top: 12px;
+  --padding-bottom: 12px;
+}
+
+// Estilos específicos para el datetime (calendario)
+.custom-datetime {
+  --padding-start: 0;
+  --padding-end: 0;
+  padding: 3px 0;
+  margin: 10px 0 14px 0;
+  
+  ion-datetime {
+    --background: transparent;
+    border-radius: 12px;
+    padding: 12px;
+    
+    // Header del calendario
+    .calendar-header {
+      padding: 0 4px 12px;
+    }
+
+    // Botones de navegación
+    .calendar-action-buttons {
+      ion-button {
+        --color: #3b82f6;
+        --background-hover: rgba(59, 130, 246, 0.1);
+      }
+    }
+
+    // Selector de mes/año
+    .calendar-month-year {
+      color: #3b82f6;
+      font-weight: 600;
+      font-size: 15px;
+    }
+
+    // Días de la semana
+    .calendar-day-of-week {
+      color: #3b82f6;
+      font-weight: 600;
+      font-size: 12px;
+      opacity: 0.7;
+    }
+
+    // Días del mes
+    .calendar-day {
+      color: var(--ion-text-color);
+      font-size: 14px;
+      
+      &:hover {
+        background: rgba(59, 130, 246, 0.1);
+        color: #3b82f6;
+      }
+    }
+
+    // Día seleccionado
+    .calendar-day-active {
+      background: #3b82f6 !important;
+      color: #fff !important;
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+    }
+
+    // Día de hoy
+    .calendar-day-today {
+      color: #3b82f6;
+      font-weight: 600;
+      
+      &::after {
+        background: #3b82f6;
+      }
+    }
+  }
+}
+
+// Footer
+.modal-footer {
+  position: relative;
+  z-index: 10;
+  
+  ion-toolbar {
+    --background: var(--ion-background-color);
+    --border-width: 0;
+    padding: 12px 16px;
+    box-shadow: 0 -2px 10px rgba(59, 130, 246, 0.1);
+    border-top: 1px solid rgba(59, 130, 246, 0.1);
+  }
+}
+
+.footer-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+
+  .cancel-btn {
+    --padding-start: 20px;
+    --padding-end: 20px;
+    font-weight: 600;
+    --color: #3b82f6;
+
+    &:hover {
+      --color: #2563eb;
+    }
+  }
+
+  .save-btn {
+    --background: #3b82f6;
+    --background-hover: #2563eb;
+    --padding-start: 24px;
+    --padding-end: 24px;
+    font-weight: 600;
+    flex: 1;
+    max-width: 200px;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    transition: all 0.3s ease;
+
+    &:hover {
+      box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+      transform: translateY(-1px);
+    }
+
+    &::part(native) {
+      border-radius: 12px;
+      height: 48px;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      box-shadow: none;
+    }
+  }
+}
+
+// Dark mode
+@media (prefers-color-scheme: dark) {
+  ion-header {
+    ion-toolbar {
+      ion-title {
+        color: #93c5fd;
+      }
+
+      ion-button {
+        --color: #93c5fd;
+
+        &:hover {
+          --color: #bfdbfe;
+        }
+      }
+    }
+  }
+
+  // Scrollbar en dark mode
+  ion-content {
+    &::part(scroll) {
+      &::-webkit-scrollbar-thumb {
+        background: rgba(96, 165, 250, 0.3);
+
+        &:hover {
+          background: rgba(96, 165, 250, 0.5);
+        }
+      }
+    }
+  }
+
+  .section-card {
+    background: #1c1c1c;
+    border-color: rgba(59, 130, 246, 0.2);
+
+    &:hover {
+      box-shadow: 
+        0 4px 8px rgba(59, 130, 246, 0.15),
+        0 8px 16px rgba(59, 130, 246, 0.12);
+    }
+
+    .section-header {
+      border-bottom-color: rgba(59, 130, 246, 0.2);
+
+      ion-icon {
+        color: #60a5fa;
+      }
+
+      h3 {
+        color: #93c5fd;
+      }
+    }
+  }
+
+  .custom-item {
+    --background: rgba(96, 165, 250, 0.08);
+    border-color: rgba(59, 130, 246, 0.2);
+
+    &:hover {
+      --background: rgba(96, 165, 250, 0.12);
+      border-color: rgba(59, 130, 246, 0.3);
+    }
+
+    &.item-has-focus {
+      border-color: #60a5fa;
+      --background: rgba(96, 165, 250, 0.12);
+    }
+  }
+
+  .custom-label {
+    color: #60a5fa;
+
+    .label-icon {
+      color: #60a5fa;
+    }
+  }
+
+  // Estilos del calendario en dark mode
+  .custom-datetime {
+    ion-datetime {
+      .calendar-action-buttons {
+        ion-button {
+          --color: #60a5fa;
+          --background-hover: rgba(96, 165, 250, 0.15);
+        }
+      }
+
+      .calendar-month-year {
+        color: #93c5fd;
+      }
+
+      .calendar-day-of-week {
+        color: #60a5fa;
+      }
+
+      .calendar-day {
+        color: #e5e7eb;
+        
+        &:hover {
+          background: rgba(96, 165, 250, 0.15);
+          color: #93c5fd;
+        }
+      }
+
+      .calendar-day-active {
+        background: #60a5fa !important;
+        box-shadow: 0 2px 8px rgba(96, 165, 250, 0.5);
+      }
+
+      .calendar-day-today {
+        color: #93c5fd;
+        
+        &::after {
+          background: #60a5fa;
+        }
+      }
+    }
+  }
+
+  .modal-footer {
+    ion-toolbar {
+      box-shadow: 0 -2px 10px rgba(59, 130, 246, 0.15);
+      border-top-color: rgba(59, 130, 246, 0.2);
+    }
+  }
+
+  .footer-buttons {
+    .cancel-btn {
+      --color: #60a5fa;
+
+      &:hover {
+        --color: #93c5fd;
+      }
+    }
+
+    .save-btn {
+      --background: #60a5fa;
+      --background-hover: #93c5fd;
+      box-shadow: 0 4px 12px rgba(96, 165, 250, 0.3);
+
+      &:hover {
+        box-shadow: 0 6px 16px rgba(96, 165, 250, 0.4);
+      }
+    }
+  }
+}
+
+// Responsive
+@media (max-width: 576px) {
+  .modal-container {
+    padding-bottom: 100px;
+  }
+
+  .footer-buttons {
+    flex-direction: column-reverse;
+
+    .save-btn {
+      max-width: 100%;
+    }
+  }
+}
+
+// Animaciones
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.section-card {
+  animation: slideIn 0.3s ease-out;
+}
+
+// Animación de entrada del modal
+@keyframes modalSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-container {
+  animation: modalSlideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}

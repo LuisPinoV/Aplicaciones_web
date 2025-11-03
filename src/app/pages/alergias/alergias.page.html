@@ -1,12 +1,125 @@
-<ion-list *ngIf="!isLoading; else loading">
-  <ion-item *ngFor="let alergia of alergias">
-    <ion-label>
-      <h2>{{ alergia }}</h2>
-    </ion-label>
-  </ion-item>
-</ion-list>
-<ng-template #loading>
-  <ion-spinner
-    name="crescent"
-    style="display: block; margin: auto; margin-top: 50%">
-  </ion-spinner>
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/historial"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Alergias Médicos</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content #pageContent [fullscreen]="true" scrollEvents="true" (ionScroll)="onScroll($event)">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Alergias</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <div class="health-container" *ngIf="paciente">
+    <!-- Estadísticas mejoradas -->
+    <div class="stats-section" *ngIf="totalAlergias > 0">
+      <div class="section-header">
+        <h3>Resumen Médico</h3>
+      </div>
+      
+      <div class="enhanced-stats-grid">
+        <ion-card class="stat-card total">
+          <ion-card-content>
+            <div class="stat-icon">
+              <ion-icon name="medical"></ion-icon>
+            </div>
+            <div class="stat-number">{{ totalAlergias }}</div>
+            <div class="stat-label">Total Alergias</div>
+          </ion-card-content>
+        </ion-card>
+
+        <ion-card class="stat-card recent">
+          <ion-card-content>
+            <div class="stat-icon">
+              <ion-icon name="time"></ion-icon>
+            </div>
+            <div class="stat-number">{{ alergiasRecientes }}</div>
+            <div class="stat-label">Recientes (3m)</div>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </div>
+
+    <!-- Acciones rápidas -->
+    <div class="quick-actions-section" *ngIf="totalAlergias > 0">
+      <div class="actions-row">       
+        <ion-button 
+          fill="clear" 
+          size="small" 
+          class="action-btn sort-btn"
+          (click)="sortAlergias()">
+          <ion-icon name="swap-vertical" slot="start"></ion-icon>
+          Ordenar
+        </ion-button>
+        
+        <ion-button 
+          fill="solid" 
+          size="small" 
+          class="action-btn add-btn"
+          (click)="addAlergia()">
+          <ion-icon name="add" slot="start"></ion-icon>
+          Nuevo
+        </ion-button>
+      </div>
+    </div>
+
+    <!-- Lista de alergias -->
+    <div class="alergias-section">
+      <!-- spinner inicial opcional (overlay) -->
+      <div class="initial-loader" *ngIf="initialLoading">
+        <ion-spinner name="crescent"></ion-spinner>
+      </div>
+
+      <!-- Estado vacío -->
+      <div class="empty-state" *ngIf="!initialLoading && totalAlergias === 0">
+        <div class="empty-icon">
+          <ion-icon name="flask-outline"></ion-icon>
+        </div>
+        <h3>No hay alergias registrados</h3>
+        <p>Aún no se han registrado alergias médicos</p>
+        <ion-button fill="solid" (click)="addAlergia()">
+          <ion-icon name="add" slot="start"></ion-icon>
+          Registrar primera alergia
+        </ion-button>
+      </div>
+
+      <div class="alergias-list" *ngIf="totalAlergias > 0">
+        <app-alergia-card
+          *ngFor="let aler of alergias; trackBy: trackByAlergia; let i = index"
+          [alergia]="aler"
+          [index]="i"
+          [class.new-alergias-animation]="aler._isNew"
+          (onDelete)="onAlergiaDeleted($event)"
+          class="alergia-item">
+        </app-alergia-card>
+      </div>
+
+      <!-- Infinite scroll -->
+      <ion-infinite-scroll
+        *ngIf="totalAlergias > 0"
+        threshold="100px"
+        (ionInfinite)="loadMore($event)"
+        [disabled]="!hasMore">
+        <ion-infinite-scroll-content
+          loadingSpinner="crescent"
+          loadingText="Cargando más alergias...">
+        </ion-infinite-scroll-content>
+      </ion-infinite-scroll>
+    </div>
+  </div>
+  
+  <ion-fab
+    vertical="bottom"
+    horizontal="end"
+    slot="fixed"
+    [class.visible]="showScrollTop">
+    <ion-fab-button class="scroll-top-btn" (click)="scrollToTop()">
+      <ion-icon name="arrow-up-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+</ion-content>

@@ -1,173 +1,726 @@
-
 .alergia-card {
-  background: var(--ion-color-step-100);
-  border: 1px solid rgba(100, 116, 139, 0.2);
-  border-radius: 12px;
-  margin-bottom: 16px;
-  overflow: hidden;
+  margin: 0 0 20px 0 !important;
+  border-radius: 16px;
   position: relative;
-  transition: all 0.2s ease;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(239, 68, 68, 0.12);
+  background: #ffffff;
+
+  box-shadow:
+    0 2px 4px rgba(239, 68, 68, 0.04),
+    0 6px 12px rgba(239, 68, 68, 0.08),
+    0 12px 24px rgba(239, 68, 68, 0.06);
 
   &:hover {
-    border-color: var(--ion-color-step-500);
-    .severity-indicator {
-      width: 6px;
-    }
+    transform: translateY(-3px);
+    border-color: rgba(239, 68, 68, 0.2);
+    box-shadow:
+      0 4px 6px rgba(239, 68, 68, 0.08),
+      0 8px 20px rgba(239, 68, 68, 0.15),
+      0 16px 32px rgba(239, 68, 68, 0.10);
   }
 
-  .severity-indicator {
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 4px;
-    transition: width 0.3s ease;
-    z-index: 2;
-
-    &.leve { background: rgb(52, 168, 83); }
-    &.moderado { background: rgb(251, 146, 60); }
-    &.grave { background: rgb(239, 68, 68); }
+  &:last-child {
+    margin-bottom: 0;
   }
+}
 
-  .card-header {
-    display: flex;
-    align-items: flex-start;
-    padding: 16px 16px 8px 20px;
-    background: var(--ion-color-step-100);
-    border-bottom: 1px solid var(--ion-color-step-300);
+// Header de la card
+.card-header {
+  padding: 1rem 0.8rem 0.8rem 1.4rem !important;
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  gap: 12px;
+  border-bottom: 1px solid rgba(239, 68, 68, 0.08);
+}
 
-    .alergia-icon {
-      width: 42px;
-      height: 42px;
-      border-radius: 12px;
-      background: rgba(var(--ion-color-primary-rgb), 0.1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-right: 12px;
-      flex-shrink: 0;
+.alergia-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
 
-      ion-icon {
-        font-size: 22px;
-        color: rgb(var(--ion-color-primary-rgb));
-      }
-    }
+.alergia-date {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: #ef4444;
+  font-weight: 600;
 
-    .alergia-info {
-      flex: 1;
-      min-width: 0;
-
-      .titulo {
-        font-size: 1rem;
-        font-weight: 600;
-        color: var(--ion-text-color);
-        line-height: 1.3;
-        margin: 0 0 4px 0;
-        word-break: break-word;
-      }
-
-      .codigo {
-        font-size: 0.75rem;
-        font-weight: 500;
-        color: var(--ion-color-medium);
-        margin: 0;
-        background: var(--ion-color-step-200);
-        padding: 2px 6px;
-        border-radius: 4px;
-        display: inline-block;
-      }
-    }
-
-    .card-actions {
-      .more-btn {
-        --color: var(--ion-color-medium);
-        --padding-start: 8px;
-        --padding-end: 8px;
-        margin: -8px -4px 0 0;
-      }
-    }
+  ion-icon {
+    font-size: 18px;
+    margin-bottom: 2px;
+    color: #ef4444;
   }
+}
 
-  .card-content {
-    padding: 12px 16px 16px 20px;
+// Acciones de la card
+.card-actions {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
 
-    .info-row {
-      margin-bottom: 12px;
-
-      .info-item {
-        display: flex;
-        align-items: flex-start;
-        gap: 12px;
-        padding: 8px 0;
-
-        ion-icon {
-          font-size: 16px;
-          color: rgb(var(--ion-color-primary-rgb));
-          flex-shrink: 0;
-          opacity: 0.8;
-          margin-top: 2px;
-        }
-
-        .label {
-          font-size: 0.85rem;
-          font-weight: 500;
-          color: var(--ion-color-medium);
-          min-width: 80px;
-        }
-
-        .value {
-          font-size: 0.9rem;
-          font-weight: 600;
-          color: var(--ion-text-color);
-          text-align: left;
-          flex: 1;
-        }
-      }
+  .more-btn {
+    --color: #ef4444;
+    --padding-start: 1px;
+    --padding-end: 1px;
+    margin: 0;
+    
+    ion-icon {
+      font-size: 20px;
     }
 
-    .alergia-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 12px;
-      padding-top: 12px;
-      border-top: 1px solid var(--ion-color-step-300);
-
-      .tiempo-transcurrido {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        font-size: 0.8rem;
-        color: var(--ion-color-medium);
-        font-weight: 500;
-      }
-
-      .estado-badge {
-        font-size: 0.7rem;
-        font-weight: 600;
-        padding: 4px 8px;
-        border-radius: 6px;
-        text-transform: uppercase;
-
-        &.leve-badge {
-          background: rgba(52, 168, 83, 0.1);
-          color: rgb(52, 168, 83);
-        }
-        &.moderado-badge {
-          background: rgba(251, 146, 60, 0.1);
-          color: rgb(251, 146, 60);
-        }
-        &.grave-badge {
-          background: rgba(239, 68, 68, 0.1);
-          color: rgb(239, 68, 68);
-        }
-      }
+    &:hover {
+      --color: #dc2626;
     }
   }
 }
 
+// Cuerpo de la card
+.card-body {
+  padding: 16px 20px 16px 24px !important;
+}
+
+// Detalles del alergia
+.alergia-details {
+  margin-bottom: 0;
+}
+
+.detail-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(239, 68, 68, 0.06);
+
+  &:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+
+  ion-icon {
+    margin-top: 1px;
+    color: #ef4444;
+    font-size: 20px;
+    min-width: 20px;
+  }
+}
+
+.detail-content {
+  flex: 1;
+  min-width: 0;
+
+  .detail-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #ef4444;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .detail-value {
+    display: block;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--ion-color-dark);
+    line-height: 1.5;
+  }
+}
+
+// Badge de tipo de alergia
+.tipo-badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: rgba(239, 68, 68, 0.12);
+  color: #ef4444;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+// Sección de resultados
+.results-section {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 2px solid rgba(239, 68, 68, 0.12);
+}
+
+.results-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.15);
+  border-radius: 12px;
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+
+  &:hover {
+    background: rgba(239, 68, 68, 0.12);
+    border-color: rgba(239, 68, 68, 0.25);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  .toggle-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    
+    ion-icon {
+      font-size: 20px;
+      color: #ef4444;
+    }
+
+    span {
+      font-size: 14px;
+      font-weight: 600;
+      color: #ef4444;
+      letter-spacing: 0.2px;
+    }
+  }
+
+  .toggle-icon {
+    font-size: 20px;
+    color: #ef4444;
+    transition: transform 0.3s ease;
+  }
+}
+
+.results-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &.expanded {
+    max-height: 2000px;
+  }
+}
+
+.results-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.result-item {
+  background: rgba(239, 68, 68, 0.04);
+  border: 1px solid rgba(239, 68, 68, 0.1);
+  border-radius: 14px;
+  padding: 16px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.08);
+    border-color: rgba(239, 68, 68, 0.2);
+  }
+
+  .result-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+
+    .result-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--ion-text-color);
+    }
+
+    .result-format {
+      font-size: 12px;
+      font-weight: 600;
+      color: #ef4444;
+      background: rgba(239, 68, 68, 0.12);
+      padding: 4px 10px;
+      border-radius: 8px;
+    }
+  }
+
+  .result-comparison {
+    margin-bottom: 12px;
+  }
+
+  .valor-obtenido,
+  .valor-esperado {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+
+    .valor-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--ion-color-medium);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .valor-numero {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .valor-container {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+
+      .direction-icon {
+        font-size: 20px;
+        font-weight: bold;
+      }
+    }
+  }
+
+  .valor-esperado .valor-numero {
+    color: #ef4444;
+  }
+
+  .comparison-bar-container {
+    margin: 12px 0;
+  }
+
+  .comparison-bar {
+    height: 8px;
+    background: rgba(239, 68, 68, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 6px;
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 8px;
+      transition: all 0.5s ease;
+      box-shadow: 0 0 8px currentColor;
+    }
+  }
+
+  .comparacion-texto {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    text-align: center;
+    letter-spacing: 0.3px;
+  }
+
+  .status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    background: rgba(239, 68, 68, 0.06);
+    border: 1px solid rgba(239, 68, 68, 0.1);
+
+    ion-icon {
+      font-size: 18px;
+    }
+
+    span {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.2px;
+    }
+  }
+}
+
+// Estilos para modo de edición
+.edit-section {
+  padding: 8px 0 0 0 !important;
+}
+
+.edit-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid rgba(239, 68, 68, 0.12);
+
+  ion-icon {
+    font-size: 22px;
+    color: #ef4444;
+  }
+
+  h4 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 700;
+    color: #ef4444;
+    letter-spacing: -0.2px;
+  }
+}
+
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.edit-item {
+  --background: rgba(239, 68, 68, 0.05);
+  --border-radius: 12px;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --inner-padding-end: 0;
+  border-radius: 12px;
+  border: 1px solid rgba(239, 68, 68, 0.1);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    --background: rgba(239, 68, 68, 0.08);
+    border-color: rgba(239, 68, 68, 0.2);
+  }
+
+  &.item-has-focus {
+    border-color: #ef4444;
+    --background: rgba(239, 68, 68, 0.08);
+  }
+  
+  &.textarea-item {
+    --background: rgba(239, 68, 68, 0.05);
+  }
+}
+
+.edit-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 17px !important;
+  color: #ef4444 !important;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+
+  .label-icon {
+    font-size: 20px;
+    margin-bottom: 4px;
+    color: #ef4444;
+  }
+}
+
+.edit-select,
+.edit-datetime,
+.edit-textarea {
+  margin-top: 4px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.edit-textarea {
+  --padding-top: 12px;
+  --padding-bottom: 12px;
+}
+
+// Estilos del datetime en modo edición
+.edit-datetime {
+  --padding-start: 0;
+  --padding-end: 0;
+  padding: 3px 0!important;
+  margin: 10px 0 14px 0;
+}
+
+.botones-edicion {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(239, 68, 68, 0.1);
+  justify-content: flex-end;
+
+  .cancel-edit-btn {
+    --color: #ef4444;
+    --padding-start: 20px;
+    --padding-end: 20px;
+    font-weight: 600;
+
+    &:hover {
+      --color: #dc2626;
+    }
+  }
+
+  .save-edit-btn {
+    --background: #ef4444;
+    --background-hover: #dc2626;
+    --padding-start: 24px;
+    --padding-end: 24px;
+    --border-radius: 12px;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    transition: all 0.3s ease;
+
+    &:hover {
+      box-shadow: 0 6px 16px rgba(239, 68, 68, 0.4);
+      transform: translateY(-1px);
+    }
+  }
+}
+
+ion-item {
+  --border-color: rgba(239, 68, 68, 0.1);
+  
+  ion-label {
+    color: #ef4444 !important;
+    font-weight: 600;
+    font-size: 13px;
+  }
+}
+
+// Dark mode
 @media (prefers-color-scheme: dark) {
   .alergia-card {
-    background: #202020;
+    background: #1c1c1c;
+    border-color: rgba(239, 68, 68, 0.2) !important;
+
+    box-shadow:
+      0 4px 8px rgba(0, 0, 0, 0.6),
+      0 8px 20px rgba(239, 68, 68, 0.15);
+
+    &:hover {
+      border-color: rgba(239, 68, 68, 0.35);
+      box-shadow:
+        0 6px 14px rgba(0, 0, 0, 0.7),
+        0 12px 28px rgba(239, 68, 68, 0.25);
+      transform: translateY(-3px);
+    }
+  }
+
+  .card-header {
+    border-bottom-color: rgba(239, 68, 68, 0.15);
+  }
+
+  .detail-item {
+    border-bottom-color: rgba(239, 68, 68, 0.1);
+  }
+
+  .detail-content .detail-value {
+    color: #e5e7eb;
+  }
+
+  .alergia-date {
+    color: #f87171;
+    
+    ion-icon {
+      color: #f87171;
+    }
+  }
+
+  .detail-content .detail-label {
+    color: #f87171;
+  }
+
+  .detail-item ion-icon {
+    color: #f87171;
+  }
+
+  .card-actions .more-btn {
+    --color: #f87171;
+
+    &:hover {
+      --color: #fca5a5 !important;
+    }
+  }
+
+  ion-item {
+    --border-color: rgba(239, 68, 68, 0.2);
+    
+    ion-label {
+      color: #f87171 !important;
+    }
+  }
+
+  // Dark mode para modo de edición
+  .edit-header {
+    border-bottom-color: rgba(239, 68, 68, 0.2);
+
+    ion-icon {
+      color: #f87171;
+    }
+
+    h4 {
+      color: #fca5a5;
+    }
+  }
+
+  .edit-item {
+    --background: rgba(248, 113, 113, 0.08);
+    border-color: rgba(239, 68, 68, 0.2);
+
+    &:hover {
+      --background: rgba(248, 113, 113, 0.12);
+      border-color: rgba(239, 68, 68, 0.3);
+    }
+
+    &.item-has-focus {
+      border-color: #f87171;
+      --background: rgba(248, 113, 113, 0.12);
+    }
+  }
+
+  .edit-label {
+    color: #f87171 !important;
+
+    .label-icon {
+      color: #f87171;
+    }
+  }
+
+  .botones-edicion {
+    border-top-color: rgba(239, 68, 68, 0.2);
+
+    .cancel-edit-btn {
+      --color: #f87171;
+
+      &:hover {
+        --color: #fca5a5;
+      }
+    }
+
+    .save-edit-btn {
+      --background: #f87171;
+      --background-hover: #fca5a5;
+      box-shadow: 0 4px 12px rgba(248, 113, 113, 0.3);
+
+      &:hover {
+        box-shadow: 0 6px 16px rgba(248, 113, 113, 0.4);
+      }
+    }
+  }
+
+  // Dark mode para sección de resultados
+  .tipo-badge {
+    background: rgba(248, 113, 113, 0.15);
+    color: #f87171;
+  }
+
+  .results-section {
+    border-top-color: rgba(239, 68, 68, 0.2);
+  }
+
+  .results-toggle {
+    background: rgba(248, 113, 113, 0.12);
+    border-color: rgba(239, 68, 68, 0.25);
+
+    &:hover {
+      background: rgba(248, 113, 113, 0.18);
+      border-color: rgba(239, 68, 68, 0.35);
+    }
+
+    .toggle-content {
+      ion-icon {
+        color: #f87171;
+      }
+
+      span {
+        color: #fca5a5;
+      }
+    }
+
+    .toggle-icon {
+      color: #f87171;
+    }
+  }
+
+  .result-item {
+    background: rgba(248, 113, 113, 0.08);
+    border-color: rgba(239, 68, 68, 0.2);
+
+    &:hover {
+      border-color: rgba(239, 68, 68, 0.3);
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15);
+    }
+
+    .result-header {
+      .result-name {
+        color: #e5e7eb;
+      }
+
+      .result-format {
+        background: rgba(248, 113, 113, 0.2);
+        color: #fca5a5;
+      }
+    }
+
+    .valor-esperado .valor-numero {
+      color: #fca5a5;
+    }
+
+    .comparison-bar-container {
+      .comparison-bar {
+        background: rgba(248, 113, 113, 0.15);
+      }
+
+      .comparacion-texto {
+        opacity: 0.9;
+      }
+    }
+
+    .status-indicator {
+      background: rgba(248, 113, 113, 0.1);
+      border-color: rgba(239, 68, 68, 0.2);
+    }
+  }
+}
+
+// Animación de entrada
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.alergia-card {
+  animation: fadeInUp 0.3s ease-out;
+}
+
+// Animación de salida mejorada
+.fade-out {
+  animation: fadeOutScale 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  pointer-events: none;
+}
+
+@keyframes fadeOutScale {
+  0% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    max-height: 500px;
+    margin-bottom: 20px;
+  }
+  50% {
+    opacity: 0;
+    transform: scale(0.85) translateY(-10px);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.7) translateY(-20px);
+    max-height: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
   }
 }

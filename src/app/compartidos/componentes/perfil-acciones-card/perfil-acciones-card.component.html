@@ -1,24 +1,31 @@
-<div class="botones">
+<div class="botones-cards">
   
-  <!-- Botón Editar Datos -->
-  <ion-button 
-    expand="block" 
-    color="primary"
-    class="edit-button"
-    (click)="editarDatos()">
-    <ion-icon name="create-outline" slot="start"></ion-icon>
-    Editar Datos
-  </ion-button>
+  <!-- Card Editar Datos -->
+  <div class="button-card edit-card" (click)="editarDatos()">
+    <div class="button-icon">
+      <ion-icon name="create-outline"></ion-icon>
+    </div>
+    <div class="button-content">
+      <h3 class="button-title">Editar Datos</h3>
+      <p class="button-subtitle">Actualiza tu información personal</p>
+    </div>
+    <div class="button-arrow">
+      <ion-icon name="chevron-forward-outline"></ion-icon>
+    </div>
+  </div>
 
-  <!-- Botón Cerrar Sesión -->
-  <ion-button 
-    expand="block" 
-    color="danger"
-    fill="outline"
-    class="logout-button"
-    (click)="cerrarSesion()">
-    <ion-icon name="log-out-outline" slot="start"></ion-icon>
-    Cerrar Sesión
-  </ion-button>
+  <!-- Card Cerrar Sesión -->
+  <div class="button-card logout-card" (click)="cerrarSesion()">
+    <div class="button-icon">
+      <ion-icon name="log-out-outline"></ion-icon>
+    </div>
+    <div class="button-content">
+      <h3 class="button-title">Cerrar Sesión</h3>
+      <p class="button-subtitle">Sal de forma segura</p>
+    </div>
+    <div class="button-arrow">
+      <ion-icon name="chevron-forward-outline"></ion-icon>
+    </div>
+  </div>
 
 </div>

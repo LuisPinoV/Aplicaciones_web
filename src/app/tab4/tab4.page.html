@@ -4,8 +4,13 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ion-content [fullscreen]="true">
   <div class="contenido" *ngIf="paciente">
     <app-ficha-paciente-acciones [paciente]="paciente"></app-ficha-paciente-acciones>
+  </div>
+
+  <div class="loading-container" *ngIf="!paciente">
+    <ion-spinner name="circular"></ion-spinner>
+    <p>Cargando información...</p>
   </div>
 </ion-content>

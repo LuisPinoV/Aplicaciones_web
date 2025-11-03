@@ -72,3 +72,4 @@ Thumbs.db
 
 # API
 .serverless
+node_modules

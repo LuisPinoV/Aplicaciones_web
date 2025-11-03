@@ -6,7 +6,10 @@
 
 <ion-content class="ion-padding">
   <div class="contenido" *ngIf="paciente">
-    <app-ficha-paciente-card [paciente]="paciente"></app-ficha-paciente-card>
+    <app-ficha-paciente-card 
+      #fichaPacienteCard
+      [paciente]="paciente">
+    </app-ficha-paciente-card>
     <app-perfil-acciones-card></app-perfil-acciones-card>
   </div>
 </ion-content>
