@@ -89,6 +89,11 @@ class _EditarFichaPageState extends State<EditarFichaPage> {
     try {
       final f = widget.ficha['ficha'] ?? widget.ficha;
       final idFicha = f['idFichaMedica'];
+      
+      // Validar que idFicha no sea null
+      if (idFicha == null) {
+        throw Exception('No se pudo obtener el ID de la ficha médica');
+      }
 
       final fichaActualizada = {
         'nombre': _nombreController.text.trim(),
@@ -101,7 +106,7 @@ class _EditarFichaPageState extends State<EditarFichaPage> {
         'fechaNacimiento': _fechaNacimiento?.toIso8601String(),
       };
 
-      final success = await ApiService.actualizarFicha(idFicha, fichaActualizada);
+      final success = await ApiService.actualizarFicha(idFicha as int, fichaActualizada);
 
       if (!mounted) return;
 
@@ -125,7 +130,7 @@ class _EditarFichaPageState extends State<EditarFichaPage> {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Error: $e'),
+          content: Text('Error al actualizar: $e'),
           backgroundColor: Colors.red,
         ),
       );
