@@ -35,7 +35,7 @@ return [
         ],
     ],
     'backend' => [
-        'base_url' => env('BACKEND_BASE_URL', 'https://w4h5ev2j02.execute-api.us-east-1.amazonaws.com'),
+        'base_url' => env('BACKEND_BASE_URL', 'https://8vsixli946.execute-api.us-east-1.amazonaws.com/'),
     ],
 
 

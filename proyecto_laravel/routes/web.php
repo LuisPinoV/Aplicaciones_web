@@ -4,15 +4,6 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Aquí definimos todas las rutas web de la aplicación.
-|
-*/
-
 // Página de bienvenida
 Route::get('/', function () {
     return view('welcome');

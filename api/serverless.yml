@@ -2,7 +2,7 @@ service: webb
 
 provider:
   name: aws
-  role: arn:aws:iam::992382436111:role/LabRole
+  role: arn:aws:iam::905418104502:role/LabRole
   runtime: nodejs18.x
   region: us-east-1
   environment:

@@ -3,10 +3,10 @@ import { faker } from '@faker-js/faker';
 
 // CONFIGURACIÓN
 const DB = {
-    host: 'bdd-ionic.c72qu2gsuzd0.us-east-1.rds.amazonaws.com', // Ejemplo: u2gsuzd0.us-east-1.rds.amazonaws.com
-    user: 'admin',             // Ejemplo: admin
-    password: 'admin123!',
-    database: 'bbdd_web'   // El nombre de la base de datos/schema
+    host: 'bbdd-web.c1m4yqkk8xfv.us-east-1.rds.amazonaws.com',
+    user: 'admin',
+    password: 'Admin123!',
+    database: 'bbdd_web'
 };
 
 const NUM_USUARIOS = 10000;

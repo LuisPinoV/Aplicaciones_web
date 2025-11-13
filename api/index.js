@@ -7,9 +7,9 @@ app.use(cors());
 app.use(express.json());
 
 const pool = mysql.createPool({
-  host: process.env.DB_HOST || 'bdd-ionic.c72qu2gsuzd0.us-east-1.rds.amazonaws.com',
+  host: process.env.DB_HOST || 'bbdd-web.c1m4yqkk8xfv.us-east-1.rds.amazonaws.com',
   user: process.env.DB_USER || 'admin',
-  password: process.env.DB_PASSWORD || 'admin123!',
+  password: process.env.DB_PASSWORD || 'Admin123!',
   database: process.env.DB_NAME || 'bbdd_web',
   port: process.env.DB_PORT || 3306
 });
