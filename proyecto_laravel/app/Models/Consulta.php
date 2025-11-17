@@ -6,5 +6,27 @@ use Illuminate\Database\Eloquent\Model;
 
 class Consulta extends Model
 {
-    //
+    protected $table = 'consulta';
+    protected $primaryKey = 'idConsulta';
+    protected $fillable = ['fecha','idMedico','idFichaMedica','institucionMedica','descripcion'];
+
+    public function medico()
+    {
+        return $this->belongsTo(Medico::class, 'idMedico');
+    }
+
+    public function fichaMedica()
+    {
+        return $this->belongsTo(FichaMedica::class, 'idFichaMedica');
+    }
+
+    public function ConsultaMedicamentos()
+    {
+        return $this->hasMany(ConsultaMedicamento::class, 'idConsulta');
+    }
+
+    public function ConsultaExamenes()
+    {
+        return $this->hasMany(ConsultaExamen::class, 'idConsulta');
+    }
 }
