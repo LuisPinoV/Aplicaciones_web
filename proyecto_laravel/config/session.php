@@ -169,7 +169,9 @@ return [
     |
     */
 
-    'secure' => env('SESSION_SECURE_COOKIE'),
+    // In production this should be `true` (only send cookies over HTTPS).
+    // In local dev it can be false. Set via .env: SESSION_SECURE_COOKIE=true
+    'secure' => env('SESSION_SECURE_COOKIE', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -199,6 +201,8 @@ return [
     |
     */
 
+    // For OAuth popup/third-party flows in production you may need
+    // SameSite=None and secure cookies. Set via .env: SESSION_SAME_SITE=none
     'same_site' => env('SESSION_SAME_SITE', 'lax'),
 
     /*

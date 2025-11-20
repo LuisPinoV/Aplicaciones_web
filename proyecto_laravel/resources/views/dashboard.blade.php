@@ -2,105 +2,239 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard Médico</title>
+    <title>Dashboard</title>
+    <!-- Prevent caching so after logout the browser won't show a cached dashboard -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <style>
-        body { font-family: Arial, sans-serif; background: #f9fafb; margin: 0; padding: 20px; }
-        h1 { text-align: center; color: #333; }
-        .container { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; margin-top: 30px; }
-        .chart-box {
-            background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            padding: 20px;
-            width: 500px;
+        :root{
+            --bg: #f1f5f4;
+            --card: #ffffff;
+            --muted: #6b7280;
+            --text: #0f172a;
+            --green-700: #047857;
+            --green-500: #10b981;
+            --green-600: #059669;
+            --accent: #064e3b;
         }
-        .error { color: red; text-align: center; }
-        canvas { width: 100% !important; height: 300px !important; }
+
+        *{box-sizing:border-box}
+        body { font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; background: var(--bg); margin: 0; color: var(--text); }
+
+        /* Header */
+        header.appbar{background:linear-gradient(90deg,var(--green-700),var(--green-500)); color:#fff; padding:14px 28px; display:flex; align-items:center; justify-content:space-between}
+        header .brand{display:flex; gap:14px; align-items:center}
+        header .brand h1{font-size:20px; margin:0; letter-spacing:0.2px}
+        header .brand p{margin:0; font-size:13px; opacity:0.9}
+        header nav{display:flex; gap:12px; align-items:center}
+        header nav a{color:rgba(255,255,255,0.95); text-decoration:none; padding:8px 12px; border-radius:8px}
+    header nav a.btn-ghost{background:rgba(255,255,255,0.08)}
+    /* also style button logout to match profile link */
+    header nav .btn-ghost{background:rgba(255,255,255,0.08); color:rgba(255,255,255,0.95); border:0; cursor:pointer; padding:8px 12px; border-radius:8px}
+
+        /* Layout */
+        .page{max-width:1200px; margin:28px auto; padding:0 18px}
+        .metrics{display:flex; gap:18px; flex-wrap:wrap; margin:18px 0 26px}
+        .metric-card{background:var(--card); padding:18px; border-radius:12px; width:220px; box-shadow:0 6px 18px rgba(2,6,23,0.06); border-left:4px solid var(--green-500)}
+        .metric-title{font-size:13px; color:var(--muted)}
+        .metric-value{font-size:24px; font-weight:700; margin-top:6px; color:var(--accent)}
+
+        /* Grid*/
+        .main-grid{display:grid; grid-template-columns: 1fr 360px; gap:24px}
+
+        .card{background:var(--card); border-radius:12px; padding:18px; box-shadow:0 6px 18px rgba(2,6,23,0.06)}
+        .card h3{margin:0 0 14px 0; color:var(--accent)}
+
+        .big-chart{height:420px}
+        .small-chart{height:220px}
+
+        .right-col .small-cards{display:flex; flex-direction:column; gap:16px}
+
+        footer.site-footer{max-width:1200px;margin:28px auto;padding:18px;border-radius:8px;color:var(--muted);text-align:center}
+
+        @media (max-width: 940px){.main-grid{grid-template-columns:1fr}.right-col{order:2}}
     </style>
 </head>
+
 <body>
 
-    <h1>Dashboard Médico</h1>
-
-    @if (!empty($errors))
-        <div class="error">
-            @foreach ($errors as $key => $msg)
-                <p> {{ ucfirst($key) }}: {{ $msg }}</p>
-            @endforeach
-        </div>
-    @endif
-
-    <div class="container">
-        <div class="chart-box">
-            <h3>Top 10 Diagnósticos</h3>
-            <canvas id="chartDiagnosticos"></canvas>
+    <header class="appbar">
+        <div class="brand">
+            <div style="width:44px;height:44px;border-radius:10px;background:rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;font-weight:700">MD</div>
+            <div>
+                <h1>MediNet — Dashboard</h1>
+                <p>Visión general clínica · Última actualización: {{ now()->format('d M Y') }}</p>
+            </div>
         </div>
 
-        <div class="chart-box">
-            <h3>Top 10 Medicamentos más Recetados</h3>
-            <canvas id="chartMedicamentos"></canvas>
+        <nav>
+            <a href="/profile" class="btn-ghost">Mi perfil</a>
+            {{-- Logout via POST (uses fetch for smooth redirect to login) --}}
+            <form id="logout-form" style="display:inline-block;margin:0;padding:0">
+                @csrf
+                <button type="button" class="btn-ghost" onclick="logoutUser(event)">Cerrar sesión</button>
+            </form>
+        </nav>
+    </header>
+
+    <script>
+        function logoutUser(e){
+            e.preventDefault();
+            const url = "{{ route('logout') }}";
+            const loginUrl = "{{ route('login') }}";
+            const token = '{{ csrf_token() }}';
+
+            // Try to logout via fetch; on success redirect to login.
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': token,
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'same-origin'
+            }).then(response => {
+                // Use replace so the login replaces the current history entry
+                // (prevents going back to the protected page using back button)
+                try {
+                    // Clear any sensitive client-side state
+                    sessionStorage.clear();
+                    localStorage.removeItem('auth');
+                } catch (e) {}
+                window.location.replace(loginUrl);
+            }).catch(() => {
+                // fallback: create and submit a traditional form
+                const f = document.createElement('form');
+                f.method = 'POST';
+                f.action = url;
+                const i = document.createElement('input');
+                i.type = 'hidden'; i.name = '_token'; i.value = token;
+                f.appendChild(i);
+                document.body.appendChild(f);
+                f.submit();
+            });
+        }
+    </script>
+
+    <div class="page">
+
+        @if (!empty($errors))
+            <div style="margin:12px 0; padding:12px; border-radius:8px; background:#fff3f2; color:#7f1d1d">Se han detectado errores. Revisa los registros.</div>
+        @endif
+
+        <!-- MÉTRICAS SUPERIORES -->
+        <div class="metrics">
+            <div class="metric-card">
+                <p class="metric-title">Diagnósticos distintos</p>
+                <p class="metric-value">{{ count($data['diagnosticos'] ?? []) }}</p>
+            </div>
+
+            <div class="metric-card">
+                <p class="metric-title">Medicamentos distintos</p>
+                <p class="metric-value">{{ count($data['medicamentos'] ?? []) }}</p>
+            </div>
+
+            <div class="metric-card">
+                <p class="metric-title">Tipos de exámenes</p>
+                <p class="metric-value">{{ count($data['examenes'] ?? []) }}</p>
+            </div>
+
+            <div class="metric-card">
+                <p class="metric-title">Tipos de alergias</p>
+                <p class="metric-value">{{ count($data['alergias'] ?? []) }}</p>
+            </div>
         </div>
 
-        <div class="chart-box">
-            <h3>Tipos de Exámenes</h3>
-            <canvas id="chartExamenes"></canvas>
+        <div class="main-grid">
+            <div>
+                <div class="card">
+                    <h3>Pacientes y actividad</h3>
+                    <div class="big-chart">
+                        <canvas id="chartDiagnosticos" style="height:100%"></canvas>
+                    </div>
+                </div>
+
+                <div style="height:24px"></div>
+
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:18px">
+                    <div class="card">
+                        <h3>Medicamentos recetados</h3>
+                        <div class="small-chart"><canvas id="chartMedicamentos"></canvas></div>
+                    </div>
+                    <div class="card">
+                        <h3>Cirugías</h3>
+                        <div class="small-chart"><canvas id="chartCirugias"></canvas></div>
+                    </div>
+                </div>
+            </div>
+
+            <aside class="right-col">
+                <div class="small-cards">
+                    <div class="card">
+                        <h3>Distribución por Exámenes</h3>
+                        <div style="height:220px"><canvas id="chartExamenes"></canvas></div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Alergias más comunes</h3>
+                        <div style="height:220px"><canvas id="chartAlergias"></canvas></div>
+                    </div>
+                </div>
+            </aside>
         </div>
 
-        <div class="chart-box">
-            <h3>Top 10 Alergias</h3>
-            <canvas id="chartAlergias"></canvas>
-        </div>
-
-        <div class="chart-box">
-            <h3>Top 10 Cirugías</h3>
-            <canvas id="chartCirugias"></canvas>
-        </div>
     </div>
+
+    <footer class="site-footer">MediNet · Datos de ejemplo · &copy; {{ date('Y') }}</footer>
 
     <script>
         const data = @json($data);
 
-        const makeChart = (ctxId, dataset, labelField, valueField, chartType = 'bar', color='#36A2EB') => {
-            const ctx = document.getElementById(ctxId);
-            if (!dataset || dataset.length === 0) return;
+        // Función generadora de gráficos
+        const makeChart = (id, dataset, labelField, valueField, type, colors) => {
+            const el = document.getElementById(id);
+            if (!dataset || !dataset.length) return;
 
-            new Chart(ctx, {
-                type: chartType,
+            new Chart(el, {
+                type,
                 data: {
-                    labels: dataset.map(d => d[labelField]),
+                    labels: dataset.map(x => x[labelField]),
                     datasets: [{
                         label: 'Cantidad',
-                        data: dataset.map(d => d[valueField]),
-                        backgroundColor: color + '88',
-                        borderColor: color,
+                        data: dataset.map(x => x[valueField]),
+                        backgroundColor: colors,
+                        borderColor: '#111827',
                         borderWidth: 1
                     }]
                 },
                 options: {
                     responsive: true,
-                    plugins: { legend: { display: false } },
-                    scales: { y: { beginAtZero: true } }
+                    scales: type === 'bar' || type === 'horizontalBar'
+                        ? { y: { beginAtZero: true } }
+                        : {},
+                    plugins: { legend: { display: type !== 'bar' } }
                 }
             });
         };
 
-        // Crear gráficos
-        makeChart('chartDiagnosticos', data.diagnosticos, 'descripcion', 'cantidad', 'bar', '#36A2EB');
-        makeChart('chartMedicamentos', data.medicamentos, 'medicamento', 'vecesPrescrito', 'bar', '#FF9F40');
-        makeChart('chartExamenes', data.examenes, 'tipoExamen', 'cantidad', 'bar', '#4BC0C0');
-        makeChart('chartAlergias', data.alergias, 'alergia', 'cantidad', 'bar', '#FFCD56');
-        makeChart('chartCirugias', data.cirugias, 'cirujia', 'cantidad', 'bar', '#36A2EB');
-    </script>
+        // Paleta de verdes para aspecto médico
+        const greens = [
+            '#ecfccb', // 100
+            '#bbf7d0', // 200
+            '#86efac', // 300
+            '#34d399', // 400
+            '#059669'  // 500
+        ];
 
-</body>
-</html>
-s', data.cirugias, 'cirujia', 'cantidad', 'bar', '#36A2EB');
-    </script>
-
-</body>
-</html>
-s', data.cirugias, 'cirujia', 'cantidad', 'bar', '#36A2EB');
+        // Gráficos (mapeo de campos según datos presentes)
+        makeChart('chartDiagnosticos', data.diagnosticos, 'descripcion', 'cantidad', 'bar', greens);
+        makeChart('chartMedicamentos', data.medicamentos, 'medicamento', 'vecesPrescrito', 'line', greens);
+        makeChart('chartExamenes', data.examenes, 'tipoExamen', 'cantidad', 'doughnut', greens);
+        makeChart('chartAlergias', data.alergias, 'alergia', 'cantidad', 'pie', greens);
+        makeChart('chartCirugias', data.cirugias, 'cirujia', 'cantidad', 'bar', greens);
     </script>
 
 </body>

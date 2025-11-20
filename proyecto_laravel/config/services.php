@@ -35,7 +35,18 @@ return [
         ],
     ],
     'backend' => [
-        'base_url' => env('BACKEND_BASE_URL', 'https://8vsixli946.execute-api.us-east-1.amazonaws.com/'),
+        'base_url' => env('BACKEND_URL'),
+    ],
+    'webpay' => [
+    'env' => env('WEBPAY_ENV', 'integration'),
+    'commerce_code' => env('WEBPAY_COMMERCE_CODE'),
+    'api_key' => env('WEBPAY_API_KEY'),
+    ],
+
+    'google' => [
+    'client_id' => env('GOOGLE_CLIENT_ID'),
+    'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+    'redirect' => env('GOOGLE_REDIRECT_URI'),
     ],
 
 

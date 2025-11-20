@@ -7,7 +7,7 @@ app.use(cors());
 app.use(express.json());
 
 const pool = mysql.createPool({
-  host: process.env.DB_HOST || 'bbdd-web.c1m4yqkk8xfv.us-east-1.rds.amazonaws.com',
+  host: process.env.DB_HOST || 'bbdd-web.crguq6uow5v7.us-east-1.rds.amazonaws.com',
   user: process.env.DB_USER || 'admin',
   password: process.env.DB_PASSWORD || 'Admin123!',
   database: process.env.DB_NAME || 'bbdd_web',
@@ -3168,26 +3168,16 @@ app.get('/pacientes/buscar/:termino', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 app.use((req, res) => {
   if (req.method === "OPTIONS") {
     return res.sendStatus(200);
   }
   res.status(404).json({ error: "Ruta no encontrada" });
 });
+
+// NOTE: This file previously contained separate `module.exports.*` handlers
+// for Lambda. They were removed because this file is used as an ES module
+// Express app when running locally. The Express routes above already
+// implement the /dashboard/* endpoints used by the application.
 
 export default app;
