@@ -4,7 +4,10 @@
 <div class="container">
     <h2>Fichas Médicas</h2>
 
-    <a href="{{ route('fichas.create') }}" class="px-4 py-2 bg-green-600 text-white rounded mb-3 inline-block">Agregar Ficha</a>
+    <a href="{{ route('fichas.create') }}"
+       class="px-4 py-2 bg-green-600 text-black rounded-md inline-block mb-3 border-2 border-green-700">
+        Agregar Ficha
+    </a>
 
     <table class="w-full border-collapse border border-gray-300">
         <thead>
@@ -34,13 +37,21 @@
                 <td class="border p-2">{{ $ficha->usuario->tipoSangre }}</td>
                 <td class="border p-2">
                     <div class="flex gap-2">
-                        <a href="{{ route('fichas.edit', $ficha->idFichaMedica) }}" class="px-3 py-1 bg-blue-500 text-white rounded">Editar</a>
+
+                        <a href="{{ route('fichas.edit', $ficha->idFichaMedica) }}"
+                           class="px-3 py-1 bg-green-600 text-black border-2 border-green-700 rounded-md">
+                            Editar
+                        </a>
 
                         <form action="{{ route('fichas.destroy', $ficha->idFichaMedica) }}" method="POST">
                             @csrf
                             @method('DELETE')
-                            <button class="px-3 py-1 bg-red-500 text-white rounded" onclick="return confirm('Eliminar ficha?')">Eliminar</button>
+                            <button class="px-3 py-1 bg-red-600 text-white border-2 border-red-700 rounded-md"
+                                    onclick="return confirm('Eliminar ficha?')">
+                                Eliminar
+                            </button>
                         </form>
+
                     </div>
                 </td>
             </tr>

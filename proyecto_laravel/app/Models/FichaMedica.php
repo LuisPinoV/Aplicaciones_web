@@ -6,10 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class FichaMedica extends Model
 {
-    // 
+
     protected $table = 'FichaMedica';
     protected $primaryKey = 'idFichaMedica';
-    // 
+    public $timestamps = false;
     protected $fillable = ['idUsuario','altura','peso','genero'];
 
     public function usuario()

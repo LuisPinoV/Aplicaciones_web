@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Consulta extends Model
 {
-    protected $table = 'consulta';
+    protected $table = 'Consulta';
     protected $primaryKey = 'idConsulta';
     protected $fillable = ['fecha','idMedico','idFichaMedica','institucionMedica','descripcion'];
 
