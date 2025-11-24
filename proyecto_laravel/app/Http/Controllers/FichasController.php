@@ -11,99 +11,38 @@ class FichasController extends Controller
     public function index()
     {
         $fichas = FichaMedica::with('usuario')->paginate(10);
-
         return view('fichas.index', compact('fichas'));
     }
 
     public function create()
     {
-        return view('fichas.create');
+        $usuarios = Usuario::all();
+        return view('fichas.create', compact('usuarios'));
     }
 
     public function store(Request $request)
     {
-        $request->validate([
-            'rut' => 'required',
-            'nombre' => 'required',
-            'fechaNacimiento' => 'required|date',
-            'sexo' => 'required',
-            'tipoSangre' => 'required',
-            'altura' => 'required|numeric',
-            'peso' => 'required|numeric',
-            'genero' => 'required'
-        ]);
-
-        $usuario = Usuario::create([
-            'rut' => $request->rut,
-            'contraseña' => bcrypt('123456'), 
-            'fechaNacimiento' => $request->fechaNacimiento,
-            'nombre' => $request->nombre,
-            'sexo' => $request->sexo,
-            'tipoSangre' => $request->tipoSangre
-        ]);
-
-        FichaMedica::create([
-            'idUsuario' => $usuario->id,
-            'altura' => $request->altura,
-            'peso' => $request->peso,
-            'genero' => $request->genero
-        ]);
-
-        return redirect()->route('fichas.index')
-            ->with('success', 'Ficha creada correctamente.');
+        FichaMedica::create($request->all());
+        return redirect()->route('fichas.index');
     }
 
-    public function edit($idFichaMedica)
+    public function edit($id)
     {
-        $ficha = FichaMedica::with('usuario')->findOrFail($id);
-
-        return view('fichas.edit', compact('ficha'));
+        $ficha = FichaMedica::findOrFail($id);
+        $usuarios = Usuario::all();
+        return view('fichas.edit', compact('ficha','usuarios'));
     }
 
-    public function update(Request $request, $idFichaMedica)
+    public function update(Request $request, $id)
     {
-        $ficha = FichaMedica::findOrFail($idFichaMedica);
-
-        $request->validate([
-            'rut' => 'required',
-            'nombre' => 'required',
-            'fechaNacimiento' => 'required|date',
-            'sexo' => 'required',
-            'tipoSangre' => 'required',
-            'altura' => 'required|numeric',
-            'peso' => 'required|numeric',
-            'genero' => 'required'
-        ]);
-
-        $usuario = $ficha->usuario;
-
-        $usuario->update([
-            'rut' => $request->rut,
-            'fechaNacimiento' => $request->fechaNacimiento,
-            'nombre' => $request->nombre,
-            'sexo' => $request->sexo,
-            'tipoSangre' => $request->tipoSangre
-        ]);
-
-        $ficha->update([
-            'altura' => $request->altura,
-            'peso' => $request->peso,
-            'genero' => $request->genero
-        ]);
-
-        return redirect()->route('fichas.index')
-            ->with('success', 'Ficha actualizada correctamente.');
+        $ficha = FichaMedica::findOrFail($id);
+        $ficha->update($request->all());
+        return redirect()->route('fichas.index');
     }
 
-    public function destroy($idFichaMedica)
+    public function destroy($id)
     {
-        $ficha = FichaMedica::findOrFail($idFichaMedica);
-        $usuario = $ficha->usuario;
-
-        $ficha->delete();
-        $usuario->delete();
-
-        return redirect()->route('fichas.index')
-            ->with('success', 'Ficha eliminada.');
+        FichaMedica::destroy($id);
+        return redirect()->route('fichas.index');
     }
 }

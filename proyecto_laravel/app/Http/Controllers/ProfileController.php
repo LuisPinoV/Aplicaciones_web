@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Password;
+
 
 class ProfileController extends Controller
 {
@@ -56,5 +58,21 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+
+    /**
+     * Send a password reset link to the authenticated user's email.
+     */
+    public function sendPasswordLink(Request $request): RedirectResponse
+    {
+        $user = $request->user();
+
+        $status = Password::sendResetLink(['email' => $user->email]);
+
+        if ($status === Password::RESET_LINK_SENT) {
+            return Redirect::route('profile.edit')->with('status', 'password-link-sent');
+        }
+
+        return Redirect::route('profile.edit')->with('status', 'password-link-failed');
     }
 }

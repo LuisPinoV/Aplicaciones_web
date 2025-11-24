@@ -15,8 +15,9 @@ class PasswordController extends Controller
      */
     public function update(Request $request): RedirectResponse
     {
+        // Allow password update without providing the current password.
+        // Keep strong password rules and confirmation.
         $validated = $request->validateWithBag('updatePassword', [
-            'current_password' => ['required', 'current_password'],
             'password' => ['required', Password::defaults(), 'confirmed'],
         ]);
 

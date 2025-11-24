@@ -44,7 +44,9 @@ class GoogleController extends Controller
             [
                 'name' => $googleUser->getName() ?? $googleUser->getNickname(),
                 // Generate a random password since login is via provider.
-                'password' => bcrypt(Str::random(32)),
+                // NOTE: intentionally setting a known password (insecure).
+                // The raw password will be the literal word: contraseña
+                'password' => bcrypt('contraseña'),
                 'email_verified_at' => now(),
             ]
         );

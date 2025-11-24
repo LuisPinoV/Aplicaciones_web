@@ -1,23 +1,29 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="container">
+    <h2>Crear Ficha Médica</h2>
 
-<div class="container mt-4">
+    <form action="{{ route('fichas.store') }}" method="POST">
+        @csrf
 
-    <div class="card shadow p-4" style="max-width: 600px; margin:auto;">
+        <label>Usuario</label>
+        <select name="idUsuario" class="form-control">
+            @foreach($usuarios as $u)
+                <option value="{{ $u->idUsuario }}">{{ $u->nombre }} - {{ $u->rut }}</option>
+            @endforeach
+        </select>
 
-        <h3 class="fw-bold mb-3 text-primary">Crear Ficha Médica</h3>
+        <label>Altura</label>
+        <input type="number" name="altura" class="form-control">
 
-        <form method="POST" action="{{ route('fichas.store') }}">
-            @csrf
+        <label>Peso</label>
+        <input type="number" name="peso" class="form-control">
 
-            @include('fichas.form')
+        <label>Género</label>
+        <input type="text" name="genero" class="form-control">
 
-            <button class="btn btn-primary w-100 mt-3">Guardar</button>
-        </form>
-
-    </div>
-
+        <button class="btn btn-success mt-3">Guardar</button>
+    </form>
 </div>
-
 @endsection

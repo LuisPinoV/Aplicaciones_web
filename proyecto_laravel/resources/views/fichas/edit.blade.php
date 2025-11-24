@@ -1,24 +1,32 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="container">
+    <h2>Editar Ficha Médica</h2>
 
-<div class="container mt-4">
+    <form action="{{ route('fichas.update', $ficha->idFichaMedica) }}" method="POST">
+        @csrf
+        @method('PUT')
 
-    <div class="card shadow p-4" style="max-width: 600px; margin:auto;">
+        <label>Usuario</label>
+        <select name="idUsuario" class="form-control">
+            @foreach($usuarios as $u)
+                <option value="{{ $u->idUsuario }}" @if($ficha->idUsuario == $u->idUsuario) selected @endif>
+                    {{ $u->nombre }} - {{ $u->rut }}
+                </option>
+            @endforeach
+        </select>
 
-        <h3 class="fw-bold mb-3 text-primary">Editar Ficha Médica</h3>
+        <label>Altura</label>
+        <input type="number" name="altura" value="{{ $ficha->altura }}" class="form-control">
 
-        <form method="POST" action="{{ route('fichas.update', $ficha->id) }}">
-            @csrf
-            @method('PUT')
+        <label>Peso</label>
+        <input type="number" name="peso" value="{{ $ficha->peso }}" class="form-control">
 
-            @include('fichas.form', ['ficha' => $ficha])
+        <label>Género</label>
+        <input type="text" name="genero" value="{{ $ficha->genero }}" class="form-control">
 
-            <button class="btn btn-primary w-100 mt-3">Actualizar</button>
-        </form>
-
-    </div>
-
+        <button class="btn btn-primary mt-3">Actualizar</button>
+    </form>
 </div>
-
 @endsection
