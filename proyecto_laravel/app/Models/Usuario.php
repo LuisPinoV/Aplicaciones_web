@@ -6,12 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Usuario extends Model
 {
-    protected $table = 'usuario';
+
+    protected $table = 'Usuario';
     protected $primaryKey = 'idUsuario';
     protected $fillable = ['rut','contraseña','fechaNacimiento','nombre','sexo','tipoSangre'];
 
     public function fichaMedica()
     {
-        return $this->hasOne(FichaMedica::class, 'idUsuario');
+        return $this->hasOne(FichaMedica::class, 'idUsuario', 'idUsuario');
     }
 }

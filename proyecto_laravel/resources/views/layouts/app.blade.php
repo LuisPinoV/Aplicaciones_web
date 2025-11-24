@@ -66,7 +66,7 @@
 
             <!-- Page Content -->
             <main>
-                <div style="max-width:1200px;margin:28px auto;padding:0 18px">{{ $slot }}</div>
+                <div style="max-width:1200px;margin:28px auto;padding:0 18px">@yield('content')</div>
             </main>
 
             <footer class="site-footer">{{ config('app.name', 'Laravel') }} · &copy; {{ date('Y') }}</footer>

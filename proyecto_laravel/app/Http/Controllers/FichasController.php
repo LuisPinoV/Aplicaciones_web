@@ -2,34 +2,108 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Http;
+use App\Models\Usuario;
+use App\Models\FichaMedica;
+use Illuminate\Http\Request;
 
 class FichasController extends Controller
 {
     public function index()
     {
-        try {
-            $url = config('services.backend.base_url') . '/fichas';
-            $response = Http::withoutVerifying()->get($url);
-            if ($response->failed()) {
-                return view('fichas', [
-                    'fichas' => [],
-                    'error' => 'Error al conectar con el backend. Código: ' . $response->status(),
-                ]);
-            }
-            $data = $response->json();
-            $fichas = isset($data['data']) && is_array($data['data']) ? $data['data'] : [];
+        $fichas = FichaMedica::with('usuario')->paginate(10);
 
-            return view('fichas', [
-                'fichas' => $fichas,
-                'error' => null,
-            ]);
+        return view('fichas.index', compact('fichas'));
+    }
 
-        } catch (\Exception $e) {
-            return view('fichas', [
-                'fichas' => [],
-                'error' => 'Excepción: ' . $e->getMessage(),
-            ]);
-        }
+    public function create()
+    {
+        return view('fichas.create');
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'rut' => 'required',
+            'nombre' => 'required',
+            'fechaNacimiento' => 'required|date',
+            'sexo' => 'required',
+            'tipoSangre' => 'required',
+            'altura' => 'required|numeric',
+            'peso' => 'required|numeric',
+            'genero' => 'required'
+        ]);
+
+        $usuario = Usuario::create([
+            'rut' => $request->rut,
+            'contraseña' => bcrypt('123456'), 
+            'fechaNacimiento' => $request->fechaNacimiento,
+            'nombre' => $request->nombre,
+            'sexo' => $request->sexo,
+            'tipoSangre' => $request->tipoSangre
+        ]);
+
+        FichaMedica::create([
+            'idUsuario' => $usuario->id,
+            'altura' => $request->altura,
+            'peso' => $request->peso,
+            'genero' => $request->genero
+        ]);
+
+        return redirect()->route('fichas.index')
+            ->with('success', 'Ficha creada correctamente.');
+    }
+
+    public function edit($idFichaMedica)
+    {
+        $ficha = FichaMedica::with('usuario')->findOrFail($id);
+
+        return view('fichas.edit', compact('ficha'));
+    }
+
+    public function update(Request $request, $idFichaMedica)
+    {
+        $ficha = FichaMedica::findOrFail($idFichaMedica);
+
+        $request->validate([
+            'rut' => 'required',
+            'nombre' => 'required',
+            'fechaNacimiento' => 'required|date',
+            'sexo' => 'required',
+            'tipoSangre' => 'required',
+            'altura' => 'required|numeric',
+            'peso' => 'required|numeric',
+            'genero' => 'required'
+        ]);
+
+        $usuario = $ficha->usuario;
+
+        $usuario->update([
+            'rut' => $request->rut,
+            'fechaNacimiento' => $request->fechaNacimiento,
+            'nombre' => $request->nombre,
+            'sexo' => $request->sexo,
+            'tipoSangre' => $request->tipoSangre
+        ]);
+
+        $ficha->update([
+            'altura' => $request->altura,
+            'peso' => $request->peso,
+            'genero' => $request->genero
+        ]);
+
+        return redirect()->route('fichas.index')
+            ->with('success', 'Ficha actualizada correctamente.');
+    }
+
+    public function destroy($idFichaMedica)
+    {
+        $ficha = FichaMedica::findOrFail($idFichaMedica);
+        $usuario = $ficha->usuario;
+
+        $ficha->delete();
+        $usuario->delete();
+
+        return redirect()->route('fichas.index')
+            ->with('success', 'Ficha eliminada.');
     }
 }

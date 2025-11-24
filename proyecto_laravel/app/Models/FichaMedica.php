@@ -6,13 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class FichaMedica extends Model
 {
-    protected $table = 'fichamedica';
+    // 
+    protected $table = 'FichaMedica';
     protected $primaryKey = 'idFichaMedica';
+    // 
     protected $fillable = ['idUsuario','altura','peso','genero'];
 
     public function usuario()
     {
-        return $this->belongsTo(Usuario::class, 'idUsuario');
+        return $this->belongsTo(Usuario::class, 'idUsuario', 'idUsuario');
     }
 
     public function diagnosticos()

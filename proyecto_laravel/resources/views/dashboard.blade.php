@@ -48,10 +48,30 @@
         .card{background:var(--card); border-radius:12px; padding:18px; box-shadow:0 6px 18px rgba(2,6,23,0.06)}
         .card h3{margin:0 0 14px 0; color:var(--accent)}
 
-        .big-chart{height:420px}
-        .small-chart{height:220px}
+        /* Make charts responsive: use viewport-relative sizes with sensible max heights */
+        .big-chart{width:100%; height:min(56vh,420px); position:relative}
+        .small-chart{width:100%; height:min(34vh,220px); position:relative}
+
+        /* Ensure canvas elements fill their parent containers */
+        .big-chart canvas,
+        .small-chart canvas,
+        .chart-canvas {
+            display:block;
+            width:100% !important;
+            height:100% !important;
+        }
+
+        /* Tweak heights for very small viewports (inspect device presets) */
+        @media (max-width: 420px) {
+            .big-chart{height:40vh}
+            .small-chart{height:26vh}
+        }
 
         .right-col .small-cards{display:flex; flex-direction:column; gap:16px}
+
+        .right-col .small-cards{display:flex; flex-direction:column; gap:16px}
+
+        @media (max-width: 940px){.main-grid{grid-template-columns:1fr}.right-col{order:2}}
 
         footer.site-footer{max-width:1200px;margin:28px auto;padding:18px;border-radius:8px;color:var(--muted);text-align:center}
 
@@ -71,6 +91,7 @@
         </div>
 
         <nav>
+            <a href="{{ route('fichas.index') }}" class="btn-ghost">Fichas</a>
             <a href="/profile" class="btn-ghost">Mi perfil</a>
             {{-- Logout via POST (uses fetch for smooth redirect to login) --}}
             <form id="logout-form" style="display:inline-block;margin:0;padding:0">
@@ -119,6 +140,8 @@
         }
     </script>
 
+    
+
     <div class="page">
 
         @if (!empty($errors))
@@ -153,7 +176,7 @@
                 <div class="card">
                     <h3>Pacientes y actividad</h3>
                     <div class="big-chart">
-                        <canvas id="chartDiagnosticos" style="height:100%"></canvas>
+                        <canvas id="chartDiagnosticos" class="chart-canvas"></canvas>
                     </div>
                 </div>
 
@@ -162,11 +185,11 @@
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:18px">
                     <div class="card">
                         <h3>Medicamentos recetados</h3>
-                        <div class="small-chart"><canvas id="chartMedicamentos"></canvas></div>
+                        <div class="small-chart"><canvas id="chartMedicamentos" class="chart-canvas"></canvas></div>
                     </div>
                     <div class="card">
                         <h3>Cirugías</h3>
-                        <div class="small-chart"><canvas id="chartCirugias"></canvas></div>
+                        <div class="small-chart"><canvas id="chartCirugias" class="chart-canvas"></canvas></div>
                     </div>
                 </div>
             </div>
@@ -175,12 +198,12 @@
                 <div class="small-cards">
                     <div class="card">
                         <h3>Distribución por Exámenes</h3>
-                        <div style="height:220px"><canvas id="chartExamenes"></canvas></div>
+                        <div class="small-chart"><canvas id="chartExamenes" class="chart-canvas"></canvas></div>
                     </div>
 
                     <div class="card">
                         <h3>Alergias más comunes</h3>
-                        <div style="height:220px"><canvas id="chartAlergias"></canvas></div>
+                        <div class="small-chart"><canvas id="chartAlergias" class="chart-canvas"></canvas></div>
                     </div>
                 </div>
             </aside>
@@ -193,31 +216,60 @@
     <script>
         const data = @json($data);
 
-        // Función generadora de gráficos
-        const makeChart = (id, dataset, labelField, valueField, type, colors) => {
-            const el = document.getElementById(id);
-            if (!dataset || !dataset.length) return;
+        // Store original datasets so filters can restore them
+        const originalDatasets = {
+            diagnosticos: data.diagnosticos || [],
+            medicamentos: data.medicamentos || [],
+            examenes: data.examenes || [],
+            alergias: data.alergias || [],
+            cirugias: data.cirugias || []
+        };
 
-            new Chart(el, {
+        const chartsMap = {}; // datasetName -> Chart instance
+        const chartConfigs = {}; // datasetName -> {labelField, valueField, container}
+
+        // Función generadora de gráficos (responsive) - accepts datasetName key
+        const makeChart = (id, datasetName, labelField, valueField, type, colors) => {
+            const el = document.getElementById(id);
+            const dataset = originalDatasets[datasetName] || [];
+            if (!el) return;
+
+            el.style.width = '100%';
+            el.style.height = '100%';
+
+            // prepare data arrays
+            const labels = dataset.map(x => x[labelField]);
+            const values = dataset.map(x => x[valueField]);
+            const background = labels.map((_, i) => colors[i % colors.length]);
+
+            const chart = new Chart(el, {
                 type,
                 data: {
-                    labels: dataset.map(x => x[labelField]),
+                    labels,
                     datasets: [{
                         label: 'Cantidad',
-                        data: dataset.map(x => x[valueField]),
-                        backgroundColor: colors,
+                        data: values,
+                        backgroundColor: background,
                         borderColor: '#111827',
                         borderWidth: 1
                     }]
                 },
                 options: {
                     responsive: true,
+                    maintainAspectRatio: false,
                     scales: type === 'bar' || type === 'horizontalBar'
                         ? { y: { beginAtZero: true } }
                         : {},
                     plugins: { legend: { display: type !== 'bar' } }
                 }
             });
+
+            chartsMap[datasetName] = chart;
+            // container: nearest .card (if present) otherwise parent element
+            const container = el.closest('.card') || el.parentElement || document.getElementById(id);
+            chartConfigs[datasetName] = { labelField, valueField, container };
+
+            return chart;
         };
 
         // Paleta de verdes para aspecto médico
@@ -229,12 +281,14 @@
             '#059669'  // 500
         ];
 
-        // Gráficos (mapeo de campos según datos presentes)
-        makeChart('chartDiagnosticos', data.diagnosticos, 'descripcion', 'cantidad', 'bar', greens);
-        makeChart('chartMedicamentos', data.medicamentos, 'medicamento', 'vecesPrescrito', 'line', greens);
-        makeChart('chartExamenes', data.examenes, 'tipoExamen', 'cantidad', 'doughnut', greens);
-        makeChart('chartAlergias', data.alergias, 'alergia', 'cantidad', 'pie', greens);
-        makeChart('chartCirugias', data.cirugias, 'cirujia', 'cantidad', 'bar', greens);
+        // Create charts and keep instances
+        makeChart('chartDiagnosticos', 'diagnosticos', 'descripcion', 'cantidad', 'bar', greens);
+        makeChart('chartMedicamentos', 'medicamentos', 'medicamento', 'vecesPrescrito', 'line', greens);
+        makeChart('chartExamenes', 'examenes', 'tipoExamen', 'cantidad', 'doughnut', greens);
+        makeChart('chartAlergias', 'alergias', 'alergia', 'cantidad', 'pie', greens);
+        makeChart('chartCirugias', 'cirugias', 'cirujia', 'cantidad', 'bar', greens);
+
+        
     </script>
 
 </body>
