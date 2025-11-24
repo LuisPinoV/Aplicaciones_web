@@ -22,9 +22,26 @@ class FichasController extends Controller
 
     public function store(Request $request)
     {
-        FichaMedica::create($request->all());
-        return redirect()->route('fichas.index');
+    
+    $usuario = new Usuario();
+    $usuario->nombre = $request->nombre;
+    $usuario->rut = $request->rut;
+    $usuario->sexo = $request->sexo;
+    $usuario->fechaNacimiento = $request->fechaNacimiento;
+    $usuario->tipoSangre = $request->tipoSangre;
+    $usuario->contraseña = 'default';
+    $usuario->save();
+
+    $ficha = new FichaMedica();
+    $ficha->idUsuario = $usuario->idUsuario;
+    $ficha->genero = $request->genero;
+    $ficha->altura = $request->altura;
+    $ficha->peso = $request->peso;
+    $ficha->save();
+
+    return redirect()->route('fichas.index');
     }
+
 
     public function edit($id)
     {
