@@ -1,15 +1,300 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>Perfil</ion-title>
+    <ion-title>Mi Perfil</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <div class="contenido" *ngIf="paciente">
-    <app-ficha-paciente-card 
-      #fichaPacienteCard
-      [paciente]="paciente">
-    </app-ficha-paciente-card>
-    <app-perfil-acciones-card></app-perfil-acciones-card>
+  <!-- Loading state -->
+  <div *ngIf="isLoading" class="loading-container">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Cargando perfil...</p>
+  </div>
+
+  <!-- Contenido del perfil -->
+  <div *ngIf="!isLoading && paciente" class="contenido">
+    
+    <!-- Header del perfil -->
+    <div class="profile-header">
+      <div class="avatar-container">
+        <ion-icon name="person-circle" class="avatar-icon"></ion-icon>
+      </div>
+      <h2 class="profile-name">{{ paciente.nombre }}</h2>
+      <p class="profile-rut">RUT: {{ paciente.Rut }}</p>
+    </div>
+
+    <!-- Información personal -->
+    <div class="section-card">
+      <div class="section-header">
+        <ion-icon name="person-outline"></ion-icon>
+        <h3>Información Personal</h3>
+      </div>
+
+      <!-- Campo: Nombre -->
+      <div class="info-item">
+        <div class="info-label">
+          <ion-icon name="text-outline"></ion-icon>
+          <span>Nombre completo</span>
+        </div>
+        <div class="info-value-container">
+          <ion-input
+            *ngIf="editingField === 'nombre'"
+            [(ngModel)]="paciente.nombre"
+            type="text"
+            class="edit-input"
+            [disabled]="isSaving"
+          ></ion-input>
+          <div *ngIf="editingField !== 'nombre'" class="info-value">
+            {{ paciente.nombre }}
+          </div>
+          <div class="info-actions">
+            <ion-button
+              *ngIf="editingField !== 'nombre'"
+              fill="clear"
+              size="small"
+              (click)="iniciarEdicion('nombre')"
+            >
+              <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+            </ion-button>
+            <div *ngIf="editingField === 'nombre'" class="edit-actions">
+              <ion-button
+                fill="clear"
+                size="small"
+                color="success"
+                (click)="guardarCambio('nombre')"
+                [disabled]="isSaving"
+              >
+                <ion-icon slot="icon-only" name="checkmark-outline"></ion-icon>
+              </ion-button>
+              <ion-button
+                fill="clear"
+                size="small"
+                color="danger"
+                (click)="cancelarEdicion('nombre')"
+                [disabled]="isSaving"
+              >
+                <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+              </ion-button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Campo: RUT (no editable) -->
+      <div class="info-item">
+        <div class="info-label">
+          <ion-icon name="card-outline"></ion-icon>
+          <span>RUT</span>
+        </div>
+        <div class="info-value-container">
+          <div class="info-value">
+            {{ paciente.Rut }}
+          </div>
+          <ion-badge color="medium" class="no-edit-badge">No editable</ion-badge>
+        </div>
+      </div>
+
+      <!-- Campo: Fecha de Nacimiento -->
+      <div class="info-item">
+        <div class="info-label">
+          <ion-icon name="calendar-outline"></ion-icon>
+          <span>Fecha de nacimiento</span>
+        </div>
+        <div class="info-value-container">
+          <ion-datetime-button
+            *ngIf="editingField === 'fechaNacimiento'"
+            datetime="fechaNacimiento"
+            class="edit-datetime"
+          ></ion-datetime-button>
+          
+          <ion-modal [keepContentsMounted]="true">
+            <ng-template>
+              <ion-datetime
+                id="fechaNacimiento"
+                [(ngModel)]="paciente.fechaNacimiento"
+                presentation="date"
+                [max]="maxDate"
+                locale="es-CL"
+              ></ion-datetime>
+            </ng-template>
+          </ion-modal>
+
+          <div *ngIf="editingField !== 'fechaNacimiento'" class="info-value">
+            {{ formatearFecha(paciente.fechaNacimiento) }}
+            <span class="edad-badge">({{ calcularEdad(paciente.fechaNacimiento) }} años)</span>
+          </div>
+          <div class="info-actions">
+            <ion-button
+              *ngIf="editingField !== 'fechaNacimiento'"
+              fill="clear"
+              size="small"
+              (click)="iniciarEdicion('fechaNacimiento')"
+            >
+              <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+            </ion-button>
+            <div *ngIf="editingField === 'fechaNacimiento'" class="edit-actions">
+              <ion-button
+                fill="clear"
+                size="small"
+                color="success"
+                (click)="guardarCambio('fechaNacimiento')"
+                [disabled]="isSaving"
+              >
+                <ion-icon slot="icon-only" name="checkmark-outline"></ion-icon>
+              </ion-button>
+              <ion-button
+                fill="clear"
+                size="small"
+                color="danger"
+                (click)="cancelarEdicion('fechaNacimiento')"
+                [disabled]="isSaving"
+              >
+                <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+              </ion-button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Campo: Sexo -->
+      <div class="info-item">
+        <div class="info-label">
+          <ion-icon name="male-female-outline"></ion-icon>
+          <span>Sexo</span>
+        </div>
+        <div class="info-value-container">
+          <ion-select
+            *ngIf="editingField === 'sexo'"
+            [(ngModel)]="paciente.sexo"
+            interface="popover"
+            class="edit-select"
+            [disabled]="isSaving"
+          >
+            <ion-select-option value="Masculino">Masculino</ion-select-option>
+            <ion-select-option value="Femenino">Femenino</ion-select-option>
+            <ion-select-option value="Otro">Otro</ion-select-option>
+          </ion-select>
+          <div *ngIf="editingField !== 'sexo'" class="info-value">
+            {{ paciente.sexo }}
+          </div>
+          <div class="info-actions">
+            <ion-button
+              *ngIf="editingField !== 'sexo'"
+              fill="clear"
+              size="small"
+              (click)="iniciarEdicion('sexo')"
+            >
+              <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+            </ion-button>
+            <div *ngIf="editingField === 'sexo'" class="edit-actions">
+              <ion-button
+                fill="clear"
+                size="small"
+                color="success"
+                (click)="guardarCambio('sexo')"
+                [disabled]="isSaving"
+              >
+                <ion-icon slot="icon-only" name="checkmark-outline"></ion-icon>
+              </ion-button>
+              <ion-button
+                fill="clear"
+                size="small"
+                color="danger"
+                (click)="cancelarEdicion('sexo')"
+                [disabled]="isSaving"
+              >
+                <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+              </ion-button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Información médica -->
+    <div class="section-card">
+      <div class="section-header">
+        <ion-icon name="medkit-outline"></ion-icon>
+        <h3>Información Médica</h3>
+      </div>
+
+      <!-- Campo: Tipo de sangre -->
+      <div class="info-item">
+        <div class="info-label">
+          <ion-icon name="water-outline"></ion-icon>
+          <span>Tipo de sangre</span>
+        </div>
+        <div class="info-value-container">
+          <ion-select
+            *ngIf="editingField === 'tipoSangre'"
+            [(ngModel)]="paciente.tipoSangre"
+            interface="popover"
+            class="edit-select"
+            [disabled]="isSaving"
+          >
+            <ion-select-option value="A+">A+</ion-select-option>
+            <ion-select-option value="A-">A-</ion-select-option>
+            <ion-select-option value="B+">B+</ion-select-option>
+            <ion-select-option value="B-">B-</ion-select-option>
+            <ion-select-option value="AB+">AB+</ion-select-option>
+            <ion-select-option value="AB-">AB-</ion-select-option>
+            <ion-select-option value="O+">O+</ion-select-option>
+            <ion-select-option value="O-">O-</ion-select-option>
+          </ion-select>
+          <div *ngIf="editingField !== 'tipoSangre'" class="info-value">
+            <span class="blood-type">{{ paciente.tipoSangre }}</span>
+          </div>
+          <div class="info-actions">
+            <ion-button
+              *ngIf="editingField !== 'tipoSangre'"
+              fill="clear"
+              size="small"
+              (click)="iniciarEdicion('tipoSangre')"
+            >
+              <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+            </ion-button>
+            <div *ngIf="editingField === 'tipoSangre'" class="edit-actions">
+              <ion-button
+                fill="clear"
+                size="small"
+                color="success"
+                (click)="guardarCambio('tipoSangre')"
+                [disabled]="isSaving"
+              >
+                <ion-icon slot="icon-only" name="checkmark-outline"></ion-icon>
+              </ion-button>
+              <ion-button
+                fill="clear"
+                size="small"
+                color="danger"
+                (click)="cancelarEdicion('tipoSangre')"
+                [disabled]="isSaving"
+              >
+                <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+              </ion-button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Botón de cerrar sesión -->
+    <div class="logout-section">
+      <ion-button 
+        expand="block" 
+        color="danger" 
+        (click)="confirmarCerrarSesion()"
+        class="logout-button"
+      >
+        <ion-icon slot="start" name="log-out-outline"></ion-icon>
+        Cerrar Sesión
+      </ion-button>
+    </div>
+
+    <!-- Indicador de guardado -->
+    <div *ngIf="isSaving" class="saving-indicator">
+      <ion-spinner name="crescent"></ion-spinner>
+      <span>Guardando cambios...</span>
+    </div>
   </div>
 </ion-content>
