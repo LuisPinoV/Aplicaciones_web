@@ -32,6 +32,16 @@
             header nav a{color:rgba(255,255,255,0.95); text-decoration:none; padding:8px 12px; border-radius:8px}
             header nav .btn-ghost{background:rgba(255,255,255,0.08); color:rgba(255,255,255,0.95); border:0; cursor:pointer; padding:8px 12px; border-radius:8px}
             footer.site-footer{max-width:1200px;margin:28px auto;padding:18px;border-radius:8px;color:var(--muted);text-align:center}
+
+            label {
+                display: block !important;
+                margin-bottom: 5px;
+            }
+
+            input.form-control {
+                display: block !important;
+                width: 100% !important;
+            }
         </style>
     </head>
     <body class="font-sans antialiased">

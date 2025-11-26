@@ -23,7 +23,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    // Send password reset link to the authenticated user's email
     Route::post('/profile/send-password-link', [ProfileController::class, 'sendPasswordLink'])->name('profile.send-password-link');
 
 });
@@ -40,5 +39,4 @@ Route::get('/auth/google/redirect', [GoogleController::class, 'redirect'])->name
 
 Route::get('/auth/google/callback', [GoogleController::class, 'callback'])->name('auth.google.callback');
 
-// Rutas Auth Breeze
 require __DIR__.'/auth.php';

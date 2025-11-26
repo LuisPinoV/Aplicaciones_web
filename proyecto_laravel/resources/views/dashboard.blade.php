@@ -174,7 +174,7 @@
         <div class="main-grid">
             <div>
                 <div class="card">
-                    <h3>Pacientes y actividad</h3>
+                    <h3>Diagnosticos mas comunes</h3>
                     <div class="big-chart">
                         <canvas id="chartDiagnosticos" class="chart-canvas"></canvas>
                     </div>
