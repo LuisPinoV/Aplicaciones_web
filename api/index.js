@@ -1626,8 +1626,7 @@ app.get('/fichas/:id/procedimientos', async (req, res) => {
         c.descripcion AS descripcionCirujia,
         tc.idTipoCirujia,
         tc.tipoCirujia AS tipoCirujia,
-        fmc.fecha,
-        fmc.descripcion
+        fmc.fecha
       FROM FichaMedicaCirujia fmc
       JOIN Cirujia c ON fmc.idCirujia = c.idCirujia
       JOIN TipoCirujia tc ON c.idTipoCirujia = tc.idTipoCirujia
